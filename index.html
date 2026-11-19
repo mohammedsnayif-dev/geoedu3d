@@ -1,0 +1,1053 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoEdu 3D</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #101923;
+    color: white;
+}
+
+header {
+    height: 65px;
+    background: #172633;
+    display: flex;
+    align-items: center;
+    padding: 0 22px;
+    border-bottom: 1px solid #344653;
+}
+
+.logo {
+    color: #55c2a3;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.logo span { color: white; }
+
+main {
+    display: flex;
+    min-height: calc(100vh - 65px);
+}
+
+.sidebar {
+    width: 310px;
+    flex-shrink: 0;
+    background: #172633;
+    padding: 20px 15px;
+    border-right: 1px solid #344653;
+}
+
+.sidebar h3 {
+    color: #55c2a3;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+.field {
+    margin: 12px 0;
+}
+
+.field label {
+    display: block;
+    font-size: 12px;
+    color: #b6c6d0;
+    margin-bottom: 6px;
+}
+
+input, select {
+    width: 100%;
+    padding: 9px;
+    background: #243846;
+    color: white;
+    border: 1px solid #405565;
+    border-radius: 5px;
+}
+
+input[type="color"] {
+    height: 38px;
+    padding: 3px;
+}
+
+button {
+    padding: 9px 12px;
+    background: #315466;
+    color: white;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover { background: #42768a; }
+
+.add-button {
+    width: 100%;
+    background: #237e69;
+    margin-top: 10px;
+}
+
+.layer-card {
+    background: #243846;
+    border: 1px solid #405565;
+    border-radius: 6px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.layer-card strong {
+    display: block;
+    margin-bottom: 9px;
+    color: #55c2a3;
+    font-size: 13px;
+}
+
+.layer-actions {
+    display: flex;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.layer-actions button {
+    flex: 1;
+    padding: 7px 4px;
+    font-size: 11px;
+}
+
+.delete-button { background: #853f49; }
+
+.workspace {
+    flex: 1;
+    min-width: 0;
+    padding: 25px;
+}
+
+.workspace h1 { margin: 0 0 8px; }
+
+.subtitle { color: #a8b8c5; }
+
+#viewer {
+    width: 100%;
+    height: 520px;
+    margin-top: 20px;
+    background: #172633;
+    border: 1px solid #405565;
+    border-radius: 9px;
+    overflow: hidden;
+    position: relative;
+}
+
+#viewer canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.hint {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: #101923cc;
+    padding: 9px;
+    border-radius: 5px;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+.status {
+    margin-top: 14px;
+    color: #55c2a3;
+    font-size: 13px;
+}
+
+@media(max-width:850px) {
+    main { flex-direction: column; }
+    .sidebar { width: 100%; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">GeoEdu <span>3D</span></div>
+</header>
+
+<main>
+
+<aside class="sidebar">
+
+<h3>PROJECT INFORMATION</h3>
+
+<div class="field">
+    <label>Project name</label>
+    <input id="projectName" value="My Geological Model">
+</div>
+
+<div class="field">
+    <label>Author</label>
+    <input id="projectAuthor" placeholder="Your name">
+</div>
+
+<div class="field">
+    <label>Description</label>
+    <input id="projectDescription" placeholder="Project description">
+</div>
+
+<button class="add-button" onclick="saveProject()">
+    💾 Save Project
+</button>
+
+<button class="add-button" onclick="document.getElementById('openFile').click()">
+    📂 Open Project
+</button>
+
+<button class="add-button" onclick="newProject()">
+    + New Project
+</button>
+
+<input type="file" id="openFile" accept=".json,application/json"
+       style="display:none">
+
+
+    <h3>ADD GEOLOGICAL FORMATION</h3>
+
+    <div class="field">
+        <label>Formation name</label>
+        <input id="newName" value="New Formation">
+    </div>
+
+    <div class="field">
+        <label>Formation color</label>
+        <input id="newColor" type="color" value="#D99B45">
+    </div>
+
+    <div class="field">
+        <label>Thickness (meters)</label>
+        <input id="newThickness" type="number"
+               value="100" min="1" max="5000" step="10">
+    </div>
+
+    <button class="add-button" onclick="addLayer()">
+        + Add Formation
+    </button>
+
+<h3>STRUCTURAL GEOLOGY</h3>
+
+<div class="field">
+    <label>Fold type</label>
+    <select id="foldType">
+        <option value="none">No Fold</option>
+        <option value="anticline">Anticline</option>
+        <option value="syncline">Syncline</option>
+    </select>
+</div>
+
+<div class="field">
+    <label>Fold amplitude (meters)</label>
+    <input id="foldAmplitude" type="number"
+           value="100" min="0" max="200" step="10">
+</div>
+
+<div class="field">
+    <label>Fold wavelength (meters)</label>
+    <input id="foldWavelength" type="number"
+           value="500" min="100" max="2000" step="50">
+</div>
+
+<button class="add-button" onclick="applyFold()">
+    Apply Fold
+</button>
+
+<h3>FAULT MODELING</h3>
+
+<div class="field">
+    <label>Fault Type</label>
+    <select id="faultType">
+        <option value="normal">Normal Fault</option>
+        <option value="reverse">Reverse Fault</option>
+        <option value="strike">Strike-Slip Fault</option>
+    </select>
+</div>
+
+<div class="field">
+    <label>Dip Angle (degrees)</label>
+    <input type="number" id="faultDip" value="60" min="0" max="90">
+</div>
+
+<div class="field">
+    <label>Displacement (meters)</label>
+    <input type="number" id="faultDisplacement" value="30" min="0" max="200">
+</div>
+
+<div class="field">
+    <label>Fault Position</label>
+    <input type="range" id="faultPosition" min="-3" max="3" value="0" step="0.1">
+</div>
+
+<button class="add-button" onclick="applyFault()">APPLY FAULT</button>
+
+  <h3>GEOLOGICAL CROSS-SECTION</h3>
+
+<div class="field">
+    <label>Section Direction</label>
+    <select id="sectionDirection">
+        <option value="xz">Vertical Section (X-Z)</option>
+        <option value="yz">Vertical Section (Y-Z)</option>
+    </select>
+</div>
+
+<div class="field">
+    <label>Section Position</label>
+    <input type="range" id="sectionPosition"
+           min="-3" max="3" value="0" step="0.1">
+</div>
+
+<button class="add-button" onclick="createCrossSection()">
+    GENERATE CROSS-SECTION
+</button> <div style="margin-top:15px; background:#ffffff; border-radius:8px; padding:8px;">
+    <canvas id="crossSectionCanvas"
+            width="600"
+            height="350"
+            style="width:100%; height:auto; display:block;">
+    </canvas>
+</div> <h3>STRATIGRAPHIC COLUMN</h3>
+
+    <div id="layerList"></div>
+
+</aside>
+
+<section class="workspace">
+
+    <h1>Geological Modeling Workspace</h1>
+
+    <p class="subtitle">
+        Build and edit your own geological stratigraphy.
+    </p>
+
+    <div id="viewer">
+        <div class="hint">
+            Drag to rotate · Scroll to zoom
+        </div>
+    </div>
+
+    <div class="status" id="status">
+        ● Stratigraphy Builder ready
+    </div>
+
+</section>
+
+</main>
+
+<script type="module">
+
+import * as THREE from
+'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+
+const viewer = document.getElementById("viewer");
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color("#172633");
+
+const camera = new THREE.PerspectiveCamera(
+    45,
+    viewer.clientWidth / viewer.clientHeight,
+    0.1,
+    1000
+);
+
+camera.position.set(10, 8, 12);
+camera.lookAt(0, 0, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(viewer.clientWidth, viewer.clientHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+viewer.appendChild(renderer.domElement);
+
+scene.add(new THREE.AmbientLight(0xffffff, 1.5));
+
+const light = new THREE.DirectionalLight(0xffffff, 2);
+light.position.set(8, 12, 10);
+scene.add(light);
+
+const model = new THREE.Group();
+scene.add(model);
+
+const grid = new THREE.GridHelper(16, 16, 0x547080, 0x344653);
+scene.add(grid);
+
+let layers = [
+    { name: "Sandstone", color: "#D99B45", thickness: 100 },
+    { name: "Shale", color: "#596B8A", thickness: 100 },
+    { name: "Limestone", color: "#D7D0A6", thickness: 100 },
+    { name: "Topsoil", color: "#6B9657", thickness: 100 }
+];
+
+function setStatus(message) {
+    document.getElementById("status").textContent = message;
+}
+let faultEnabled = false;
+   
+function updateModel() {
+
+    // Remove the previous geological model
+    while (model.children.length > 0) {
+        const object = model.children[0];
+        model.remove(object);
+        object.geometry?.dispose();
+
+        if (object.material) {
+            if (Array.isArray(object.material)) {
+                object.material.forEach(m => m.dispose());
+            } else {
+                object.material.dispose();
+            }
+        }
+    }
+
+    const total = layers.reduce(
+        (sum, layer) => sum + layer.thickness, 0
+    );
+
+    let currentY = total / 200;
+
+    // Fold settings
+    const foldType = document.getElementById("foldType").value;
+    const amplitude = Number(
+        document.getElementById("foldAmplitude").value
+    ) / 100;
+
+    const wavelength = Number(
+        document.getElementById("foldWavelength").value
+    ) / 100;
+
+    // Fault settings
+    const faultType = document.getElementById("faultType").value;
+    const dip = Number(
+        document.getElementById("faultDip").value
+    );
+
+    const displacement = Number(
+        document.getElementById("faultDisplacement").value
+    ) / 100;
+
+    const faultPosition = Number(
+        document.getElementById("faultPosition").value
+    );
+
+    const safeDip = Math.max(1, Math.min(90, dip));
+    const dipRadians = safeDip * Math.PI / 180;
+    const tanDip = Math.tan(dipRadians);
+
+    layers.forEach(layer => {
+
+        const height = layer.thickness / 100;
+        const centerY = currentY - height / 2;
+
+        // Create a detailed geological layer
+        const geometry = new THREE.BoxGeometry(
+            7, height, 5, 80, 20, 10
+        );
+
+        const positions = geometry.attributes.position;
+
+        for (let i = 0; i < positions.count; i++) {
+
+            let x = positions.getX(i);
+            let y = positions.getY(i);
+            let z = positions.getZ(i);
+
+            // Apply folding
+            if (foldType !== "none") {
+
+                const direction =
+                    foldType === "anticline" ? 1 : -1;
+
+                const foldDisplacement =
+                    direction * amplitude *
+                    Math.cos((2 * Math.PI * x) / wavelength);
+
+                y += foldDisplacement;
+            }
+
+            // Apply fault displacement
+            if (faultEnabled) {
+
+                const globalY = y + centerY;
+
+                const faultLineX =
+                    faultPosition +
+                    (total / 200 - globalY) / tanDip;
+
+                // Move the hanging-wall side
+                if (x > faultLineX) {
+
+                    if (faultType === "normal") {
+                        x += displacement * Math.cos(dipRadians);
+                        y -= displacement * Math.sin(dipRadians);
+                    }
+
+                    else if (faultType === "reverse") {
+                        x -= displacement * Math.cos(dipRadians);
+                        y += displacement * Math.sin(dipRadians);
+                    }
+
+                    else if (faultType === "strike") {
+                        z += displacement;
+                    }
+                }
+            }
+
+            positions.setXYZ(i, x, y, z);
+        }
+
+        positions.needsUpdate = true;
+        geometry.computeVertexNormals();
+
+        const material = new THREE.MeshStandardMaterial({
+            color: layer.color,
+            roughness: 0.85
+        });
+
+        const block = new THREE.Mesh(geometry, material);
+        block.position.y = centerY;
+        block.castShadow = true;
+        block.receiveShadow = true;
+        model.add(block);
+
+        const edges = new THREE.EdgesGeometry(geometry);
+
+        const outline = new THREE.LineSegments(
+            edges,
+            new THREE.LineBasicMaterial({ color: 0x25313a })
+        );
+
+        outline.position.y = centerY;
+        model.add(outline);
+
+        currentY -= height;
+    });
+
+    grid.position.y = -total / 200 - 0.1;
+
+    // Display the 3D fault plane
+    if (faultEnabled) {
+
+        const planeGeometry = new THREE.PlaneGeometry(
+            5, total / 100, 20, 20
+        );
+
+        const planeMaterial = new THREE.MeshStandardMaterial({
+            color: 0xff8c00,
+            transparent: true,
+            opacity: 0.60,
+            side: THREE.DoubleSide,
+            roughness: 0.8
+        });
+
+        const faultPlane = new THREE.Mesh(
+            planeGeometry,
+            planeMaterial
+        );
+
+        const dipRadians =
+            Number(document.getElementById("faultDip").value) *
+            Math.PI / 180;
+
+        const faultPosition =
+            Number(document.getElementById("faultPosition").value);
+
+        faultPlane.rotation.y = Math.PI / 2;
+        faultPlane.rotation.z = dipRadians;
+
+        faultPlane.position.set(
+            faultPosition,
+            0,
+            0
+        );
+
+        model.add(faultPlane);
+    }
+
+    camera.lookAt(0, 0, 0);
+}
+
+
+function renderLayerList() {
+
+    const list = document.getElementById("layerList");
+    list.innerHTML = "";
+
+    layers.forEach((layer, index) => {
+
+        const card = document.createElement("div");
+        card.className = "layer-card";
+
+        const title = document.createElement("strong");
+        title.textContent = "Formation " + (index + 1);
+        card.appendChild(title);
+
+        const name = document.createElement("input");
+        name.value = layer.name;
+        name.setAttribute("aria-label", "Formation name");
+
+        name.addEventListener("change", () => {
+            layer.name = name.value.trim() || "Unnamed Formation";
+            setStatus("Formation name updated.");
+        });
+
+        card.appendChild(name);
+
+        const color = document.createElement("input");
+        color.type = "color";
+        color.value = layer.color;
+        color.style.marginTop = "7px";
+
+        color.addEventListener("input", () => {
+            layer.color = color.value;
+            updateModel();
+        });
+
+        card.appendChild(color);
+
+        const thickness = document.createElement("input");
+        thickness.type = "number";
+        thickness.min = "1";
+        thickness.max = "5000";
+        thickness.value = layer.thickness;
+        thickness.style.marginTop = "7px";
+
+        thickness.addEventListener("change", () => {
+            const value = Number(thickness.value);
+
+            if (!Number.isFinite(value) || value < 1 || value > 5000) {
+                thickness.value = layer.thickness;
+                return;
+            }
+
+            layer.thickness = value;
+            updateModel();
+            setStatus("Formation thickness updated.");
+        });
+
+        card.appendChild(thickness);
+
+        const actions = document.createElement("div");
+        actions.className = "layer-actions";
+
+        const up = document.createElement("button");
+        up.textContent = "↑ Up";
+        up.disabled = index === 0;
+        up.onclick = () => moveLayer(index, -1);
+        actions.appendChild(up);
+
+        const down = document.createElement("button");
+        down.textContent = "↓ Down";
+        down.disabled = index === layers.length - 1;
+        down.onclick = () => moveLayer(index, 1);
+        actions.appendChild(down);
+
+        const remove = document.createElement("button");
+        remove.textContent = "Delete";
+        remove.className = "delete-button";
+        remove.onclick = () => deleteLayer(index);
+        actions.appendChild(remove);
+
+        card.appendChild(actions);
+        list.appendChild(card);
+    });
+}
+
+window.applyFold = function() {
+
+    const amplitude = Number(
+        document.getElementById("foldAmplitude").value
+    );
+
+    const wavelength = Number(
+        document.getElementById("foldWavelength").value
+    );
+
+    if (!Number.isFinite(amplitude) ||
+        amplitude < 0 || amplitude > 200) {
+        setStatus("Amplitude must be between 0 and 200 meters.");
+        return;
+    }
+
+    if (!Number.isFinite(wavelength) ||
+        wavelength < 100 || wavelength > 2000) {
+        setStatus("Wavelength must be between 100 and 2000 meters.");
+        return;
+    }
+
+    updateModel();
+
+    const type = document.getElementById("foldType").value;
+
+    setStatus(
+        type === "none"
+            ? "Horizontal geological layers restored."
+            : type.charAt(0).toUpperCase() +
+              type.slice(1) + " applied successfully."
+    );
+};
+
+window.applyFault = function() {
+
+    const dip = Number(
+        document.getElementById("faultDip").value
+    );
+
+    const displacement = Number(
+        document.getElementById("faultDisplacement").value
+    );
+
+    const position = Number(
+        document.getElementById("faultPosition").value
+    );
+
+    if (!Number.isFinite(dip) || dip < 1 || dip > 90) {
+        setStatus("Dip angle must be between 1 and 90 degrees.");
+        return;
+    }
+
+    if (!Number.isFinite(displacement) ||
+        displacement < 0 || displacement > 200) {
+        setStatus("Displacement must be between 0 and 200 meters.");
+        return;
+    }
+
+    if (!Number.isFinite(position) || position < -3 || position > 3) {
+        setStatus("Invalid fault position.");
+        return;
+    }
+
+    faultEnabled = displacement > 0;
+
+    updateModel();
+
+    if (faultEnabled) {
+        const type = document.getElementById("faultType").value;
+
+        setStatus(
+            type.charAt(0).toUpperCase() +
+            type.slice(1) + " fault applied successfully."
+        );
+    } else {
+        setStatus("Fault removed. Geological layers restored.");
+    }
+};
+
+window.addLayer = function() {
+
+    const name = document.getElementById("newName").value.trim();
+    const color = document.getElementById("newColor").value;
+    const thickness = Number(
+        document.getElementById("newThickness").value
+    );
+
+    if (!name) {
+        setStatus("Please enter a formation name.");
+        return;
+    }
+
+    if (!Number.isFinite(thickness) || thickness < 1 || thickness > 5000) {
+        setStatus("Thickness must be between 1 and 5000 meters.");
+        return;
+    }
+
+    layers.push({ name, color, thickness });
+
+    updateModel();
+    renderLayerList();
+
+    setStatus(name + " added successfully.");
+};
+
+window.deleteLayer = function(index) {
+
+    if (layers.length <= 1) {
+        setStatus("At least one formation is required.");
+        return;
+    }
+
+    const removed = layers.splice(index, 1)[0];
+
+    updateModel();
+    renderLayerList();
+
+    setStatus(removed.name + " deleted.");
+};
+
+window.moveLayer = function(index, direction) {
+
+    const newIndex = index + direction;
+
+    if (newIndex < 0 || newIndex >= layers.length) return;
+
+    [layers[index], layers[newIndex]] =
+        [layers[newIndex], layers[index]];
+
+    updateModel();
+    renderLayerList();
+
+    setStatus("Stratigraphic order updated.");
+};
+
+// Save the geological project
+window.saveProject = function() {
+
+    const project = {
+        application: "GeoEdu 3D",
+        version: "1.0",
+        projectName: document.getElementById("projectName").value,
+        author: document.getElementById("projectAuthor").value,
+        description: document.getElementById("projectDescription").value,
+        savedAt: new Date().toISOString(),
+        formations: layers
+    };
+
+    const data = JSON.stringify(project, null, 2);
+
+    const blob = new Blob([data], {
+        type: "application/json"
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download =
+        (project.projectName || "GeoEdu_Project")
+        .replace(/[^a-z0-9_-]/gi, "_") + ".json";
+
+    link.click();
+
+    URL.revokeObjectURL(url);
+
+    setStatus("Project saved to your computer.");
+};
+
+
+// Open an existing geological project
+document.getElementById("openFile").addEventListener("change", async function(event) {
+
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    try {
+        const text = await file.text();
+        const project = JSON.parse(text);
+
+        if (
+            project.application !== "GeoEdu 3D" ||
+            !Array.isArray(project.formations) ||
+            project.formations.length === 0 ||
+            project.formations.length > 1000
+        ) {
+            throw new Error("Invalid GeoEdu project file.");
+        }
+
+        const validFormations = project.formations.every(layer =>
+            typeof layer.name === "string" &&
+            /^#[0-9a-f]{6}$/i.test(layer.color) &&
+            Number.isFinite(layer.thickness) &&
+            layer.thickness >= 1 &&
+            layer.thickness <= 5000
+        );
+
+        if (!validFormations) {
+            throw new Error("Invalid formation data.");
+        }
+
+        layers = project.formations;
+
+        document.getElementById("projectName").value =
+            project.projectName || "Imported Project";
+
+        document.getElementById("projectAuthor").value =
+            project.author || "";
+
+        document.getElementById("projectDescription").value =
+            project.description || "";
+
+        updateModel();
+        renderLayerList();
+
+        setStatus("Project opened successfully.");
+
+    } catch (error) {
+        alert("Could not open this project. Please select a valid GeoEdu 3D JSON file.");
+        console.error(error);
+    }
+
+    event.target.value = "";
+});
+
+
+// Create a new geological project
+window.newProject = function() {
+
+    const confirmed = confirm(
+        "Start a new project? Save your current work first."
+    );
+
+    if (!confirmed) return;
+
+    layers = [
+        { name: "Sandstone", color: "#D99B45", thickness: 100 },
+        { name: "Shale", color: "#596B8A", thickness: 100 },
+        { name: "Limestone", color: "#D7D0A6", thickness: 100 },
+        { name: "Topsoil", color: "#6B9657", thickness: 100 }
+    ];
+
+    document.getElementById("projectName").value = "New Geological Model";
+    document.getElementById("projectAuthor").value = "";
+    document.getElementById("projectDescription").value = "";
+
+    updateModel();
+    renderLayerList();
+
+    setStatus("New project created.");
+};
+
+// Mouse rotation
+let dragging = false;
+let previousX = 0;
+let previousY = 0;
+
+renderer.domElement.addEventListener("pointerdown", event => {
+    dragging = true;
+    previousX = event.clientX;
+    previousY = event.clientY;
+    renderer.domElement.setPointerCapture(event.pointerId);
+});
+
+renderer.domElement.addEventListener("pointermove", event => {
+
+    if (!dragging) return;
+
+    const dx = event.clientX - previousX;
+    const dy = event.clientY - previousY;
+
+    model.rotation.y += dx * 0.008;
+    model.rotation.x += dy * 0.008;
+
+    previousX = event.clientX;
+    previousY = event.clientY;
+});
+
+renderer.domElement.addEventListener("pointerup", () => {
+    dragging = false;
+});
+
+renderer.domElement.addEventListener("pointercancel", () => {
+    dragging = false;
+});
+
+// Zoom
+renderer.domElement.addEventListener("wheel", event => {
+    event.preventDefault();
+
+    camera.position.multiplyScalar(
+        event.deltaY > 0 ? 1.08 : 0.92
+    );
+
+    camera.position.clampLength(7, 35);
+}, { passive: false });
+
+// Responsive display
+window.addEventListener("resize", () => {
+    camera.aspect = viewer.clientWidth / viewer.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(viewer.clientWidth, viewer.clientHeight);
+});
+
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+
+updateModel();
+renderLayerList();
+animate();
+window.createCrossSection = function() {
+
+    const canvas = document.getElementById("crossSectionCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const width = canvas.width;
+    const height = canvas.height;
+
+    ctx.clearRect(0, 0, width, height);
+
+    // Background
+    ctx.fillStyle = "#f4f6f8";
+    ctx.fillRect(0, 0, width, height);
+
+    const left = 60;
+    const top = 45;
+    const sectionWidth = 480;
+    const sectionHeight = 260;
+
+    const totalThickness = layers.reduce(
+        (sum, layer) => sum + Number(layer.thickness), 0
+    );
+
+    if (totalThickness <= 0) {
+        ctx.fillStyle = "#333";
+        ctx.fillText("No geological layers available.", 100, 150);
+        return;
+    }
+
+    let currentY = top;
+
+    layers.forEach(layer => {
+
+        const layerHeight =
+            (Number(layer.thickness) / totalThickness) * sectionHeight;
+
+        ctx.fillStyle = layer.color;
+        ctx.fillRect(left, currentY, sectionWidth, layerHeight);
+
+        ctx.strokeStyle = "#333";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(left, currentY, sectionWidth, layerHeight);
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 13px Arial";
+        ctx.textAlign = "center";
+
+        ctx.fillText(
+            layer.name + " (" + layer.thickness + " m)",
+            left + sectionWidth / 2,
+            currentY + layerHeight / 2 + 4
+        );
+
+        currentY += layerHeight;
+    });
+
+    // Section border
+    ctx.strokeStyle = "#222";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(left, top, sectionWidth, sectionHeight);
+
+    ctx.fillStyle = "#222";
+    ctx.font = "bold 15px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("GEOLOGICAL CROSS-SECTION", width / 2, 25);
+};
+</script>
+
+</body>
+</html>
