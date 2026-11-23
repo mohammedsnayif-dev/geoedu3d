@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mohammedsnayif-dev.github.io/geoedu3d/sitemap.xml
