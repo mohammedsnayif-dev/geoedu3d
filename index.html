@@ -794,6 +794,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 <option value="structures">⛰️ Structures Library</option>
 <option value="stratigraphy">📚 Stratigraphy Lessons</option>
 <option value="quiz">🎓 Geological Quiz Center</option>
+<option value="learning">🎓 Learning Center</option>
 <option value="dictionary">🌐 Geological Dictionary</option>
 <option value="diagrams">📊 Geological Diagrams</option>
 </select></div>
@@ -1029,6 +1030,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 <button type="button" data-geo-view="structures" aria-pressed="false" >⛰️ Structures</button>
 <button type="button" data-geo-view="stratigraphy" aria-pressed="false" >📚 Stratigraphy</button>
 <button type="button" data-geo-view="quiz" aria-pressed="false" >🎓 Quizzes</button>
+<button type="button" data-geo-view="learning" aria-pressed="false">🎓 Learning Center</button>
 <button type="button" data-geo-view="dictionary" aria-pressed="false" >🌐 Dictionary</button>
 <button type="button" data-geo-view="crystals" aria-pressed="false">Crystal Systems</button><button type="button" data-geo-view="minerals" aria-pressed="false">Mineral Library</button><button type="button" data-geo-view="rocks" aria-pressed="false">Rock Library</button><button type="button" data-geo-view="fossils" aria-pressed="false">Fossil Library</button><button type="button" data-geo-view="petroleum" aria-pressed="false">Petroleum Systems</button>
 <button type="button" data-geo-view="diagrams" aria-pressed="false">📊 Geological Diagrams</button>
@@ -1121,6 +1123,18 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 <h2>Mineralogy — Crystal Systems</h2><p>Explore idealized crystallographic unit cells. These are geometric teaching models, not atomic structures or predictions of natural crystal habit.</p>
 <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center"><label>Crystal system <select id="crystalSystem"></select></label><label><input type="checkbox" id="crystalAxes" checked> Show axes</label><label><input type="checkbox" id="crystalSpin"> Auto rotate</label><button type="button" id="crystalReset">Reset view</button></div>
 <div id="crystalCanvas" style="height:420px;max-height:65vh;min-height:260px;background:#172633;border-radius:10px;overflow:hidden;position:relative;margin:12px 0"><div class="geo-developer-credit" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div><div class="geo-local-export" role="group" aria-label="Model export"><button type="button" onclick="geoExportVisible('crystalCanvas')">↓ Export Crystal Model (PNG)</button></div></div><p>Drag to rotate · Scroll to zoom</p><div id="crystalInfo" aria-live="polite"></div></div>
+<div id="geoView_learning" class="educational-workspace-view" hidden><section id="geoLearningPanel" role="region" aria-label="GeoEdu 3D Learning Center">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2>Geology Learning Center</h2><button type="button" id="geoLearningClose" aria-label="Return to 3D model">✕</button></div>
+  <p>Follow a short guided activity, learn key terms, and export your study notes.</p>
+  <strong id="geoLearningStepTitle">Step 1 of 5</strong>
+  <p id="geoLearningStepText" class="geo-learning-tip"></p>
+  <div class="geo-learning-actions"><button id="geoLearningPrev" type="button">Previous</button><button id="geoLearningNext" type="button">Next step</button></div>
+  <label for="geoLearningTerm">Geological glossary</label>
+  <select id="geoLearningTerm"><option value="formation">Formation</option><option value="lithology">Lithology</option><option value="anticline">Anticline</option><option value="syncline">Syncline</option><option value="fault">Fault</option><option value="crosssection">Cross-section</option><option value="stratigraphy">Stratigraphy</option></select>
+  <p id="geoLearningDefinition" class="geo-learning-tip" aria-live="polite"></p>
+  <button id="geoLearningExport" type="button">Export learning notes (.txt)</button>
+  <p style="font-size:12px;opacity:.8">Educational illustrations are simplified and are not substitutes for validated subsurface interpretations.</p>
+</section></div>
 <div id="geoView_dictionary" class="educational-workspace-view" hidden><div class="geo-developer-credit geo-credit-footer" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div>
 <h2>Geological Dictionary</h2>
 <p class="preset-intro">Search geology vocabulary in English, Arabic, and Kurdish Badini. Explore definitions and geological examples.</p>
@@ -1263,7 +1277,7 @@ function renderFullGeologicalTimeChart(){
 }
 renderFullGeologicalTimeChart();
 let activeMainView='model';
-const geoWorkspaceViews=['model','time','presets','structures','stratigraphy','quiz','dictionary','diagrams','crystals','minerals','rocks','fossils','petroleum'];
+const geoWorkspaceViews=['model','time','presets','structures','stratigraphy','quiz','dictionary','diagrams','crystals','minerals','rocks','fossils','petroleum','learning'];
 function setMainGeologyView(next){
  if(!geoWorkspaceViews.includes(next)) next='model';
  activeMainView=next;
@@ -4502,7 +4516,7 @@ body.geo-v2-compact .geo-v2-toolbar{margin:7px 0 12px}
     const bar=document.createElement('nav');bar.id='geoV2Toolbar';bar.className='geo-v2-toolbar';bar.setAttribute('aria-label','Workspace quick navigation');
     const label=document.createElement('label');label.textContent='Jump to';
     const picker=document.createElement('select');picker.setAttribute('aria-label','Jump to workspace view');
-    const views=[['model','3D Model'],['diagrams','Geological Diagrams'],['crystals','Crystal Systems'],['minerals','Mineral Library'],['rocks','Rock Library'],['fossils','Fossil Library'],['petroleum','Petroleum Systems'],['time','Geological Time Scale'],['presets','Ready-Made Models'],['structures','Structures Library'],['stratigraphy','Stratigraphy Lessons'],['quiz','Quiz Center'],['dictionary','Dictionary']];
+    const views=[['model','3D Model'],['diagrams','Geological Diagrams'],['crystals','Crystal Systems'],['minerals','Mineral Library'],['rocks','Rock Library'],['fossils','Fossil Library'],['petroleum','Petroleum Systems'],['time','Geological Time Scale'],['presets','Ready-Made Models'],['structures','Structures Library'],['stratigraphy','Stratigraphy Lessons'],['quiz','Quiz Center'],['dictionary','Dictionary'],['learning','Learning Center']];
     views.forEach(([id,name])=>{const option=document.createElement('option');option.value=id;option.textContent=name;picker.append(option);});
     label.append(picker);
     const spacer=document.createElement('span');spacer.className='geo-v2-spacer';
@@ -4524,18 +4538,7 @@ body.geo-v2-compact .geo-v2-toolbar{margin:7px 0 12px}
 
 <!-- Step 6: standalone student learning center; project files remain local -->
 <button id="geoLearningToggle" type="button" aria-controls="geoLearningPanel" aria-expanded="false">🎓 Learning Center</button>
-<section id="geoLearningPanel" role="region" aria-label="GeoEdu 3D Learning Center" hidden>
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2>Geology Learning Center</h2><button type="button" id="geoLearningClose" aria-label="Close Learning Center">✕</button></div>
-  <p>Follow a short guided activity, learn key terms, and export your study notes.</p>
-  <strong id="geoLearningStepTitle">Step 1 of 5</strong>
-  <p id="geoLearningStepText" class="geo-learning-tip"></p>
-  <div class="geo-learning-actions"><button id="geoLearningPrev" type="button">Previous</button><button id="geoLearningNext" type="button">Next step</button></div>
-  <label for="geoLearningTerm">Geological glossary</label>
-  <select id="geoLearningTerm"><option value="formation">Formation</option><option value="lithology">Lithology</option><option value="anticline">Anticline</option><option value="syncline">Syncline</option><option value="fault">Fault</option><option value="crosssection">Cross-section</option><option value="stratigraphy">Stratigraphy</option></select>
-  <p id="geoLearningDefinition" class="geo-learning-tip" aria-live="polite"></p>
-  <button id="geoLearningExport" type="button">Export learning notes (.txt)</button>
-  <p style="font-size:12px;opacity:.8">Educational illustrations are simplified and are not substitutes for validated subsurface interpretations.</p>
-</section>
+
 <script>
 (function(){
 'use strict';
@@ -4552,8 +4555,8 @@ function init(){
  let index=0;
  function draw(){ $('geoLearningStepTitle').textContent=`Step ${index+1} of ${steps.length}: ${steps[index][0]}`;$('geoLearningStepText').textContent=steps[index][1];$('geoLearningPrev').disabled=index===0;$('geoLearningNext').disabled=index===steps.length-1; }
  function definition(){ $('geoLearningDefinition').textContent=glossary[$('geoLearningTerm').value]||''; }
- function open(isOpen){panel.hidden=!isOpen;toggle.setAttribute('aria-expanded',String(isOpen));if(isOpen)$('geoLearningClose').focus();else toggle.focus();}
- toggle.addEventListener('click',()=>open(panel.hidden));$('geoLearningClose').addEventListener('click',()=>open(false));
+ function open(isOpen){setMainGeologyView(isOpen?'learning':'model');}
+ toggle.addEventListener('click',()=>open(document.getElementById('geoView_learning').hidden));$('geoLearningClose').addEventListener('click',()=>open(false));
  $('geoLearningPrev').addEventListener('click',()=>{index=Math.max(0,index-1);draw()});$('geoLearningNext').addEventListener('click',()=>{index=Math.min(steps.length-1,index+1);draw()});
  $('geoLearningTerm').addEventListener('change',definition);
  panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();open(false)}});
@@ -4816,5 +4819,7 @@ document.addEventListener('fullscreenchange',sync);document.addEventListener('we
 <style id="geoMainScreenCreditStyle">#geoMainScreenCredit{position:fixed;bottom:12px;right:12px;z-index:90;display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:7px 10px;border-radius:7px;background:rgba(15,25,35,.9);color:#dce5ed;font:11px/1.3 Arial,sans-serif;pointer-events:none;text-align:right;max-width:calc(100vw - 24px);box-sizing:border-box}#geoMainScreenCredit strong{color:#65d6c1;font-size:13px}#geoMainScreenCredit small{font-size:10px}@media(max-width:700px){#geoMainScreenCredit{bottom:calc(76px + env(safe-area-inset-bottom,0px));right:8px;font-size:9px}#geoMainScreenCredit strong{font-size:11px}}</style>
 <div id="geoMainScreenCredit" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div>
 <style id="geoMobileThemeStyle">.geo-mobile-theme{display:none!important}@media(max-width:820px){.geo-mobile-theme{display:block!important;padding:10px;margin:0 0 12px;border:1px solid #456073;border-radius:10px}.geo-mobile-theme select{width:100%}}</style>
+<style id="geoHideFloatingLearning">#geoLearningToggle { display: none !important; }</style>
+<style>#geoLearningPanel{position:static;width:auto;max-height:none;overflow:visible;box-shadow:none;box-sizing:border-box;margin:0;} </style>
 </body>
 </html>
