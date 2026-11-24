@@ -1,8 +1,7 @@
-
 <!DOCTYPE html>
 <!--
 GeoEdu 3D
-Copyright © 2026 Mohammed Nayif.
+Copyright © 2026 Mohammed Simko Nayif Pasha.
 All Rights Reserved.
 
 This software, its original source code,
@@ -697,6 +696,50 @@ button.geo-iconized .geo-icon svg{width:17px;height:17px}
  .sidebar#geoSidebar{transition:none}
 }
 
+
+
+/* Step 15.6: hide redundant navigation and section arrangement controls; retain internal navigation targets. */
+#geoWorkspaceMenu,.workspace-layout-controls,.section-handle,.section-move-up,.section-move-down,.section-position{display:none!important}
+/* GeoEdu 3D v2.0 - workspace accessibility and responsive refinement */
+:root { scroll-behavior: smooth; }
+button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible {
+  outline: 3px solid #6dc7ff !important;
+  outline-offset: 3px;
+}
+#viewer { position: relative; min-height: 380px; }
+#viewer .hint { pointer-events: none; }
+.geoedu-shortcuts { display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px;
+  margin:12px 0; padding:10px 14px; border:1px solid rgba(145,183,207,.28);
+  border-radius:12px; background:rgba(38,65,84,.18); font-size:12px; }
+.geoedu-shortcuts strong { font-size:13px; }
+.geoedu-shortcuts kbd { display:inline-block; padding:2px 6px; border:1px solid #8196a7;
+  border-radius:5px; font-family:inherit; font-size:11px; margin-right:4px; }
+@media (max-width:820px) { #viewer { min-height:320px; } .geoedu-shortcuts { display:none; } }
+@media (prefers-reduced-motion:reduce) { :root {scroll-behavior:auto;} }
+
+/* GeoEdu 3D v2.0 — Step 6: Learning Center */
+#geoLearningToggle{position:fixed;right:18px;bottom:20px;z-index:1200;background:#187e95;color:white;border:1px solid #70d7e3;border-radius:30px;padding:11px 17px;font-weight:700;cursor:pointer;box-shadow:0 5px 24px #0007}
+#geoLearningPanel{position:fixed;right:18px;bottom:76px;z-index:1201;width:min(400px,calc(100vw - 28px));max-height:min(75vh,660px);overflow:auto;background:#172735;color:#f1f8fc;border:1px solid #4a7485;border-radius:14px;padding:18px;box-shadow:0 14px 50px #000a;font-family:Arial,sans-serif}
+#geoLearningPanel[hidden]{display:none}#geoLearningPanel h2{margin:0;font-size:20px}#geoLearningPanel p{line-height:1.5;font-size:14px}#geoLearningPanel button,#geoLearningPanel select{background:#254456;color:white;border:1px solid #668998;border-radius:7px;padding:9px;cursor:pointer}#geoLearningPanel button:focus-visible,#geoLearningToggle:focus-visible{outline:3px solid #ffe18a;outline-offset:2px}#geoLearningPanel .geo-learning-actions{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}#geoLearningPanel .geo-learning-actions button{flex:1}#geoLearningPanel .geo-learning-tip{background:#213d4a;padding:10px;border-left:3px solid #57d3db;border-radius:5px}#geoLearningPanel label{display:block;margin:8px 0}#geoLearningPanel select{width:100%}@media(max-width:600px){#geoLearningToggle{right:10px;bottom:10px}#geoLearningPanel{right:10px;bottom:65px}}
+</style>
+<style>#psCanvas:fullscreen,#psCanvas.geo-expanded{width:100%!important;height:100%!important;background:#172633}#psCanvas.geo-expanded{position:fixed!important;inset:0;z-index:99999}#psCanvas canvas{display:block;touch-action:none}</style><style>
+#geoVisualTools{padding:8px 12px;margin:6px 0 8px}
+#geoVisualTools>summary{cursor:pointer;font-size:13px;font-weight:700;color:#81e4cc;padding:4px 0;list-style:none;display:flex;align-items:center;gap:8px}
+#geoVisualTools>summary::-webkit-details-marker{display:none}
+#geoVisualTools>summary::after{content:'▾ Show';margin-left:auto;font-size:12px;font-weight:500}
+#geoVisualTools[open]>summary::after{content:'▴ Hide'}
+#geoVisualTools[open]>summary{margin-bottom:9px}
+#geoVisualTools>summary:focus-visible{outline:2px solid #81e4cc;outline-offset:3px}
+</style>
+
+<style>
+#geoWorkspaceMenu{padding:8px 12px;margin:6px 0 8px}
+#geoWorkspaceMenu>summary{cursor:pointer;font-size:13px;font-weight:700;color:#81e4cc;padding:4px 0;list-style:none;display:flex;align-items:center;gap:8px}
+#geoWorkspaceMenu>summary::-webkit-details-marker{display:none}
+#geoWorkspaceMenu>summary::after{content:'▾ Show';margin-left:auto;font-size:12px;font-weight:500}
+#geoWorkspaceMenu[open]>summary::after{content:'▴ Hide'}
+#geoWorkspaceMenu>summary:focus-visible{outline:2px solid #81e4cc;outline-offset:3px}
+#geoWorkspaceMenu .model-view-switch{margin:8px 0 0}
 </style>
 </head>
 
@@ -733,7 +776,8 @@ button.geo-iconized .geo-icon svg{width:17px;height:17px}
 <details class="geo-sidebar-panel" data-panel="workspace-views"><summary>WORKSPACE VIEWS</summary>
 <div class="field"><label for="sidebarWorkspaceView">Open a workspace module</label>
 <select id="sidebarWorkspaceView" aria-label="Choose a workspace module">
-<option value="model">🧊 3D Geological Model</option>
+<option value="crystals">Crystal Systems</option><option value="minerals">Mineral Library</option><option value="rocks">Rock Library</option>
+<option value="model" selected>🧊 3D Geological Model</option>
 <option value="time">🕰️ Geological Time Scale</option>
 <option value="presets">🪨 Ready-Made Models</option>
 <option value="structures">⛰️ Structures Library</option>
@@ -742,7 +786,7 @@ button.geo-iconized .geo-icon svg{width:17px;height:17px}
 <option value="dictionary">🌐 Geological Dictionary</option>
 <option value="diagrams">📊 Geological Diagrams</option>
 </select></div>
-<p class="sidebar-note">The selected module opens in the main workspace. You can also use the tabs above the viewer.</p>
+<p class="sidebar-note">The selected module opens in the main workspace. You can also use Jump to above the viewer.</p>
 
 </details>
 <details class="geo-sidebar-panel" data-panel="background-music"><summary>BACKGROUND MUSIC</summary>
@@ -828,6 +872,9 @@ button.geo-iconized .geo-icon svg{width:17px;height:17px}
            value="500" min="100" max="2000" step="50">
 </div>
 
+<div class="field"><label><input type="checkbox" id="geoShowFoldAxes" checked style="width:auto"> Show fold axes in 3D</label><small>Dashed hinge traces on the upper formation; anticline (gold), syncline (cyan).</small></div>
+<div class="field"><label><input type="checkbox" id="geoShowFoldAxisLabels" checked style="width:auto"> Show fold axis labels</label></div>
+<div class="geo-structure-readout" id="geoFoldReadout" role="status" aria-live="polite"></div>
 <button class="add-button" onclick="applyFold()">
     Apply Fold
 </button>
@@ -859,10 +906,25 @@ button.geo-iconized .geo-icon svg{width:17px;height:17px}
     <input type="range" id="faultPosition" min="-3" max="3" value="0" step="0.1">
 </div>
 
+<div class="field"><label><input type="checkbox" id="geoShowFaultTrace" checked style="width:auto"> Show fault line</label></div>
+<div class="field"><label for="geoFaultTraceWeight">Fault line thickness</label><select id="geoFaultTraceWeight"><option value="1">Thin</option><option value="2" selected>Normal</option><option value="4">Bold</option><option value="6">Extra bold</option></select></div>
+<div class="field"><label for="geoFaultTraceColor">Fault line color</label><input type="color" id="geoFaultTraceColor" value="#e87516"></div>
+<div class="field"><label><input type="checkbox" id="geoShowDisplacement" checked style="width:auto"> Show displacement line</label></div>
+<div class="field"><label for="geoDisplacementWeight">Displacement line thickness</label><select id="geoDisplacementWeight"><option value="1">Thin</option><option value="2" selected>Normal</option><option value="4">Bold</option><option value="6">Extra bold</option></select></div>
+<div class="field"><label for="geoDisplacementColor">Displacement line color</label><input type="color" id="geoDisplacementColor" value="#ffdf55"></div>
+<div class="geo-structure-readout" id="geoFaultReadout" role="status" aria-live="polite"></div>
 <button class="add-button" onclick="applyFault()">APPLY FAULT</button>
 
 
 </details>
+</details>
+<details class="geo-sidebar-panel" data-panel="unconformity"><summary>UNCONFORMITY MODELING</summary>
+<div class="field"><label for="geoUnType">Unconformity type</label><select id="geoUnType"><option value="none">None</option><option value="angular">Angular unconformity</option><option value="disconformity">Disconformity</option><option value="nonconformity">Nonconformity</option></select></div>
+<div class="field"><label for="geoUnBoundary">Younger formations above contact</label><input id="geoUnBoundary" type="number" min="1" value="1" step="1"></div>
+<div class="field"><label for="geoUnTilt">Older bed tilt (degrees; angular only)</label><input id="geoUnTilt" type="number" min="5" max="60" value="25"></div>
+<div class="field"><label for="geoUnErosion">Erosion relief (% of adjacent thinner unit)</label><input id="geoUnErosion" type="number" min="0" max="80" value="35"></div>
+<button class="add-button" id="geoUnApply" type="button">Apply Unconformity</button><button class="add-button" id="geoUnReset" type="button">Remove Unconformity</button>
+<p id="geoUnNote" class="sidebar-note" role="status">Choose a contact between formations. Folds and faults may be applied after the unconformity.</p>
 </details>
 <details class="geo-sidebar-panel" data-panel="geological-cross-section"><summary>GEOLOGICAL CROSS-SECTION</summary>
 <div class="field">
@@ -891,10 +953,15 @@ button.geo-iconized .geo-icon svg{width:17px;height:17px}
 <h3>PETROLEUM SYSTEM MODELING</h3>
 <p style="font-size:12px;color:#b6c6d0">Educational assignments only; no actual oil discovery or volumetric estimate.</p>
 <div class="field"><label>Formation</label><select id="petroFormation"></select></div>
-<div class="field"><label>Petroleum system role</label><select id="petroRole"><option value="none">Unassigned</option><option value="reservoir">Reservoir</option><option value="seal">Seal</option><option value="source">Source rock</option></select></div>
+<div class="field"><label>Petroleum system role</label><select id="petroRole"><option value="none">Unassigned</option><option value="reservoir">Reservoir</option><option value="seal">Seal</option><option value="source">Source rock</option><option value="carrier">Carrier rock</option><option value="overburden">Overburden rock</option></select></div>
 <div class="field"><label>Porosity (%)</label><input type="number" id="petroPorosity" min="0" max="100" step="0.1" value="15"></div>
 <div class="field"><label>Permeability (mD)</label><input type="number" id="petroPermeability" min="0" max="1000000" step="0.1" value="100"></div>
-<button class="add-button" onclick="savePetroleumProperties()">Apply Petroleum Properties</button>
+<details open><summary>Reservoir and source rock properties</summary>
+<div class="field"><label>Water saturation (%)</label><input id="mainPetroSw" type="number" min="0" max="100" step="1" value="30"></div>
+<div class="field"><label>Kerogen type</label><select id="mainPetroKerogen"><option value="unknown">Unspecified</option><option>I</option><option>II</option><option>III</option><option>IV</option></select></div>
+<div class="field"><label>Total organic carbon (wt%)</label><input id="mainPetroToc" type="number" min="0" max="100" step="0.1" value="2"></div>
+<div class="field"><label>Thermal maturity (assigned)</label><select id="mainPetroMaturity"><option value="unknown">Unspecified</option><option>Immature</option><option>Oil window</option><option>Gas window</option><option>Overmature</option></select></div>
+<p style="font-size:11px">Properties are educational inputs, not calculated fluid distributions.</p></details><button class="add-button" onclick="savePetroleumProperties()">Apply Petroleum Properties</button>
 <div class="field"><label><input type="checkbox" id="petroHighlight" style="width:auto" checked> Highlight reservoir formations in 3D</label></div>
 <div class="field"><label><input type="checkbox" id="petroLabels" style="width:auto" checked> Show petroleum rock names on 3D model</label></div>
 <div class="field" style="border-top:1px solid #405565;padding-top:12px"><label style="color:#55c2a3;font-weight:bold">3D LABEL POSITION — SELECTED FORMATION</label><p style="font-size:11px;color:#b6c6d0">Move the selected formation’s label using X (left/right), Y (up/down), and Z (front/back). Changes are saved with your project.</p></div>
@@ -904,7 +971,7 @@ button.geo-iconized .geo-icon svg{width:17px;height:17px}
 <div class="field"><label for="petroLabelSize">Label Size</label><input id="petroLabelSize" type="range" min="0.5" max="2" step="0.1" value="1"><span id="petroLabelSizeValue">1.0×</span></div>
 <div class="field"><label><input type="checkbox" id="petroDragLabels" style="width:auto" checked> Drag labels directly with mouse</label><p style="font-size:11px;color:#b6c6d0">Drag a petroleum label to move it across the screen. Use the Z slider for depth. Dragging a label will not rotate the model.</p></div>
 <button type="button" onclick="resetPetroleumLabelPosition()">Reset Selected Label</button>
-<div id="petroSummary" style="font-size:12px;line-height:1.6;color:#d8e8ee" aria-live="polite"></div>
+<details open><summary>Hydrocarbon migration</summary><label><input type="checkbox" id="mainMigShow" style="width:auto"> Show migration pathways</label><div class="field"><label>Migration stage</label><select id="mainMigStage"><option value="both">Primary and secondary</option><option value="primary">Primary (source expulsion)</option><option value="secondary">Secondary (toward reservoir)</option></select></div><div class="field"><label>Animation speed</label><input id="mainMigSpeed" type="range" min="0.25" max="3" step="0.25" value="1"></div><button type="button" id="mainMigPlayButton">Start / resume</button><button type="button" id="mainMigPauseButton">Pause</button><button type="button" id="mainMigResetButton">Reset animation</button><p id="mainMigStatus" aria-live="polite" style="font-size:12px">Assign source and reservoir roles first.</p><p style="font-size:11px">Gold: primary; cyan: secondary. Conceptual front-face overlay, not a prediction of flow or fault sealing.</p></details><details class="volPanel" id="mainVol"><summary>Petroleum volumetric calculator</summary><p>Single-phase oil or gas scenario; not certified reserves. Area is user supplied, not measured from the model.</p><label>Units <select data-v="units"><option value="metric">Metric (km², m)</option><option value="field">Field (acres, ft)</option></select></label><label>Scenario <select data-v="phase"><option value="oil">Oil</option><option value="gas">Gas</option></select></label><label>Area<input data-v="area" type="number" min="0.000001" step="any" value="1" ></label><label>Gross thickness<input data-v="h" type="number" min="0.000001" step="any" value="30" ></label><label>Net-to-gross (%)<input data-v="ntg" type="number" min="0" step="any" value="80" max="100"></label><label>Porosity (%)<input data-v="phi" type="number" min="0" step="any" value="15" max="100"></label><label>Water saturation (%)<input data-v="sw" type="number" min="0" step="any" value="30" max="100"></label><label>Oil FVF (reservoir / stock tank volume)<input data-v="bo" type="number" min="0.000001" step="any" value="1.2" ></label><label>Gas FVF (reservoir / standard volume)<input data-v="bg" type="number" min="0.000000001" step="any" value="0.005" ></label><label>Recovery factor (%)<input data-v="rf" type="number" min="0" step="any" value="30" max="100"></label><button type="button" data-v="import">Use selected reservoir properties</button><div data-v="result" role="status"></div><button type="button" data-v="export">Export calculation report (TXT)</button></details><button type="button" id="mainPetroLabLink">Open advanced Petroleum System Lab</button><div id="petroSummary" style="font-size:12px;line-height:1.6;color:#d8e8ee" aria-live="polite"></div>
 </section>
 
 
@@ -943,6 +1010,7 @@ button.geo-iconized .geo-icon svg{width:17px;height:17px}
     </div>
     <div id="workspaceSections" class="workspace-sections">
     <section class="moveable-section model-section" data-section-id="model" data-section-title="3D Geological Model">
+    <details id="geoWorkspaceMenu" class="geo-visual-tools" hidden aria-hidden="true"><summary>Workspace</summary>
     <div class="model-view-switch" role="group" aria-label="Main geological view">
       <button type="button" data-geo-view="model" aria-pressed="true" >🧊 3D Model</button>
 <button type="button" data-geo-view="time" aria-pressed="false" >🕰️ Time Scale</button>
@@ -951,10 +1019,12 @@ button.geo-iconized .geo-icon svg{width:17px;height:17px}
 <button type="button" data-geo-view="stratigraphy" aria-pressed="false" >📚 Stratigraphy</button>
 <button type="button" data-geo-view="quiz" aria-pressed="false" >🎓 Quizzes</button>
 <button type="button" data-geo-view="dictionary" aria-pressed="false" >🌐 Dictionary</button>
+<button type="button" data-geo-view="crystals" aria-pressed="false">Crystal Systems</button><button type="button" data-geo-view="minerals" aria-pressed="false">Mineral Library</button><button type="button" data-geo-view="rocks" aria-pressed="false">Rock Library</button><button type="button" data-geo-view="fossils" aria-pressed="false">Fossil Library</button><button type="button" data-geo-view="petroleum" aria-pressed="false">Petroleum Systems</button>
 <button type="button" data-geo-view="diagrams" aria-pressed="false">📊 Geological Diagrams</button>
     </div>
-    <div class="geo-visual-tools" id="geoVisualTools">
-      <h3>3D Visualization Controls</h3>
+    </details>
+    <details class="geo-visual-tools" id="geoVisualTools">
+      <summary>3D Visualization Controls</summary>
       <div class="geo-visual-grid">
         <label>Formation opacity <input id="geoOpacity" type="range" min="15" max="100" value="100" step="5" aria-label="Formation opacity"><output id="geoOpacityValue">100%</output></label>
         <button type="button" id="geoViewFit">Fit model</button>
@@ -962,33 +1032,42 @@ button.geo-iconized .geo-icon svg{width:17px;height:17px}
         <button type="button" data-camera-preset="front">Front</button>
         <button type="button" data-camera-preset="side">Side</button>
         <button type="button" data-camera-preset="iso">3D</button>
+        <label><input id="geoModelAutoRotate" type="checkbox"> Auto rotate</label>
+        <label>Rotation speed <input id="geoModelRotationSpeed" type="range" min="5" max="60" step="5" value="20" aria-label="Rotation speed in degrees per second" disabled><output id="geoModelRotationSpeedValue">20°/s</output></label>
         <label><input id="geoCutaway" type="checkbox"> Cutaway</label>
         <label>Cut position <input id="geoCutPosition" type="range" min="-350" max="350" value="0" step="10" disabled></label>
         <button type="button" id="geoShowAllLayers">Show all layers</button>
       </div>
       <div class="geo-layer-visibility" id="geoLayerVisibility" aria-label="Toggle geological formation visibility"></div>
       <p class="visual-hint">Cutaway clips the model along a vertical plane. Hidden layers and opacity are visualization-only; the geological data is unchanged.</p>
+    </details>
+    <div class="geoedu-shortcuts" aria-label="Keyboard shortcuts">
+      <strong>Quick controls</strong>
+      <span><kbd>F</kbd> Fit model</span>
+      <span><kbd>1</kbd> 3D view</span>
+      <span><kbd>2</kbd> Diagrams</span>
+      <span><kbd>?</kbd> Help</span>
     </div>
-    <div id="viewer">
+    <div id="viewer"><div class="geo-developer-credit" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div><div class="geo-local-export" role="group" aria-label="Model export"><button type="button" onclick="geoExportVisible('viewer')">↓ Export Geological Model (PNG)</button><button type="button" onclick="geoExportVisible('report')">Export Report</button></div>
         <div class="hint">
             Drag to rotate · Scroll to zoom
         </div>
     </div>
     <div id="fullGeologicalTime" class="full-geological-time" hidden>
-      <h2>Geological Time Scale</h2>
+      <div class="geo-time-heading"><h2>Geological Time Scale</h2><button type="button" id="geoTimeFullscreen" aria-pressed="false">⛶ Full screen</button></div>
       <p>Explore Earth history from the Phanerozoic to the Precambrian. The Precambrian is grouped under one heading, with its Proterozoic, Archean, and Hadean eons and subdivisions beneath it. Ages are approximate. The major-events column summarizes key milestones for each era or Precambrian eon.</p>
       <div id="geologicalTimeChart" class="geological-time-chart"></div>
       <p class="time-footnote">Ma = million years ago. Approximate boundaries; consult the latest International Chronostratigraphic Chart for formal dates. This chart is not drawn to scale.</p>
     </div>
 
-<div id="geoView_presets" class="educational-workspace-view" hidden>
+<div id="geoView_presets" class="educational-workspace-view" hidden><div class="geo-developer-credit geo-credit-footer" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div>
 <h2>Ready-Made Models</h2>
 <p class="preset-intro">Choose an educational example, read the explanation, then load it into the 3D viewer. Loading replaces your current formations and structure: save your project first.</p>
 <div class="preset-grid" id="presetGrid" aria-label="Example geological models"></div>
 <div class="preset-lesson" id="presetLesson" aria-live="polite">Choose an example to preview its geological lesson.</div>
 <button type="button" class="add-button" id="loadPreset" disabled>Load selected example into 3D</button>
 </div>
-<div id="geoView_structures" class="educational-workspace-view" hidden>
+<div id="geoView_structures" class="educational-workspace-view" hidden><div class="geo-developer-credit geo-credit-footer" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div>
 <h2>Structures Library</h2>
 <p class="preset-intro">Learn how structures form, inspect a simplified diagram, test your understanding, and open the matching 3D example.</p>
 <div class="structure-library" id="structureLibrary">
@@ -997,7 +1076,7 @@ button.geo-iconized .geo-icon svg{width:17px;height:17px}
   <div id="structureLessonContent" aria-live="polite"></div>
 </div>
 </div>
-<div id="geoView_stratigraphy" class="educational-workspace-view" hidden>
+<div id="geoView_stratigraphy" class="educational-workspace-view" hidden><div class="geo-developer-credit geo-credit-footer" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div>
 <h2>Stratigraphy Lessons</h2>
 <p class="preset-intro">Interpret geological diagrams, practice relative dating, and discover the principles behind the order of rock layers.</p>
 <section class="strat-classroom" id="stratClassroom" aria-label="Interactive stratigraphy lessons">
@@ -1013,7 +1092,7 @@ button.geo-iconized .geo-icon svg{width:17px;height:17px}
   <div id="stratOrdering"></div>
 </section>
 </div>
-<div id="geoView_quiz" class="educational-workspace-view" hidden>
+<div id="geoView_quiz" class="educational-workspace-view" hidden><div class="geo-developer-credit geo-credit-footer" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div>
 <h2>Quiz Center</h2>
 <p class="preset-intro">Test your geological knowledge. Choose a difficulty, answer five questions, and receive explanations and a final score. Your 3D project stays unchanged.</p>
 <section id="geoQuizCenter" class="geoquiz" aria-label="Geological Quiz Center">
@@ -1023,7 +1102,15 @@ button.geo-iconized .geo-icon svg{width:17px;height:17px}
   <div id="geoQuizContent" aria-live="polite"><p>Choose a difficulty level and click Start quiz.</p></div>
 </section>
 </div>
-<div id="geoView_dictionary" class="educational-workspace-view" hidden>
+<div id="geoView_rocks" class="educational-workspace-view" hidden><h2>3D Rock Library</h2><p>Procedural educational rock specimens. Textures and colors are illustrative, not scanned samples.</p><div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center"><label>Rock <select id="rockSelect"></select></label><label><input type="checkbox" id="rockSpin"> Auto rotate</label><button id="rockReset" type="button">Reset view</button><button id="rockIn" type="button">Zoom +</button><button id="rockOut" type="button">Zoom −</button></div><div id="rockCanvas" style="height:420px;max-height:65vh;min-height:260px;background:#172633;border-radius:10px;overflow:hidden;position:relative;margin:12px 0"><div class="geo-developer-credit" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div><div class="geo-local-export" role="group" aria-label="Model export"><button type="button" onclick="geoExportVisible('rockCanvas')">↓ Export Rock Model (PNG)</button></div></div><div id="rockInfo" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px"></div><h3>Rock identification quiz</h3><p id="rockQuestion"></p><select id="rockAnswer"></select> <button id="rockCheck" type="button">Check answer</button> <button id="rockNext" type="button">Next question</button><p id="rockFeedback" aria-live="polite"></p><p>Reference for further study: <a href="https://www.usgs.gov/" target="_blank" rel="noopener">USGS</a>.</p></div>
+<div id="geoView_petroleum" class="educational-workspace-view" hidden><h2>Petroleum System Lab</h2><p>Conceptual demonstration, independent of your geological project. Not a basin simulation or resource estimate.</p><div id="psFullscreenHost"><div id="psControls"><h3>Petroleum modeling controls</h3><details class="psGroup" open><summary>Trap modeling</summary><div class="psGroupBody"><label>Trap <select id="psTrap"><option value="fold">Anticline</option><option value="pinch">Stratigraphic pinch-out</option><option value="fault">Fault trap</option><option value="salt">Salt dome trap</option><option value="uncon">Unconformity trap</option><option value="reef">Reef trap</option><option value="combo">Combination trap</option><option value="channel">Channel sandstone trap</option></select></label></div></details><details class="psGroup" ><summary>Hydrocarbon generation</summary><div class="psGroupBody"><label>Source maturity <select id="psMaturity"><option value="0">Immature</option><option selected="" value="1">Oil window</option><option value="2">Gas window</option></select></label></div></details><details class="psGroup" ><summary>Migration & accumulation</summary><div class="psGroupBody"><label><input checked="" id="psSeal" type="checkbox"/> Effective seal</label><button id="psRun" type="button">Animate migration</button></div></details><details class="psGroup" ><summary>Reservoir fluid modeling</summary><div class="psGroupBody"><label><input checked="" id="psFluids" type="checkbox"/> Fluid zones</label><label>GOC <input id="psGoc" max="100" min="0" type="range" value="70"/><output id="psGocOut">70%</output></label><label>OWC <input id="psOwc" max="100" min="0" type="range" value="35"/><output id="psOwcOut">35%</output></label><label>Irreducible water saturation <input id="psSw" max="100" min="0" type="range" value="20"/><output id="psSwOut">20%</output></label></div></details><details class="psGroup" ><summary>Visualization settings</summary><div class="psGroupBody"><label><input checked="" id="psLabels" type="checkbox"/> Show labels</label><label><input id="psSpin" type="checkbox"/> Auto rotate</label><button id="psReset" type="button">Reset view</button><button id="psIn" type="button">Zoom +</button><button id="psOut" type="button">Zoom −</button></div></details><details id="psBurial" style="flex:1 0 100%;padding:8px;border:1px solid #8196a5;border-radius:8px"><summary>Burial history &amp; thermal maturity</summary><div style="display:flex;flex-wrap:wrap;gap:12px;margin:10px 0"><label>Deposition age (Ma) <input id="bhAge" max="500" min="10" type="number" value="150"/></label><label>Present burial (km) <input id="bhDepth" max="10" min="0" step="0.1" type="number" value="4"/></label><label>Gradient (°C/km) <input id="bhGrad" max="60" min="10" type="number" value="30"/></label><label>Surface temperature (°C) <input id="bhSurface" max="40" min="0" type="number" value="20"/></label><label>Elapsed history <input id="bhTime" max="100" min="0" type="range" value="100"/></label><button id="bhPlay" type="button">Play history</button><label><input id="bhLink" type="checkbox"/> Link maturity to trap</label></div><svg aria-label="Burial depth against geological age" id="bhChart" role="img" style="width:100%;max-width:650px;background:#172633;color:white;border-radius:6px" viewbox="0 0 600 230"></svg><p aria-live="polite" id="bhResult"></p><p>Educational linear burial and constant gradient model. Temperature thresholds: oil 60–120°C, gas 120–200°C, overmature above 200°C. Ro proxy uses peak temperature only; real maturity depends on time, kinetics and kerogen type. Linked overmature source disables new generation; it does not model preservation of earlier charge.</p></details><details class="volPanel" id="labVol"><summary>Petroleum volumetric calculator</summary><p>Single-phase oil or gas scenario; not certified reserves. Area is user supplied, not measured from the model.</p><label>Units <select data-v="units"><option value="metric">Metric (km², m)</option><option value="field">Field (acres, ft)</option></select></label><label>Scenario <select data-v="phase"><option value="oil">Oil</option><option value="gas">Gas</option></select></label><label>Area<input data-v="area" type="number" min="0.000001" step="any" value="1" ></label><label>Gross thickness<input data-v="h" type="number" min="0.000001" step="any" value="30" ></label><label>Net-to-gross (%)<input data-v="ntg" type="number" min="0" step="any" value="80" max="100"></label><label>Porosity (%)<input data-v="phi" type="number" min="0" step="any" value="15" max="100"></label><label>Water saturation (%)<input data-v="sw" type="number" min="0" step="any" value="30" max="100"></label><label>Oil FVF (reservoir / stock tank volume)<input data-v="bo" type="number" min="0.000001" step="any" value="1.2" ></label><label>Gas FVF (reservoir / standard volume)<input data-v="bg" type="number" min="0.000000001" step="any" value="0.005" ></label><label>Recovery factor (%)<input data-v="rf" type="number" min="0" step="any" value="30" max="100"></label><button type="button" data-v="import">Use lab water saturation</button><div data-v="result" role="status"></div><button type="button" data-v="export">Export calculation report (TXT)</button></details></div><div id="psCanvas" style="position:relative;height:460px;width:100%;background:#172633;overflow:hidden;border-radius:8px"><div class="geo-developer-credit" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div><div class="geo-local-export" role="group" aria-label="Model export"><button type="button" onclick="geoExportVisible('psCanvas')">↓ Export Petroleum Model (PNG)</button></div></div><p id="psTrapInfo"></p><p id="psStatus" role="status"></p></div><p>Legend: dark gray = source rock; ochre = reservoir; blue-gray = seal; green = oil; orange = gas. Blue = water. Fluid contacts are horizontal and expressed as percentages of the modeled reservoir elevation range (0% bottom, 100% top). Saturation changes hydrocarbon zone color to illustrate water fraction; it is not a flow or pore-volume calculation. Fluid zones assume an effective seal and mature source; gas and oil coexist in this conceptual charge scenario regardless of maturity selection. Moving dots illustrate migration, not computed flow.</p></div><div id="geoView_fossils" class="educational-workspace-view" hidden><h2>3D Fossil Library</h2><p>Idealized fossil morphology, not scanned specimens.</p><div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center"><label>Fossil <select id="fossilSelect"></select></label><label><input type="checkbox" id="fossilSpin"> Auto rotate</label><button id="fossilReset" type="button">Reset view</button><button id="fossilIn" type="button">Zoom +</button><button id="fossilOut" type="button">Zoom −</button></div><div id="fossilCanvas" style="height:420px;max-height:65vh;min-height:260px;background:#172633;border-radius:10px;overflow:hidden;position:relative;margin:12px 0"><div class="geo-developer-credit" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div><div class="geo-local-export" role="group" aria-label="Model export"><button type="button" onclick="geoExportVisible('fossilCanvas')">↓ Export Fossil Model (PNG)</button></div></div><div id="fossilInfo" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px"></div><h3>Fossil identification quiz</h3><p id="fossilQuestion"></p><select id="fossilAnswer"></select> <button id="fossilCheck" type="button">Check answer</button> <button id="fossilNext" type="button">Next question</button><p id="fossilFeedback" aria-live="polite"></p><p>Reference for further study: <a href="https://ucmp.berkeley.edu/" target="_blank" rel="noopener">UC Museum of Paleontology</a>.</p></div>
+
+<div id="geoView_minerals" class="educational-workspace-view" hidden><h2>3D Mineral Library</h2><p>Idealized crystal habits and typical mineral properties. Colors and shapes vary in nature; these are not scanned specimens.</p><div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center"><label>Mineral <select id="mineralSelect"></select></label><label><input type="checkbox" id="mineralSpin"> Auto rotate</label><button id="mineralReset" type="button">Reset view</button><button id="mineralIn" type="button">Zoom +</button><button id="mineralOut" type="button">Zoom −</button></div><div id="mineralCanvas" style="height:420px;max-height:65vh;min-height:260px;background:#172633;border-radius:10px;overflow:hidden;position:relative;margin:12px 0"><div class="geo-developer-credit" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div><div class="geo-local-export" role="group" aria-label="Model export"><button type="button" onclick="geoExportVisible('mineralCanvas')">↓ Export Mineral Model (PNG)</button></div></div><div id="mineralInfo" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px"></div><h3>Mineral identification quiz</h3><p id="mineralQuestion"></p><select id="mineralAnswer"></select> <button id="mineralCheck" type="button">Check answer</button> <button id="mineralNext" type="button">Next question</button><p id="mineralFeedback" aria-live="polite"></p><p>Reference for further study: <a href="https://www.mindat.org/" target="_blank" rel="noopener">Mindat mineral database</a>.</p></div>
+<div id="geoView_crystals" class="educational-workspace-view" hidden>
+<h2>Mineralogy — Crystal Systems</h2><p>Explore idealized crystallographic unit cells. These are geometric teaching models, not atomic structures or predictions of natural crystal habit.</p>
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center"><label>Crystal system <select id="crystalSystem"></select></label><label><input type="checkbox" id="crystalAxes" checked> Show axes</label><label><input type="checkbox" id="crystalSpin"> Auto rotate</label><button type="button" id="crystalReset">Reset view</button></div>
+<div id="crystalCanvas" style="height:420px;max-height:65vh;min-height:260px;background:#172633;border-radius:10px;overflow:hidden;position:relative;margin:12px 0"><div class="geo-developer-credit" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div><div class="geo-local-export" role="group" aria-label="Model export"><button type="button" onclick="geoExportVisible('crystalCanvas')">↓ Export Crystal Model (PNG)</button></div></div><p>Drag to rotate · Scroll to zoom</p><div id="crystalInfo" aria-live="polite"></div></div>
+<div id="geoView_dictionary" class="educational-workspace-view" hidden><div class="geo-developer-credit geo-credit-footer" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div>
 <h2>Geological Dictionary</h2>
 <p class="preset-intro">Search geology vocabulary in English, Arabic, and Kurdish Badini. Explore definitions and geological examples.</p>
 <section class="geodict" aria-label="Trilingual geological dictionary">
@@ -1036,7 +1123,7 @@ button.geo-iconized .geo-icon svg{width:17px;height:17px}
   <p class="gd-note">Badini terminology varies by region and university. Some translations are descriptive, and English technical names are retained where useful. Teachers can help refine terminology.</p>
 </section>
 </div>
-<div id="geoView_diagrams" class="educational-workspace-view geological-diagrams-view" hidden>
+<div id="geoView_diagrams" class="educational-workspace-view geological-diagrams-view" hidden><div class="geo-developer-credit geo-credit-footer" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div>
 <h2>Geological Diagrams &amp; Legend</h2>
 <p>Display the geological cross-section, stratigraphic column, and formation legend together. Choose which diagrams to show.</p>
 <div class="diagram-visibility-controls" role="group" aria-label="Visible geological diagrams">
@@ -1048,34 +1135,24 @@ button.geo-iconized .geo-icon svg{width:17px;height:17px}
 <div class="diagram-content-grid">
 <div id="diagram_cross" class="diagram-card"><section class="geology-panel" data-section-id="cross" data-section-title="Geological Cross-Section">
             <h2>Geological Cross-Section</h2>
-            <canvas id="crossSectionCanvas" width="600" height="350"></canvas>
+            <canvas id="crossSectionCanvas" width="600" height="350"></canvas><button type="button" class="geo-local-diagram-export" onclick="exportGeologyPNG('cross')">Export Cross-Section (PNG)</button>
         </section></div>
 <div id="diagram_column" class="diagram-card"><section class="geology-panel" data-section-id="column" data-section-title="Stratigraphic Column">
             <h2>Stratigraphic Column</h2>
-            <canvas id="stratigraphicCanvas" width="600" height="650"></canvas>
+            <canvas id="stratigraphicCanvas" width="600" height="650"></canvas><button type="button" class="geo-local-diagram-export" onclick="exportGeologyPNG('column')">Export Stratigraphic Column (PNG)</button>
         </section></div>
 <div id="diagram_legend" class="diagram-card diagram-legend"><section class="legend-panel" data-section-id="legend" data-section-title="Geological Legend" aria-label="Automatic geological legend">
         <div class="legend-heading">
             <h2>Geological Legend</h2>
             <span id="legendSummary">Formation colors, lithology and thickness</span>
         </div>
-        <div id="geologicalLegend" class="legend-grid" aria-live="polite"></div>
+        <div id="geologicalLegend" class="legend-grid" aria-live="polite"></div><button type="button" class="geo-local-diagram-export" onclick="exportGeologyPNG('legend')">Export Legend (PNG)</button>
     </section></div>
 </div>
 </div>
     </section>
 
-    <section class="export-panel" data-section-id="exports" data-section-title="Export Geological Models" aria-label="Export geological models">
-      <h2>Export Geological Models</h2>
-      <p class="export-note">Download PNG images of your current model and diagrams. The complete report combines the 3D view, legend, cross-section and stratigraphic column. These images are educational illustrations, not survey-grade interpretations.</p>
-      <div class="export-actions">
-        <button onclick="exportGeologyPNG('3d')">Export 3D View</button>
-        <button onclick="exportGeologyPNG('cross')">Export Cross-Section</button>
-        <button onclick="exportGeologyPNG('column')">Export Stratigraphic Column</button>
-        <button onclick="exportGeologyPNG('legend')">Export Legend</button>
-        <button onclick="exportGeologyPNG('report')">Export Complete Report</button>
-      </div>
-    </section>
+
 
 
     </div>
@@ -1170,7 +1247,7 @@ function renderFullGeologicalTimeChart(){
 }
 renderFullGeologicalTimeChart();
 let activeMainView='model';
-const geoWorkspaceViews=['model','time','presets','structures','stratigraphy','quiz','dictionary','diagrams'];
+const geoWorkspaceViews=['model','time','presets','structures','stratigraphy','quiz','dictionary','diagrams','crystals','minerals','rocks','fossils','petroleum'];
 function setMainGeologyView(next){
  if(!geoWorkspaceViews.includes(next)) next='model';
  activeMainView=next;
@@ -1181,9 +1258,11 @@ function setMainGeologyView(next){
  }
  document.querySelectorAll('[data-geo-view]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.geoView===next)));
  document.getElementById('sidebarWorkspaceView').value=next;
+ document.dispatchEvent(new CustomEvent('geo-crystal-view',{detail:next}));
  if(next==='diagrams')requestAnimationFrame(()=>{document.querySelectorAll('#geoView_diagrams canvas').forEach(c=>{c.style.maxWidth='100%'});});
  if(next==='model')requestAnimationFrame(()=>{if(typeof resize3DViewer==='function')resize3DViewer()});
 }
+document.getElementById('mainPetroLabLink').addEventListener('click',()=>setMainGeologyView('petroleum'));
 document.querySelectorAll('[data-geo-view]').forEach(button=>button.addEventListener('click',()=>setMainGeologyView(button.dataset.geoView)));
 document.getElementById('sidebarWorkspaceView').addEventListener('change',event=>setMainGeologyView(event.target.value));
 
@@ -1605,6 +1684,21 @@ let faultEnabled = false;
 
 function createLithologyTexture(type, baseColor) {
 
+    // Stable pseudo-random pattern: identical lithologies and colors render
+    // consistently in the 3D model, legend, and stratigraphic column.
+    const seedText = String(type) + ":" + String(baseColor);
+    let seed = 2166136261;
+    for (let i = 0; i < seedText.length; i++) {
+        seed = Math.imul(seed ^ seedText.charCodeAt(i), 16777619);
+    }
+    function patternRandom() {
+        seed += 0x6D2B79F5;
+        let t = seed;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+
     const canvas = document.createElement("canvas");
     canvas.width = 512;
     canvas.height = 512;
@@ -1621,9 +1715,9 @@ function createLithologyTexture(type, baseColor) {
     if (type === "sandstone") {
         // Sand grains
         for (let i = 0; i < 900; i++) {
-            const x = Math.random() * 512;
-            const y = Math.random() * 512;
-            const r = 1 + Math.random() * 3;
+            const x = patternRandom() * 512;
+            const y = patternRandom() * 512;
+            const r = 1 + patternRandom() * 3;
 
             ctx.beginPath();
             ctx.arc(x, y, r, 0, Math.PI * 2);
@@ -1664,14 +1758,14 @@ function createLithologyTexture(type, baseColor) {
     else if (type === "conglomerate") {
         // Rounded rock fragments
         for (let i = 0; i < 90; i++) {
-            const x = Math.random() * 512;
-            const y = Math.random() * 512;
-            const r = 5 + Math.random() * 12;
+            const x = patternRandom() * 512;
+            const y = patternRandom() * 512;
+            const r = 5 + patternRandom() * 12;
 
             ctx.beginPath();
             ctx.ellipse(
                 x, y, r, r * 0.7,
-                Math.random(), 0, Math.PI * 2
+                patternRandom(), 0, Math.PI * 2
             );
             ctx.stroke();
         }
@@ -1682,8 +1776,8 @@ function createLithologyTexture(type, baseColor) {
         for (let i = 0; i < 1600; i++) {
             ctx.beginPath();
             ctx.arc(
-                Math.random() * 512,
-                Math.random() * 512,
+                patternRandom() * 512,
+                patternRandom() * 512,
                 1.2, 0, Math.PI * 2
             );
             ctx.fill();
@@ -1700,11 +1794,11 @@ function createLithologyTexture(type, baseColor) {
     else if (type === "topsoil") {
         // Organic irregular marks
         for (let i = 0; i < 180; i++) {
-            const x = Math.random() * 512;
-            const y = Math.random() * 512;
+            const x = patternRandom() * 512;
+            const y = patternRandom() * 512;
 
             ctx.beginPath();
-            ctx.arc(x, y, 2 + Math.random() * 5, 0, Math.PI * 2);
+            ctx.arc(x, y, 2 + patternRandom() * 5, 0, Math.PI * 2);
             ctx.fill();
         }
     }
@@ -1730,9 +1824,9 @@ function createLithologyTexture(type, baseColor) {
 // Camera-facing labels identify the assigned petroleum role and formation.
 function makePetroleumLabel(layer) {
     const role = layer.petroleum?.role;
-    const labels = {reservoir: 'RESERVOIR', seal: 'SEAL', source: 'SOURCE ROCK'};
+    const labels = {reservoir: 'RESERVOIR', seal: 'SEAL', source: 'SOURCE ROCK', carrier: 'CARRIER ROCK', overburden: 'OVERBURDEN'};
     if (!labels[role]) return null;
-    const colors = {reservoir: '#087e77', seal: '#8052b8', source: '#b66a26'};
+    const colors = {reservoir: '#087e77', seal: '#8052b8', source: '#b66a26', carrier: '#397eac', overburden: '#777777'};
     const canvas = document.createElement('canvas');
     canvas.width = 1024;
     canvas.height = 160;
@@ -1763,7 +1857,69 @@ function makePetroleumLabel(layer) {
     return sprite;
 }
 
+let geoUn = {type:'none',boundary:1,tilt:25,erosion:35};
+function geoUnActive(){return geoUn.type!=='none' && geoUn.boundary>0 && geoUn.boundary<layers.length && (geoUn.type!=='angular'||layers.length-geoUn.boundary>=2) && (geoUn.type!=='nonconformity'||layers.slice(geoUn.boundary).every(l=>l.lithology==='basement'));}
+function geoUnY(x,y){
+ if(!geoUnActive())return y;
+ const total=layers.reduce((a,l)=>a+Number(l.thickness),0)/100;
+ const contact=total/2-layers.slice(0,geoUn.boundary).reduce((a,l)=>a+Number(l.thickness),0)/100;
+ const bottom=-total/2;
+ const relief=Math.min(layers[geoUn.boundary-1].thickness,layers[geoUn.boundary].thickness)/100*geoUn.erosion/100;
+ const surface=contact-relief*(0.5+0.5*Math.sin(x*2.1));
+ if(Math.abs(y-contact)<1e-7)return surface;
+ if(y>contact || geoUn.type!=='angular')return y;
+ if(y<=bottom+1e-7)return bottom;
+ return Math.max(bottom,Math.min(surface,y+x*Math.tan(geoUn.tilt*Math.PI/180)));
+}
+function geoUnSync(){
+ document.getElementById('geoUnType').value=geoUn.type;
+ document.getElementById('geoUnBoundary').value=geoUn.boundary;
+ document.getElementById('geoUnTilt').value=geoUn.tilt;
+ document.getElementById('geoUnErosion').value=geoUn.erosion;
+ document.getElementById('geoUnNote').textContent=geoUnActive()?'Active: '+geoUn.type+'. Simplified geometry; folds and faults supported.':geoUn.type==='none'?'No unconformity applied.':'Inactive: contact or lithology no longer valid.';
+}
+function geoUnLoad(v){
+ const n=(x,d,min,max)=>Number.isFinite(x)?Math.max(min,Math.min(max,x)):d;
+ geoUn={type:['angular','disconformity','nonconformity'].includes(v?.type)?v.type:'none',boundary:Math.round(n(v?.boundary,1,1,1000)),tilt:n(v?.tilt,25,5,60),erosion:n(v?.erosion,35,0,80)};
+ geoUnSync();
+}
+document.getElementById('geoUnApply').addEventListener('click',()=>{
+ const old=geoUn;
+ geoUnLoad({type:document.getElementById('geoUnType').value,boundary:Number(document.getElementById('geoUnBoundary').value),tilt:Number(document.getElementById('geoUnTilt').value),erosion:Number(document.getElementById('geoUnErosion').value)});
+ if(geoUn.type!=='none'&&!geoUnActive()){geoUn=old;geoUnSync();alert('Choose a valid contact. Angular requires at least two older layers; nonconformity requires Basement lithology for all older layers.');return;}
+ updateModel();setStatus('Unconformity settings applied.');
+});
+document.getElementById('geoUnReset').addEventListener('click',()=>{geoUnLoad(null);updateModel();setStatus('Unconformity removed.');});
+
+
+var mainMigState;
+function mainMigGet(){return mainMigState ||= {running:false,t:0,group:null,tracks:[]};}
+function mainMigBuild(){
+ const st=mainMigGet(); if(st.group){model.remove(st.group);st.group.traverse(o=>{o.geometry?.dispose();o.material?.dispose()});} st.group=null;st.tracks=[];
+ const $=id=>document.getElementById(id), status=$('mainMigStatus'); if(!$('mainMigShow').checked){status.textContent='Pathways hidden.';return;}
+ const source=layers.findIndex(l=>l.petroleum?.role==='source');const reservoir=layers.findIndex((l,i)=>i<source&&l.petroleum?.role==='reservoir');
+ if(source<0||reservoir<0){status.textContent='Assign a source below a reservoir first.';return;}
+ if(layers.slice(reservoir+1,source).some(l=>l.petroleum?.role==='seal')){status.textContent='An assigned seal separates source and reservoir; no direct pathway shown.';return;}
+ if(['Immature','Overmature'].includes(layers[source].petroleum?.maturity)){status.textContent='Assigned maturity does not support active generation in this illustration.';return;}
+ const total=layers.reduce((a,l)=>a+Number(l.thickness),0);const amp=Number($('foldAmplitude').value)/100,w=Math.max(.001,Number($('foldWavelength').value)/100),fold=$('foldType').value;
+ function point(i,x,f){let y=total/200-layers.slice(0,i).reduce((a,l)=>a+Number(l.thickness)/100,0)-Number(layers[i].thickness)/100*f; if(geoUnActive())y=geoUnY(x,y);if(fold!=='none')y+=(fold==='anticline'?1:-1)*amp*Math.cos(2*Math.PI*x/w);let z=2.65;if(faultEnabled){const d=Math.max(1,Math.min(90,Number($('faultDip').value)))*Math.PI/180,off=Number($('faultDisplacement').value)/100;if(x>Number($('faultPosition').value)+(total/200-y)/Math.tan(d)){const t=$('faultType').value;if(t==='normal'){x+=off*Math.cos(d);y-=off*Math.sin(d)}else if(t==='reverse'){x-=off*Math.cos(d);y+=off*Math.sin(d)}else if(t==='strike')z+=off;}}return new THREE.Vector3(x,y,z);}
+ st.group=new THREE.Group();model.add(st.group);
+ function track(points,color){const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color,depthTest:false,depthWrite:false}));line.renderOrder=80;st.group.add(line);const curve=new THREE.CurvePath();for(let i=1;i<points.length;i++)curve.add(new THREE.LineCurve3(points[i-1],points[i]));const end=points.at(-1),dir=end.clone().sub(points.at(-2));if(dir.length()>0){const cone=new THREE.Mesh(new THREE.ConeGeometry(.065,.16,12),new THREE.MeshBasicMaterial({color,depthTest:false,depthWrite:false}));cone.position.copy(end);cone.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir.normalize());cone.renderOrder=81;st.group.add(cone);}const dots=[];for(let i=0;i<5;i++){const dot=new THREE.Mesh(new THREE.SphereGeometry(.045,10,8),new THREE.MeshBasicMaterial({color,depthTest:false,depthWrite:false}));dot.renderOrder=82;st.group.add(dot);dots.push(dot);}st.tracks.push({curve,dots});}
+ const a=point(source,-1.6,.65),b=point(source,-1.6,0),c=point(reservoir,-1.6,.5);const pts=[b];for(let i=source-1;i>reservoir;i--)pts.push(point(i,-1.6,.5));pts.push(c);for(let j=1;j<=12;j++)pts.push(point(reservoir,-1.6+1.6*j/12,.5));const stage=$('mainMigStage').value;if(stage!=='secondary')track([a,b],0xffca45);if(stage!=='primary')track(pts,0x39e6ff);status.textContent='Illustrative pathway: '+layers[source].name+' → '+layers[reservoir].name+(faultEnabled?' (fault connectivity not evaluated).':'.');mainMigTick(0);
+}
+function mainMigTick(dt){const st=mainMigGet();if(st.running&&!document.hidden&&activeMainView==='model')st.t+=dt*Number(document.getElementById('mainMigSpeed').value)*.35;st.tracks.forEach(({curve,dots})=>dots.forEach((dot,i)=>dot.position.copy(curve.getPointAt((st.t+i/dots.length)%1))));}
+function mainMigPlay(){const st=mainMigGet();document.getElementById('mainMigShow').checked=true;if(!st.tracks.length)mainMigBuild();st.running=st.tracks.length>0;mainMigFeedback();}
+function mainMigPause(){mainMigGet().running=false;mainMigFeedback();}
+function mainMigReset(){const st=mainMigGet();st.running=false;st.t=0;mainMigTick(0);mainMigFeedback();}
+function mainMigFeedback(){const st=mainMigGet();const el=document.getElementById('mainMigStatus');if(st.tracks.length){el.textContent=el.textContent.replace(/ — Animation (running|paused)\.$/,'')+' — Animation '+(st.running?'running':'paused')+'.';}}
+ document.getElementById('mainMigPlayButton').addEventListener('click',mainMigPlay);
+ document.getElementById('mainMigPauseButton').addEventListener('click',mainMigPause);
+ document.getElementById('mainMigResetButton').addEventListener('click',mainMigReset);
+document.getElementById('mainMigShow').addEventListener('change',mainMigBuild);document.getElementById('mainMigStage').addEventListener('change',mainMigBuild);
+
 function updateModel() {
+    const mig=mainMigGet(); if(mig.group){model.remove(mig.group);mig.group.traverse(o=>{o.geometry?.dispose();o.material?.dispose()});mig.group=null;mig.tracks=[];}
+    geoUnSync();
     if (typeof sdReset === "function") sdReset();
 
     // Remove the previous geological model
@@ -1797,9 +1953,11 @@ function updateModel() {
         document.getElementById("foldAmplitude").value
     ) / 100;
 
-    const wavelength = Number(
+    const requestedWavelength = Number(
         document.getElementById("foldWavelength").value
     ) / 100;
+    const wavelength = Number.isFinite(requestedWavelength) && requestedWavelength > 0
+        ? requestedWavelength : 1;
 
     // Fault settings
     const faultType = document.getElementById("faultType").value;
@@ -1837,7 +1995,8 @@ function updateModel() {
             let y = positions.getY(i);
             let z = positions.getZ(i);
 
-            // Apply folding
+            // Apply unconformity first, then younger folding.
+            if (geoUnActive()) y = geoUnY(x,y+centerY)-centerY;
             if (foldType !== "none") {
 
                 const direction =
@@ -1983,8 +2142,64 @@ const material = new THREE.MeshStandardMaterial({
         );
 
         model.add(faultPlane);
+        // Displacement vector: same direction and scale as the applied block translation.
+        if (document.getElementById('geoShowDisplacement').checked && displacement > 0) {
+            const delta = faultType === 'strike' ? new THREE.Vector3(0,0,displacement) : new THREE.Vector3(Math.cos(dipRadians),-Math.sin(dipRadians),0).multiplyScalar(displacement*(faultType==='reverse'?-1:1));
+            const start = new THREE.Vector3(faultPosition,total/200+0.15,2.55);
+            const direction = delta.clone().normalize();
+            const radius = Number(document.getElementById('geoDisplacementWeight').value)*0.012;
+            const mat = new THREE.MeshBasicMaterial({color:document.getElementById('geoDisplacementColor').value,depthTest:false,depthWrite:false});
+            const head = Math.min(delta.length()*0.35,Math.max(radius*5,0.12));
+            const shaft = delta.length()-head;
+            const line = new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,shaft,12),mat);
+            line.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),direction);
+            line.position.copy(start).addScaledVector(direction,shaft/2); line.renderOrder=61; model.add(line);
+            const tip = new THREE.Mesh(new THREE.ConeGeometry(radius*2.5,head,12),mat.clone());
+            tip.quaternion.copy(line.quaternion); tip.position.copy(start).addScaledVector(direction,shaft+head/2); tip.renderOrder=62; model.add(tip);
+        }
+
+        if (document.getElementById('geoShowFaultTrace').checked) {
+            const weight = Number(document.getElementById('geoFaultTraceWeight').value);
+            const trace = new THREE.Mesh(new THREE.CylinderGeometry(weight*0.012,weight*0.012,5,12),new THREE.MeshBasicMaterial({color:document.getElementById('geoFaultTraceColor').value,depthTest:false,depthWrite:false}));
+            // Upper edge of the displayed fault plane, in its local coordinates.
+            trace.rotation.z = Math.PI/2;
+            trace.position.set(0,total/200,0);
+            trace.renderOrder=59;
+            faultPlane.updateMatrix();
+            trace.applyMatrix4(faultPlane.matrix);
+            model.add(trace);
+        }
     }
 
+    // Draw surface hinge traces for every crest and trough in the periodic fold.
+    if (layers.length && foldType !== "none" && amplitude > 0 && document.getElementById("geoShowFoldAxes").checked) {
+        const halfWave = wavelength / 2;
+        for (let k = Math.ceil(-3.5 / halfWave); k <= Math.floor(3.5 / halfWave); k++) {
+            const x0 = k * halfWave;
+            const isAnticline = (foldType === "anticline") === (k % 2 === 0);
+            const y0 = geoUnY(x0, total / 200) + (isAnticline ? amplitude : -amplitude);
+            let x = x0, y = y0, dz = 0;
+            if (faultEnabled && x > faultPosition + (total / 200 - y) / tanDip) {
+                if (faultType === "normal") { x += displacement * Math.cos(dipRadians); y -= displacement * Math.sin(dipRadians); }
+                else if (faultType === "reverse") { x -= displacement * Math.cos(dipRadians); y += displacement * Math.sin(dipRadians); }
+                else if (faultType === "strike") dz = displacement;
+            }
+            const color = isAnticline ? 0xffc928 : 0x00d9ff;
+            const points = [new THREE.Vector3(x,y+0.055,-2.5+dz),new THREE.Vector3(x,y+0.055,2.5+dz)];
+            const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineDashedMaterial({color,dashSize:0.18,gapSize:0.09,depthTest:false,depthWrite:false}));
+            line.computeLineDistances(); line.renderOrder=60; model.add(line);
+            if (!document.getElementById('geoShowFoldAxisLabels').checked) continue;
+            const canvas=document.createElement('canvas'); canvas.width=512; canvas.height=96;
+            const ctx=canvas.getContext('2d'); ctx.fillStyle='#172633';ctx.fillRect(0,0,512,96);
+            ctx.fillStyle=isAnticline?'#ffc928':'#00d9ff';ctx.font='bold 34px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
+            ctx.fillText(isAnticline?'ANTICLINE AXIS':'SYNCLINE AXIS',256,48);
+            const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
+            const label=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,depthTest:false,depthWrite:false}));
+            label.position.set(x,y+0.22,2.72+dz);label.scale.set(1.9,0.36,1);label.renderOrder=61;model.add(label);
+        }
+    }
+
+    mainMigBuild();
     camera.lookAt(0, 0, 0);
     updateGeologicalLegend();
     if (typeof window.createCrossSection === "function") {
@@ -2329,7 +2544,8 @@ window.saveProject = function() {
 
     const project = {
         application: "GeoEdu 3D",
-        version: "1.6",
+        version: "2.0-step7",
+        unconformity: geoUn,
         projectName: document.getElementById("projectName").value,
         author: document.getElementById("projectAuthor").value,
         location: document.getElementById("projectLocation").value,
@@ -2395,7 +2611,7 @@ document.getElementById("openFile").addEventListener("change", async function(ev
 
         layers = project.formations.map(layer => {
             const p = layer.petroleum;
-            if (!p || !['none','reservoir','seal','source'].includes(p.role) ||
+            if (!p || !['none','reservoir','seal','source','carrier','overburden'].includes(p.role) ||
                 !Number.isFinite(p.porosity) || p.porosity < 0 || p.porosity > 100 ||
                 !Number.isFinite(p.permeability) || p.permeability < 0 || p.permeability > 1000000) {
                 delete layer.petroleum;
@@ -2423,6 +2639,7 @@ document.getElementById("projectName").value =
         document.getElementById("projectDescription").value =
             project.description || "";
 
+        geoUnLoad(project.unconformity);
         updateModel();
         renderLayerList();
 
@@ -2445,6 +2662,7 @@ window.newProject = function() {
     );
 
     if (!confirmed) return;
+geoUnLoad(null);
 layers = [
         { name: "Sandstone", color: "#D99B45", thickness: 100 },
         { name: "Shale", color: "#596B8A", thickness: 100 },
@@ -2759,7 +2977,7 @@ function setupWorkspaceLayout() {
     let dragged = null;
     panels.forEach(panel => {
         const saved = savedSizes[panel.dataset.sectionId];
-        if (saved && typeof saved === 'object') {
+        if (panel.dataset.sectionId !== 'model' && saved && typeof saved === 'object') {
             if (saved.wide === true) panel.classList.add('wide-panel');
             if (typeof saved.height === 'string' && /^\d+(?:\.\d+)?px$/.test(saved.height)) {
                 panel.style.height = saved.height;
@@ -2771,7 +2989,7 @@ function setupWorkspaceLayout() {
         handle.className = 'section-handle';
         handle.textContent = '☰ Drag';
         handle.title = 'Drag this handle to reorder the section';
-        handle.draggable = true;
+        handle.draggable = false;
         const heading = document.createElement('strong');
         heading.textContent = panel.dataset.sectionTitle;
         const up = document.createElement('button');
@@ -2806,6 +3024,7 @@ function setupWorkspaceLayout() {
         });
         const resetHeight = document.createElement('button');
         resetHeight.type = 'button';
+        resetHeight.className = 'section-reset-height';
         resetHeight.textContent = 'Reset height';
         resetHeight.title = 'Restore automatic section height';
         resetHeight.addEventListener('click', () => {
@@ -2934,8 +3153,23 @@ function resize3DViewer() {
 }
 setupWorkspaceLayout();
 
-function animate() {
+const geoModelAutoRotate = document.getElementById('geoModelAutoRotate');
+const geoModelRotationSpeed = document.getElementById('geoModelRotationSpeed');
+geoModelAutoRotate.addEventListener('change', () => {
+    geoModelRotationSpeed.disabled = !geoModelAutoRotate.checked;
+});
+geoModelRotationSpeed.addEventListener('input', () => {
+    document.getElementById('geoModelRotationSpeedValue').textContent = geoModelRotationSpeed.value + '°/s';
+});
+let geoModelLastFrame = performance.now();
+function animate(now = performance.now()) {
     requestAnimationFrame(animate);
+    const dt = Math.max(0, Math.min(0.05, (now - geoModelLastFrame) / 1000));
+    geoModelLastFrame = now;
+    if (geoModelAutoRotate.checked && activeMainView === 'model' && !document.hidden && !dragging && !activePetroleumDrag) {
+        model.rotation.y = (model.rotation.y + Number(geoModelRotationSpeed.value) * Math.PI / 180 * dt) % (2 * Math.PI);
+    }
+    mainMigTick(dt);
     sdGraphics.rotation.copy(model.rotation);
     renderer.render(scene, camera);
 }
@@ -3082,6 +3316,7 @@ function initGeoPresets(){
   document.getElementById('faultDip').value=p.dip||60;
   document.getElementById('faultDisplacement').value=p.offset||0;
   document.getElementById('faultPosition').value=0;
+  geoUnLoad(null);
   faultEnabled=Boolean(p.fault);
   document.getElementById('projectName').value='Learning Example: '+p.title;
   document.getElementById('projectDescription').value=p.description;
@@ -3243,7 +3478,8 @@ window.createCrossSection = function(showStatus = true) {
         let x = worldX;
         let y = localY;
 
-        // Folding
+        // Apply unconformity first, then younger folding.
+        if (geoUnActive()) y = geoUnY(x,y+centerY)-centerY;
         if (foldType !== "none") {
 
             const direction =
@@ -3284,7 +3520,7 @@ window.createCrossSection = function(showStatus = true) {
 
         return {
             x: toCanvasX(x),
-            y: toCanvasY(centerY + y)
+            y: toCanvasY(centerY+y)
         };
     }
 
@@ -3394,7 +3630,7 @@ window.createCrossSection = function(showStatus = true) {
     });
 
     // Draw the fault plane
-    if (faultEnabled) {
+    if (faultEnabled && document.getElementById("geoShowFaultTrace").checked) {
 
         const faultTopX = faultPosition;
 
@@ -3419,8 +3655,8 @@ window.createCrossSection = function(showStatus = true) {
             toCanvasY(-topWorld)
         );
 
-        ctx.strokeStyle = "#e87516";
-        ctx.lineWidth = 3;
+        ctx.strokeStyle = document.getElementById("geoFaultTraceColor").value;
+        ctx.lineWidth = Number(document.getElementById("geoFaultTraceWeight").value)*1.5;
         ctx.setLineDash([8, 5]);
         ctx.stroke();
 
@@ -3436,6 +3672,27 @@ window.createCrossSection = function(showStatus = true) {
             left + 5,
             top + 15
         );
+    }
+
+    // Independent displacement vector in the X-Z geological section.
+    if (faultEnabled && displacement > 0 && document.getElementById('geoShowDisplacement').checked) {
+        const color = document.getElementById('geoDisplacementColor').value;
+        const weight = Number(document.getElementById('geoDisplacementWeight').value)*1.5;
+        const sign = faultType === 'reverse' ? -1 : 1;
+        const x = toCanvasX(faultPosition + topWorld/tanDip), y = toCanvasY(0);
+        ctx.save(); ctx.beginPath(); ctx.rect(left,top,sectionWidth,sectionHeight); ctx.clip();
+        ctx.strokeStyle=color; ctx.fillStyle=color; ctx.lineWidth=weight; ctx.setLineDash([]);
+        if (faultType === 'strike') {
+            ctx.beginPath(); ctx.arc(x,y,Math.max(6,weight*2),0,Math.PI*2); ctx.stroke();
+            ctx.beginPath(); ctx.arc(x,y,Math.max(2,weight/2),0,Math.PI*2); ctx.fill();
+        } else {
+            const ex=toCanvasX(faultPosition+topWorld/tanDip+sign*displacement*Math.cos(dipRadians));
+            const ey=toCanvasY(-sign*displacement*Math.sin(dipRadians));
+            const angle=Math.atan2(ey-y,ex-x), head=Math.min(Math.hypot(ex-x,ey-y)*0.45,Math.max(9,weight*3));
+            ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(ex,ey); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(ex,ey); ctx.lineTo(ex-head*Math.cos(angle-0.5),ey-head*Math.sin(angle-0.5)); ctx.lineTo(ex-head*Math.cos(angle+0.5),ey-head*Math.sin(angle+0.5)); ctx.closePath(); ctx.fill();
+        }
+        ctx.restore();
     }
 
     // Outer section boundary
@@ -3597,12 +3854,17 @@ function refreshPetroleumPanel() {
     picker.value = String(Number.isInteger(previous) && previous >= 0 && previous < layers.length ? previous : 0);
     loadPetroleumProperties();
 }
+window.geoVolSelectedReservoir = () => { const l=layers[Number(document.getElementById('petroFormation').value)]; return l?.petroleum?.role==='reservoir' ? {name:l.name, thickness:l.thickness, porosity:l.petroleum.porosity, sw:l.petroleum.sw ?? 30} : null; };
 function loadPetroleumProperties() {
     const i = Number(document.getElementById('petroFormation').value);
     const props = layers[i]?.petroleum || {};
-    document.getElementById('petroRole').value = ['none','reservoir','seal','source'].includes(props.role) ? props.role : 'none';
+    document.getElementById('petroRole').value = ['none','reservoir','seal','source','carrier','overburden'].includes(props.role) ? props.role : 'none';
     document.getElementById('petroPorosity').value = props.porosity ?? 15;
     document.getElementById('petroPermeability').value = props.permeability ?? 100;
+    document.getElementById('mainPetroSw').value = props.sw ?? 30;
+    document.getElementById('mainPetroToc').value = props.toc ?? 2;
+    document.getElementById('mainPetroKerogen').value = props.kerogen ?? 'unknown';
+    document.getElementById('mainPetroMaturity').value = props.maturity ?? 'unknown';
     drawPetroleumSummary();
 }
 function drawPetroleumSummary() {
@@ -3617,6 +3879,8 @@ function drawPetroleumSummary() {
         `Reservoirs: ${reservoirs.map(l=>l.name).join(', ') || 'none'}`,
         `Seals: ${seals.map(l=>l.name).join(', ') || 'none'}`,
         `Source rocks: ${sources.map(l=>l.name).join(', ') || 'none'}`,
+        `Carrier rocks: ${assigned.filter(l=>l.role==='carrier').map(l=>l.name).join(', ') || 'none'}`,
+        `Overburden: ${assigned.filter(l=>l.role==='overburden').map(l=>l.name).join(', ') || 'none'}`,
         `Structural setting: ${document.getElementById('foldType').value}`,
         reservoirs.length && seals.length && document.getElementById('foldType').value==='anticline'
           ? 'Potential anticline trap ingredients are assigned. Trapping and charge are NOT verified.'
@@ -3631,13 +3895,16 @@ window.savePetroleumProperties = function() {
     const role = document.getElementById('petroRole').value;
     const porosity = Number(document.getElementById('petroPorosity').value);
     const permeability = Number(document.getElementById('petroPermeability').value);
-    if (!['none','reservoir','seal','source'].includes(role) ||
+    if (!['none','reservoir','seal','source','carrier','overburden'].includes(role) ||
         !Number.isFinite(porosity) || porosity < 0 || porosity > 100 ||
         !Number.isFinite(permeability) || permeability < 0 || permeability > 1000000) {
         setStatus('Enter porosity 0–100% and permeability 0–1,000,000 mD.');
         return;
     }
-    layer.petroleum = {role, porosity, permeability};
+    const sw = document.getElementById('mainPetroSw').valueAsNumber;
+    const toc = document.getElementById('mainPetroToc').valueAsNumber;
+    if (![sw,toc].every(v=>Number.isFinite(v)&&v>=0&&v<=100)) {setStatus('Water saturation and TOC must be 0–100%.');return;}
+    layer.petroleum = {role, porosity, permeability, sw, toc, kerogen:document.getElementById('mainPetroKerogen').value, maturity:document.getElementById('mainPetroMaturity').value};
     updateModel();
     drawPetroleumSummary();
     setStatus(`Petroleum properties saved for ${layer.name}.`);
@@ -3940,6 +4207,9 @@ initGeoDictionary();
     });
   }
 })();
+
+document.getElementById('geoShowFoldAxes').addEventListener('change', updateModel);
+for (const id of ['geoShowFoldAxisLabels','geoShowFaultTrace','geoFaultTraceWeight','geoFaultTraceColor','geoShowDisplacement','geoDisplacementWeight','geoDisplacementColor']) document.getElementById(id).addEventListener('change', updateModel);
 </script>
 
 
@@ -4070,5 +4340,464 @@ initGeoDictionary();
   }
 })();
 </script>
+
+<script>
+/* GeoEdu 3D v2.0: non-destructive keyboard shortcuts. */
+(() => {
+  const isTyping = el => !!el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName));
+  window.addEventListener('keydown', event => {
+    if (event.ctrlKey || event.metaKey || event.altKey || isTyping(event.target)) return;
+    const key = event.key.toLowerCase();
+    if (key === 'f') document.getElementById('geoViewFit')?.click();
+    else if (key === '1') document.querySelector('[data-geo-view="model"]')?.click();
+    else if (key === '2') document.querySelector('[data-geo-view="diagrams"]')?.click();
+    else if (key === '?') alert('GeoEdu 3D shortcuts\nF — Fit model\n1 — 3D model\n2 — Geological diagrams\nShortcuts are disabled while editing text.');
+  });
+})();
+</script>
+
+<style>
+/* GeoEdu 3D v2.0 — structural parameter feedback */
+.geo-structure-readout { margin: 9px 0 11px; padding: 9px 11px; border: 1px solid rgba(119,180,210,.24); border-radius: 8px; background: rgba(22,57,75,.32); color: #c9e4ef; font-size: 12px; line-height: 1.5; }
+.geo-structure-readout[data-error="true"] { border-color: #f0a47d; color: #ffd1b7; }
+.geo-structure-readout strong { color: #fff; }
+</style>
+<script>
+/* Structural parameter previews: advisory only; existing 3D model equations unchanged. */
+(() => {
+  const byId = id => document.getElementById(id);
+  const number = id => Number(byId(id)?.value);
+  const valid = (v, min, max) => Number.isFinite(v) && v >= min && v <= max;
+  function updateStructuralReadouts() {
+    const fold = byId('geoFoldReadout');
+    const fault = byId('geoFaultReadout');
+    if (!fold || !fault) return;
+    const foldType = byId('foldType').value;
+    const amplitude = number('foldAmplitude');
+    const wavelength = number('foldWavelength');
+    const foldOK = valid(amplitude, 0, 200) && valid(wavelength, 100, 2000);
+    fold.dataset.error = String(!foldOK);
+    fold.textContent = foldOK
+      ? (foldType === 'none' ? 'No fold selected. Choose anticline or syncline to deform layers.'
+        : `${foldType === 'anticline' ? 'Anticline' : 'Syncline'} · amplitude ${amplitude} m · wavelength ${wavelength} m · amplitude/wavelength ${(amplitude/wavelength).toFixed(2)}`)
+      : 'Check fold parameters: amplitude 0–200 m; wavelength 100–2000 m.';
+    const dip = number('faultDip');
+    const displacement = number('faultDisplacement');
+    const position = number('faultPosition');
+    const faultOK = valid(dip, 0, 90) && valid(displacement, 0, 200) && valid(position, -3, 3);
+    fault.dataset.error = String(!faultOK);
+    fault.textContent = faultOK
+      ? `${byId('faultType').selectedOptions[0].text} · dip ${dip}° · displacement ${displacement} m · position ${position.toFixed(1)} (model units)`
+      : 'Check fault parameters: dip 0–90°; displacement 0–200 m; position −3 to 3.';
+  }
+  document.addEventListener('input', e => {
+    if (e.target?.matches('#foldType,#foldAmplitude,#foldWavelength,#faultType,#faultDip,#faultDisplacement,#faultPosition')) updateStructuralReadouts();
+  });
+  document.addEventListener('change', e => {
+    if (e.target?.matches('#foldType,#foldAmplitude,#foldWavelength,#faultType,#faultDip,#faultDisplacement,#faultPosition')) updateStructuralReadouts();
+  });
+  // Refresh after a saved project loads and repopulates structural controls.
+  document.addEventListener('click', e => {
+    if (e.target?.closest('[onclick*="applyFold"], [onclick*="applyFault"]')) updateStructuralReadouts();
+  });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', updateStructuralReadouts);
+  else updateStructuralReadouts();
+})();
+</script>
+
+<!-- GeoEdu 3D v2.0 Step 4: diagram clarity and standalone exports -->
+<style>
+.geo-diagram-tools{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:12px 0;padding:10px 12px;background:#142b3b;border:1px solid #3c5867;border-radius:10px;color:#e8f2f6}
+.geo-diagram-tools button{padding:8px 12px;border:1px solid #6a95a9;border-radius:7px;background:#24485c;color:#fff;cursor:pointer}
+.geo-diagram-tools button:hover,.geo-diagram-tools button:focus-visible{background:#32647e;outline:2px solid #a9dcff;outline-offset:2px}
+.geo-diagram-tools .geo-diagram-summary{font-size:13px;line-height:1.5;flex:1 1 260px}
+.geo-diagram-help{font-size:12px;color:#a9bac8;margin:8px 0 14px}
+</style>
+<script>
+(function(){
+  'use strict';
+  function formatMeters(value){return Number(value).toLocaleString(undefined,{maximumFractionDigits:1})+' m';}
+  function initDiagramUpgrade(){
+    const view=document.getElementById('geoView_diagrams');
+    const grid=view?.querySelector('.diagram-content-grid');
+    if(!view||!grid||document.getElementById('geoDiagramTools'))return;
+    const toolbar=document.createElement('div');toolbar.id='geoDiagramTools';toolbar.className='geo-diagram-tools';
+    toolbar.setAttribute('role','group');toolbar.setAttribute('aria-label','Diagram tools');
+    const summary=document.createElement('span');summary.className='geo-diagram-summary';summary.id='geoDiagramSummary';summary.setAttribute('aria-live','polite');
+    const refresh=document.createElement('button');refresh.type='button';refresh.textContent='Refresh diagrams';
+    const cross=document.createElement('button');cross.type='button';cross.textContent='Save cross-section PNG';
+    const column=document.createElement('button');column.type='button';column.textContent='Save column PNG';
+    toolbar.append(summary,refresh,cross,column);grid.before(toolbar);
+    const help=document.createElement('p');help.className='geo-diagram-help';help.textContent='Depths and thicknesses use metres (m). The cross-section is an educational schematic; horizontal coordinates are model units, not surveyed distances.';
+    toolbar.after(help);
+    function getLayers(){return Array.isArray(window.layers)?window.layers:(typeof layers!=='undefined'&&Array.isArray(layers)?layers:[]);}
+    function updateSummary(){
+      const entries=getLayers();const total=entries.reduce((n,l)=>n+(Number(l.thickness)||0),0);
+      summary.textContent=entries.length+' formation'+(entries.length===1?'':'s')+' · Total stratigraphic thickness: '+formatMeters(total)+' · Cross-section: schematic X–Z view';
+    }
+    function redraw(){
+      if(typeof window.createCrossSection==='function')window.createCrossSection(false);
+      if(typeof window.drawStratigraphicColumn==='function')window.drawStratigraphicColumn();
+      else if(typeof drawStratigraphicColumn==='function')drawStratigraphicColumn();
+      updateSummary();
+    }
+    function download(canvasId,filename){
+      redraw();const canvas=document.getElementById(canvasId);if(!canvas)return;
+      canvas.toBlob(blob=>{
+        if(!blob){alert('Unable to export this diagram.');return;}
+        const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.click();
+        setTimeout(()=>URL.revokeObjectURL(url),3000);
+      },'image/png');
+    }
+    refresh.addEventListener('click',redraw);
+    cross.addEventListener('click',()=>download('crossSectionCanvas','GeoEdu3D_cross_section.png'));
+    column.addEventListener('click',()=>download('stratigraphicCanvas','GeoEdu3D_stratigraphic_column.png'));
+    view.addEventListener('click',e=>{if(e.target.closest('[data-diagram-toggle],#showAllDiagrams'))updateSummary();});
+    updateSummary();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initDiagramUpgrade);
+  else initDiagramUpgrade();
+})();
+</script>
+
+<!-- GeoEdu 3D v2.0 Step 5: dashboard usability (no modeling logic changes) -->
+<style>
+.geo-v2-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:14px 0 18px;padding:12px 14px;border:1px solid #395a6c;border-radius:12px;background:#1a3040;box-shadow:0 6px 22px rgba(0,0,0,.12)}
+.geo-v2-toolbar label{display:flex;align-items:center;gap:9px;font-size:13px;color:#dceaf1}
+.geo-v2-toolbar select{width:auto;min-width:170px;max-width:100%;padding:8px 10px}
+.geo-v2-toolbar button{border:1px solid #54778a;background:#274b5e;padding:8px 11px}
+.geo-v2-toolbar button:hover{background:#37677e}
+.geo-v2-toolbar .geo-v2-spacer{flex:1 1 12px}
+.geo-v2-toolbar .geo-v2-status{font-size:12px;color:#bbd4e0}
+.geo-v2-toolbar button[aria-pressed="true"]{background:#397b72;border-color:#70c9b0}
+body.geo-v2-compact .sidebar{padding-top:10px;padding-bottom:10px}
+body.geo-v2-compact .sidebar .field{margin:7px 0}
+body.geo-v2-compact .workspace{padding-top:12px}
+body.geo-v2-compact .geo-v2-toolbar{margin:7px 0 12px}
+@media(max-width:650px){.geo-v2-toolbar{padding:10px;gap:8px}.geo-v2-toolbar label{width:100%;justify-content:space-between}.geo-v2-toolbar select{flex:1;min-width:0}.geo-v2-toolbar .geo-v2-spacer{display:none}.geo-v2-toolbar button{flex:1 1 auto}}
+</style>
+<script>
+(()=>{
+  'use strict';
+  function init(){
+    const workspace=document.querySelector('section.workspace');
+    const target=workspace?.querySelector('.workspace-layout-controls');
+    if(!workspace||!target||document.getElementById('geoV2Toolbar'))return;
+    const bar=document.createElement('nav');bar.id='geoV2Toolbar';bar.className='geo-v2-toolbar';bar.setAttribute('aria-label','Workspace quick navigation');
+    const label=document.createElement('label');label.textContent='Jump to';
+    const picker=document.createElement('select');picker.setAttribute('aria-label','Jump to workspace view');
+    const views=[['model','3D Model'],['diagrams','Geological Diagrams'],['crystals','Crystal Systems'],['minerals','Mineral Library'],['rocks','Rock Library'],['fossils','Fossil Library'],['petroleum','Petroleum Systems'],['time','Geological Time Scale'],['presets','Ready-Made Models'],['structures','Structures Library'],['stratigraphy','Stratigraphy Lessons'],['quiz','Quiz Center'],['dictionary','Dictionary']];
+    views.forEach(([id,name])=>{const option=document.createElement('option');option.value=id;option.textContent=name;picker.append(option);});
+    label.append(picker);
+    const spacer=document.createElement('span');spacer.className='geo-v2-spacer';
+    const status=document.createElement('span');status.className='geo-v2-status';status.textContent='Workspace ready';status.setAttribute('aria-live','polite');
+    const compact=document.createElement('button');compact.type='button';compact.textContent='Compact layout';compact.setAttribute('aria-pressed','false');
+    const controls=document.createElement('button');controls.type='button';controls.textContent='Toggle controls';
+    bar.append(label,spacer,status,compact,controls);target.before(bar);
+    picker.addEventListener('change',()=>{
+      const button=document.querySelector('[data-geo-view="'+picker.value+'"]');
+      if(button){button.click();status.textContent='Showing '+picker.selectedOptions[0].textContent;}
+    });
+    document.addEventListener('geo-crystal-view',event=>{picker.value=event.detail;status.textContent='Showing '+(picker.selectedOptions[0]?.textContent||'workspace');});
+    compact.addEventListener('click',()=>{const enabled=document.body.classList.toggle('geo-v2-compact');compact.setAttribute('aria-pressed',String(enabled));compact.textContent=enabled?'Comfortable layout':'Compact layout';});
+    controls.addEventListener('click',()=>document.getElementById('toggleGeoSidebar')?.click());
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- Step 6: standalone student learning center; project files remain local -->
+<button id="geoLearningToggle" type="button" aria-controls="geoLearningPanel" aria-expanded="false">🎓 Learning Center</button>
+<section id="geoLearningPanel" role="region" aria-label="GeoEdu 3D Learning Center" hidden>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2>Geology Learning Center</h2><button type="button" id="geoLearningClose" aria-label="Close Learning Center">✕</button></div>
+  <p>Follow a short guided activity, learn key terms, and export your study notes.</p>
+  <strong id="geoLearningStepTitle">Step 1 of 5</strong>
+  <p id="geoLearningStepText" class="geo-learning-tip"></p>
+  <div class="geo-learning-actions"><button id="geoLearningPrev" type="button">Previous</button><button id="geoLearningNext" type="button">Next step</button></div>
+  <label for="geoLearningTerm">Geological glossary</label>
+  <select id="geoLearningTerm"><option value="formation">Formation</option><option value="lithology">Lithology</option><option value="anticline">Anticline</option><option value="syncline">Syncline</option><option value="fault">Fault</option><option value="crosssection">Cross-section</option><option value="stratigraphy">Stratigraphy</option></select>
+  <p id="geoLearningDefinition" class="geo-learning-tip" aria-live="polite"></p>
+  <button id="geoLearningExport" type="button">Export learning notes (.txt)</button>
+  <p style="font-size:12px;opacity:.8">Educational illustrations are simplified and are not substitutes for validated subsurface interpretations.</p>
+</section>
+<script>
+(function(){
+'use strict';
+const steps=[
+ ['Set up your project','Give your geological project a name and location. This helps identify your saved work.'],
+ ['Build stratigraphy','Add formations and choose appropriate lithologies, colors and thicknesses. Older units are typically beneath younger units in an undeformed sequence.'],
+ ['Explore folds','Choose an anticline or syncline and adjust amplitude and wavelength. Compare how layer geometry changes.'],
+ ['Explore faults','Select a fault type and examine dip and displacement. Observe the effect on layer continuity.'],
+ ['Interpret and export','Compare the 3D model with its cross-section and stratigraphic column. Export diagrams and save your project.']
+];
+const glossary={formation:'A mappable body of rock with distinctive lithological characteristics.',lithology:'The physical characteristics of rock, including composition, texture and grain size.',anticline:'A fold that arches upward; older strata generally occur toward its core.',syncline:'A fold that bends downward; younger strata generally occur toward its core.',fault:'A fracture or fracture zone across which relative movement has occurred.',crosssection:'A vertical representation of geological features along a chosen line.',stratigraphy:'The study of rock layers, their sequence, ages and relationships.'};
+function init(){
+ const $=id=>document.getElementById(id), panel=$('geoLearningPanel'), toggle=$('geoLearningToggle');if(!panel||!toggle)return;
+ let index=0;
+ function draw(){ $('geoLearningStepTitle').textContent=`Step ${index+1} of ${steps.length}: ${steps[index][0]}`;$('geoLearningStepText').textContent=steps[index][1];$('geoLearningPrev').disabled=index===0;$('geoLearningNext').disabled=index===steps.length-1; }
+ function definition(){ $('geoLearningDefinition').textContent=glossary[$('geoLearningTerm').value]||''; }
+ function open(isOpen){panel.hidden=!isOpen;toggle.setAttribute('aria-expanded',String(isOpen));if(isOpen)$('geoLearningClose').focus();else toggle.focus();}
+ toggle.addEventListener('click',()=>open(panel.hidden));$('geoLearningClose').addEventListener('click',()=>open(false));
+ $('geoLearningPrev').addEventListener('click',()=>{index=Math.max(0,index-1);draw()});$('geoLearningNext').addEventListener('click',()=>{index=Math.min(steps.length-1,index+1);draw()});
+ $('geoLearningTerm').addEventListener('change',definition);
+ panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();open(false)}});
+ $('geoLearningExport').addEventListener('click',()=>{
+  const val=id=>$(id)?.value||'Not specified';
+  const lines=['GeoEdu 3D — Student Learning Notes','Educational model — not a validated subsurface interpretation','',`Project: ${val('projectName')}`,`Location: ${val('projectLocation')}`,`Fold: ${val('foldType')}`,`Fault: ${val('faultType')}`,'','Learning activity:'];
+  steps.forEach((step,i)=>lines.push(`${i+1}. ${step[0]} — ${step[1]}`));
+  lines.push('','Geological glossary:');Object.entries(glossary).forEach(([term,def])=>lines.push(`${term}: ${def}`));
+  const blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='GeoEdu3D_Learning_Notes.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ });draw();definition();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<script type="module">
+import * as T from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+const $=id=>document.getElementById(id), host=$('crystalCanvas');
+const systems=[
+['Cubic',1,1,1,90,90,90,'a = b = c; α = β = γ = 90°','Halite, pyrite, fluorite'],
+['Tetragonal',1,1,1.55,90,90,90,'a = b ≠ c; α = β = γ = 90°','Zircon, rutile'],
+['Orthorhombic',1,1.35,1.7,90,90,90,'a ≠ b ≠ c; α = β = γ = 90°','Olivine, sulfur'],
+['Hexagonal',1,1,1.6,90,90,120,'a = b ≠ c; α = β = 90°, γ = 120°','Beryl, apatite'],
+['Trigonal',1,1,1,75,75,75,'Rhombohedral setting: a = b = c; α = β = γ ≠ 90°','Calcite, quartz'],
+['Monoclinic',1,1.3,1.6,90,110,90,'a ≠ b ≠ c; α = γ = 90°, β ≠ 90°','Gypsum, orthoclase'],
+['Triclinic',1,1.3,1.6,75,105,115,'a ≠ b ≠ c; generally α ≠ β ≠ γ, none constrained to 90°','Albite, microcline']];
+systems.forEach((r,i)=>$('crystalSystem').add(new Option(r[0],i)));
+let renderer,scene,camera,group,axes,angle=.65,tilt=.4,dist=5,frame=0;
+function draw(){if(!renderer)return;camera.position.set(dist*Math.cos(tilt)*Math.sin(angle),dist*Math.sin(tilt),dist*Math.cos(tilt)*Math.cos(angle));camera.lookAt(0,0,0);renderer.render(scene,camera);}
+function resize(){if(!renderer||!host.clientWidth)return;renderer.setSize(host.clientWidth,host.clientHeight);camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();draw();}
+function build(){if(!renderer)return;while(group.children.length){const o=group.children[0];group.remove(o);o.traverse(x=>{x.geometry?.dispose();x.material?.map?.dispose();x.material?.dispose();});}const r=systems[+$('crystalSystem').value], [name,a,b,c,al,be,ga]=r, rad=Math.PI/180, A=al*rad,B=be*rad,G=ga*rad;
+const u=new T.Vector3(a,0,0),v=new T.Vector3(b*Math.cos(G),0,b*Math.sin(G)),cx=c*Math.cos(B),cz=c*(Math.cos(A)-Math.cos(B)*Math.cos(G))/Math.sin(G),w=new T.Vector3(cx,Math.sqrt(Math.max(0,c*c-cx*cx-cz*cz)),cz);const center=u.clone().add(v).add(w).multiplyScalar(.5);const pts=[];for(let i=0;i<8;i++)pts.push(new T.Vector3().addScaledVector(u,i&1?1:0).addScaledVector(v,i&2?1:0).addScaledVector(w,i&4?1:0).sub(center));const faces=[0,2,3,0,3,1,4,5,7,4,7,6,0,1,5,0,5,4,2,6,7,2,7,3,0,4,6,0,6,2,1,3,7,1,7,5];const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(pts.flatMap(p=>p.toArray()),3));geo.setIndex(faces);geo.computeVertexNormals();group.add(new T.Mesh(geo,new T.MeshStandardMaterial({color:0x59b9df,transparent:true,opacity:.65,side:T.DoubleSide,flatShading:true})));const lines=[];for(let i=0;i<8;i++)for(const bit of [1,2,4])if(!(i&bit))lines.push(pts[i],pts[i|bit]);group.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(lines),new T.LineBasicMaterial({color:0xffffff})));axes=new T.Group();for(const [vec,color,label] of [[u,0xff7777,'a'],[v,0x75ef9b,'b'],[w,0x77aaff,'c']]){const origin=center.clone().negate(),len=vec.length()*1.25;axes.add(new T.ArrowHelper(vec.clone().normalize(),origin,len,color,.13,.08));const canvas=document.createElement('canvas');canvas.width=128;canvas.height=64;const ctx=canvas.getContext('2d');ctx.fillStyle='#ffffff';ctx.font='bold 42px Arial';ctx.fillText(label,42,45);const sprite=new T.Sprite(new T.SpriteMaterial({map:new T.CanvasTexture(canvas),depthTest:false}));sprite.scale.set(.45,.225,1);sprite.position.copy(origin).addScaledVector(vec,1.38);axes.add(sprite);}group.add(axes);axes.visible=$('crystalAxes').checked;$('crystalInfo').textContent=name+' — '+r[7]+' | Mineral examples: '+r[8]+'. '+(name==='Hexagonal'?'Shown as a primitive unit cell; the familiar six-sided prism is a crystal habit.':'');draw();}
+function init(){if(renderer)return;try{renderer=new T.WebGLRenderer({antialias:true});}catch(e){host.append(document.createTextNode('3D crystal viewer unavailable: WebGL is required.'));return;}renderer.setPixelRatio(Math.min(devicePixelRatio,2));host.append(renderer.domElement);renderer.domElement.style.touchAction='none';scene=new T.Scene();scene.background=new T.Color(0x172633);camera=new T.PerspectiveCamera(42,1,.1,100);scene.add(new T.HemisphereLight(0xffffff,0x546678,2));const light=new T.DirectionalLight(0xffffff,2);light.position.set(3,5,4);scene.add(light);group=new T.Group();scene.add(group);let last=null;const el=renderer.domElement;el.addEventListener('pointerdown',e=>{last=[e.clientX,e.clientY];el.setPointerCapture(e.pointerId)});el.addEventListener('pointermove',e=>{if(!last)return;angle-=(e.clientX-last[0])*.01;tilt=Math.max(-1.45,Math.min(1.45,tilt+(e.clientY-last[1])*.01));last=[e.clientX,e.clientY];draw()});for(const event of ['pointerup','pointercancel','lostpointercapture'])el.addEventListener(event,()=>last=null);el.addEventListener('wheel',e=>{e.preventDefault();dist=Math.max(2.8,Math.min(10,dist+e.deltaY*.005));draw()},{passive:false});new ResizeObserver(resize).observe(host);build();resize();}
+function tick(){frame=0;if($('geoView_crystals').hidden||!$('crystalSpin').checked)return;angle+=.008;draw();frame=requestAnimationFrame(tick);}
+function spin(){if(!frame&&$('crystalSpin').checked&&!$('geoView_crystals').hidden)frame=requestAnimationFrame(tick);}
+document.addEventListener('geo-crystal-view',e=>{if(e.detail==='crystals'){init();resize();spin();}});$('crystalSystem').addEventListener('change',build);$('crystalAxes').addEventListener('change',()=>{if(axes)axes.visible=$('crystalAxes').checked;draw()});$('crystalSpin').addEventListener('change',spin);$('crystalReset').addEventListener('click',()=>{angle=.65;tilt=.4;dist=5;draw()});if(!$('geoView_crystals').hidden)init();
+
+host.geoExportCurrent = () => { if (!renderer) throw new Error('Open the model first.'); draw(); const select=$('crystalSystem'); window.geoDownloadModelPNG(renderer.domElement, select.options[select.selectedIndex]?.text || 'crystalCanvas'); };
+</script>
+
+<style>
+#viewer .geo-fullscreen-button,#crystalCanvas .geo-fullscreen-button ,#mineralCanvas .geo-fullscreen-button ,#rockCanvas .geo-fullscreen-button , #fossilCanvas .geo-fullscreen-button {position:absolute;top:12px;right:12px;z-index:20;background:#203c4d;color:#fff;border:1px solid #83b5c5;border-radius:8px;padding:9px 13px;cursor:pointer;font:600 13px Arial,sans-serif;touch-action:manipulation}
+#viewer:fullscreen,#crystalCanvas:fullscreen,#mineralCanvas:fullscreen,#viewer.geo-expanded,#crystalCanvas.geo-expanded ,#mineralCanvas.geo-expanded ,#rockCanvas:fullscreen, #fossilCanvas:fullscreen,#rockCanvas.geo-expanded , #fossilCanvas.geo-expanded {width:100vw!important;height:100vh!important;height:100dvh!important;max-width:none!important;max-height:none!important;min-height:0!important;margin:0!important;border:0!important;border-radius:0!important;resize:none!important;background:#172633;box-sizing:border-box}
+#viewer.geo-expanded,#crystalCanvas.geo-expanded ,#mineralCanvas.geo-expanded ,#rockCanvas.geo-expanded , #fossilCanvas.geo-expanded {position:fixed!important;inset:0!important;z-index:2147483647!important}
+body.geo-expanded-body {overflow:hidden!important}
+#viewer:fullscreen canvas,#crystalCanvas:fullscreen canvas,#mineralCanvas:fullscreen canvas,#viewer.geo-expanded canvas,#crystalCanvas.geo-expanded canvas ,#mineralCanvas.geo-expanded canvas ,#rockCanvas:fullscreen canvas, #fossilCanvas:fullscreen canvas,#rockCanvas.geo-expanded canvas , #fossilCanvas.geo-expanded canvas {max-width:none!important;width:100%!important;height:100%!important;display:block}
+</style>
+<script>
+(()=>{
+ const hosts=['viewer','crystalCanvas','mineralCanvas','rockCanvas','fossilCanvas','psFullscreenHost'].map(id=>document.getElementById(id));
+ let expanded=null, previousOverflow='', placeholder=null, pending=false;
+ const native=()=>document.fullscreenElement||document.webkitFullscreenElement;
+ const moved=new Map();
+ function controls(host,on){if(host.id==='psFullscreenHost')return;
+ if(on&&!moved.has(host)){const panel=document.createElement('details');panel.className='geo-fs-tools';panel.open=true;const summary=document.createElement('summary');summary.textContent='Model controls';panel.append(summary);const body=document.createElement('div');body.className='geo-fs-tools-body';panel.append(body);
+ const nodes=host.id==='viewer'?[document.getElementById('geoVisualTools'),...document.querySelectorAll('#geoSidebar > details[data-panel="add-geological-formation"],#geoSidebar > details[data-panel="formation-editor"],#geoSidebar > details[data-panel="structural-geology"],#geoSidebar > details[data-panel="unconformity"],#geoSidebar > details[data-panel="petroleum-system-modeling"],#geoSidebar > details[data-panel="strike-&-dip"],#geoSidebar > details[data-panel="geological-cross-section"]')]:[host.previousElementSibling];
+ const entries=nodes.filter(Boolean).map(node=>{const marker=document.createComment('fullscreen control position');node.before(marker);body.append(node);return [node,marker];});host.append(panel);moved.set(host,{panel,entries});for(const event of ['pointerdown','mousedown','touchstart','wheel','click'])panel.addEventListener(event,e=>e.stopPropagation());
+ }else if(!on&&moved.has(host)){const {panel,entries}=moved.get(host);for(const [node,marker] of entries)marker.replaceWith(node);panel.remove();moved.delete(host);}}
+ function sync(){for(const host of hosts){const h=host.querySelector('.geo-fs-hide');const active=native()===host||expanded===host;if(h){h.hidden=!active;if(!active){host.classList.remove('geo-fs-clean');h.textContent='Hide controls';h.setAttribute('aria-pressed','false');}}const b=host.querySelector('.geo-fullscreen-button');const on=native()===host||expanded===host;controls(host,on);if(b){b.textContent=on?'↙ Exit full screen':'⛶ Full screen';b.setAttribute('aria-pressed',String(on));}}}
+ function fallback(host){placeholder=document.createComment('viewer position');host.before(placeholder);document.body.append(host);expanded=host;previousOverflow=document.body.style.overflow;document.body.classList.add('geo-expanded-body');host.classList.add('geo-expanded');sync();}
+ function restore(){if(!expanded)return;const host=expanded;host.classList.remove('geo-expanded');placeholder.replaceWith(host);expanded=null;placeholder=null;document.body.classList.remove('geo-expanded-body');document.body.style.overflow=previousOverflow;sync();}
+ async function toggle(host){if(pending)return;pending=true;try{if(expanded){restore();return;}if(native()){const exit=document.exitFullscreen||document.webkitExitFullscreen;if(exit)await exit.call(document);return;}const request=host.requestFullscreen||host.webkitRequestFullscreen;if(request){try{await request.call(host);if(native()===host)return;}catch(e){/* use expanded viewport when native fullscreen is blocked */}}fallback(host);}finally{pending=false;sync();}}
+ for(const host of hosts){const b=document.createElement('button');b.type='button';b.className='geo-fullscreen-button';b.setAttribute('aria-label',host.id==='psFullscreenHost'?'Toggle petroleum system full screen':host.id==='viewer'?'Toggle geological model full screen':'Toggle model full screen');b.addEventListener('pointerdown',e=>e.stopPropagation());b.addEventListener('mousedown',e=>e.stopPropagation());b.addEventListener('click',e=>{e.stopPropagation();toggle(host);});host.append(b);const h=document.createElement('button');h.type='button';h.className='geo-fs-hide';h.hidden=true;h.textContent='Hide controls';h.setAttribute('aria-pressed','false');for(const event of ['pointerdown','mousedown','touchstart'])h.addEventListener(event,e=>e.stopPropagation());h.addEventListener('click',e=>{e.stopPropagation();const clean=host.classList.toggle('geo-fs-clean');h.textContent=clean?'Show controls':'Hide controls';h.setAttribute('aria-pressed',String(clean));window.dispatchEvent(new Event('resize'));});host.append(h);}
+ document.addEventListener('fullscreenchange',sync);document.addEventListener('webkitfullscreenchange',sync);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&expanded){e.preventDefault();restore();}});sync();
+})();
+</script>
+<script type="module">
+import * as T from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+const $=id=>document.getElementById(id), host=$('mineralCanvas');
+// name, formula, class, system, hardness, cleavage, fracture, streak, luster, color, habit, geometry, display color
+const minerals=[
+['Quartz','SiO₂','Silicate','Trigonal','7','None','Conchoidal','White','Vitreous','Colorless, white or variable','Hexagonal prism with pointed termination','quartz',0xb7d7e8],
+['Halite','NaCl','Halide','Cubic','2–2.5','Perfect cubic, 3 directions','Conchoidal to uneven','White','Vitreous','Colorless or white','Cube','cube',0xd8e9ee],
+['Pyrite','FeS₂','Sulfide','Cubic','6–6.5','Poor','Uneven to conchoidal','Greenish black','Metallic','Brass yellow','Cube','cube',0xc4a34c],
+['Fluorite','CaF₂','Halide','Cubic','4','Perfect octahedral, 4 directions','Subconchoidal to uneven','White','Vitreous','Purple, green or variable','Octahedron','oct',0x9d75ce],
+['Calcite','CaCO₃','Carbonate','Trigonal','3','Perfect rhombohedral, 3 directions','Conchoidal to uneven','White','Vitreous','Colorless or white','Rhombohedron','rhomb',0xf1e5c7],
+['Gypsum','CaSO₄·2H₂O','Sulfate','Monoclinic','2','Perfect in one direction; others distinct','Uneven to splintery','White','Vitreous to pearly','Colorless or white','Tabular blade','blade',0xe6e3da],
+['Magnetite','Fe₃O₄','Oxide','Cubic','5.5–6.5','None','Uneven','Black','Metallic to submetallic','Black','Octahedron','oct',0x414952],
+['Beryl','Be₃Al₂Si₆O₁₈','Silicate','Hexagonal','7.5–8','Poor basal','Conchoidal to uneven','White','Vitreous','Green, blue or variable','Hexagonal prism','hex',0x72b9a0],
+['Zircon','ZrSiO₄','Silicate','Tetragonal','7.5','Poor','Conchoidal to uneven','White','Adamantine to vitreous','Brown or variable','Square prism with pyramidal ends','zircon',0xa97649],
+['Olivine (forsterite)','Mg₂SiO₄','Silicate','Orthorhombic','6.5–7','Poor','Conchoidal','White','Vitreous','Olive green','Short prismatic','ortho',0x8caa42],
+['Orthoclase','KAlSi₃O₈','Silicate','Monoclinic','6','Two directions near 90°','Uneven','White','Vitreous to pearly','Pink or white','Blocky prism','blade',0xd9a091],
+['Albite','NaAlSi₃O₈','Silicate','Triclinic','6–6.5','Two directions near 90°','Uneven','White','Vitreous to pearly','White or colorless','Tabular prism','tric',0xc7d4db]];
+minerals.forEach((m,i)=>{$('mineralSelect').add(new Option(m[0],i));$('mineralAnswer').add(new Option(m[0],i));});
+let renderer,scene,camera,mesh,az=.65,el=.35,dist=5,drag=null,frame=0,last=0,q=0;
+function draw(){if(!renderer)return;camera.position.set(dist*Math.cos(el)*Math.sin(az),dist*Math.sin(el),dist*Math.cos(el)*Math.cos(az));camera.lookAt(0,0,0);renderer.render(scene,camera)}
+function resize(){if(!renderer||!host.clientWidth||!host.clientHeight)return;renderer.setSize(host.clientWidth,host.clientHeight);camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();draw()}
+function geometry(k){if(k==='oct')return new T.OctahedronGeometry(1.25);if(k==='hex')return new T.CylinderGeometry(.72,.72,2.2,6);if(k==='quartz'||k==='zircon'){const n=k==='quartz'?6:4,r=.75,h=.8,pts=[],idx=[];for(const y of [-h,h])for(let i=0;i<n;i++)pts.push(r*Math.cos(i*2*Math.PI/n),y,r*Math.sin(i*2*Math.PI/n));pts.push(0,-1.35,0,0,1.35,0);for(let i=0;i<n;i++){let j=(i+1)%n;idx.push(i,i+n,j,j,i+n,j+n,i,j,2*n,i+n,2*n+1,j+n)}const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(pts,3));g.setIndex(idx);g.computeVertexNormals();return g}const g=new T.BoxGeometry(k==='blade'?1.5:k==='ortho'?1.1:1.6,k==='cube'?1.6:2,k==='blade'?.55:k==='ortho'?.85:1.6);const p=g.attributes.position;for(let i=0;i<p.count;i++){let x=p.getX(i),y=p.getY(i),z=p.getZ(i);if(k==='rhomb'){x+=.35*y+.35*z;z+=.35*y}else if(k==='blade')x+=.25*y;else if(k==='tric'){x+=.3*y+.2*z;z+=.25*y}p.setXYZ(i,x,y,z)}g.computeVertexNormals();return g}
+function build(){const m=minerals[+$('mineralSelect').value];const labels=['Mineral','Chemical formula','Classification','Crystal system','Mohs hardness','Cleavage','Fracture','Streak','Luster','Typical color','Crystal habit'];$('mineralInfo').replaceChildren(...labels.map((l,i)=>{const d=document.createElement('div'),b=document.createElement('strong');b.textContent=l+': ';d.append(b,document.createTextNode(m[i]));return d}));if(!renderer)return;if(mesh){scene.remove(mesh);mesh.traverse(o=>{o.geometry?.dispose();o.material?.dispose()})}const g=geometry(m[11]);mesh=new T.Group();mesh.add(new T.Mesh(g,new T.MeshStandardMaterial({color:m[12],metalness:m[8].includes('Metallic')?.65:.08,roughness:.35,flatShading:true,side:T.DoubleSide})));mesh.add(new T.LineSegments(new T.EdgesGeometry(g),new T.LineBasicMaterial({color:0x293d4a,transparent:true,opacity:.6})));scene.add(mesh);draw()}
+function init(){if(renderer)return;try{renderer=new T.WebGLRenderer({antialias:true})}catch(e){host.textContent='WebGL is unavailable.';return}renderer.setPixelRatio(Math.min(devicePixelRatio,2));host.append(renderer.domElement);const c=renderer.domElement;c.style.touchAction='none';scene=new T.Scene();scene.background=new T.Color(0x172633);camera=new T.PerspectiveCamera(42,1,.1,100);scene.add(new T.HemisphereLight(0xffffff,0x526578,2));const light=new T.DirectionalLight(0xffffff,2.5);light.position.set(3,5,4);scene.add(light);c.addEventListener('pointerdown',e=>{drag=[e.clientX,e.clientY];c.setPointerCapture(e.pointerId)});c.addEventListener('pointermove',e=>{if(!drag)return;az-=(e.clientX-drag[0])*.01;el=Math.max(-1.45,Math.min(1.45,el+(e.clientY-drag[1])*.01));drag=[e.clientX,e.clientY];draw()});for(const event of ['pointerup','pointercancel','lostpointercapture'])c.addEventListener(event,()=>drag=null);c.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY*.005)},{passive:false});new ResizeObserver(resize).observe(host);build();resize()}
+function zoom(d){dist=Math.max(2.5,Math.min(12,dist+d));draw()}
+function tick(t){frame=0;if($('geoView_minerals').hidden||!$('mineralSpin').checked)return;if(last&&!drag)az+=Math.min(.05,(t-last)/1000)*.5;last=t;draw();frame=requestAnimationFrame(tick)}function spin(){if(!frame&&$('mineralSpin').checked&&!$('geoView_minerals').hidden){last=0;frame=requestAnimationFrame(tick)}}
+document.addEventListener('geo-crystal-view',e=>{if(e.detail==='minerals'){init();resize();spin()}});$('mineralSelect').addEventListener('change',build);$('mineralSpin').addEventListener('change',spin);$('mineralReset').onclick=()=>{az=.65;el=.35;dist=5;draw()};$('mineralIn').onclick=()=>zoom(-.5);$('mineralOut').onclick=()=>zoom(.5);
+function question(){const m=minerals[q];$('mineralQuestion').textContent='Which mineral has formula '+m[1]+' and Mohs hardness '+m[4]+'?';$('mineralFeedback').textContent='';$('mineralAnswer').selectedIndex=-1}$('mineralCheck').onclick=()=>{$('mineralFeedback').textContent=$('mineralAnswer').selectedIndex<0?'Select a mineral first.':+$('mineralAnswer').value===q?'Correct!':'Try again.'};$('mineralNext').onclick=()=>{q=(q+1)%minerals.length;question()};question();build();if(!$('geoView_minerals').hidden)init();
+
+host.geoExportCurrent = () => { if (!renderer) throw new Error('Open the model first.'); draw(); const select=$('mineralSelect'); window.geoDownloadModelPNG(renderer.domElement, select.options[select.selectedIndex]?.text || 'mineralCanvas'); };
+</script>
+<script type="module">
+import * as T from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+const $=id=>document.getElementById(id),host=$('rockCanvas');
+const rocks=[
+['Granite','Igneous','Quartz, feldspar, mica','Coarse crystalline','Slow cooling of magma underground','#b5a39b','#433b39','coarse'],
+['Basalt','Igneous','Plagioclase, pyroxene','Fine crystalline','Rapid cooling of lava','#42464a','#20252a','fine'],
+['Gabbro','Igneous','Plagioclase, pyroxene','Coarse crystalline','Slow cooling of mafic magma','#555b58','#c2c3b5','coarse'],
+['Obsidian','Igneous','Silica-rich volcanic glass','Glassy','Very rapid cooling of lava','#24252c','#555563','glass'],
+['Pumice','Igneous','Volcanic glass','Vesicular','Gas-rich explosive eruption','#c8c0ad','#726e65','pore'],
+['Sandstone','Sedimentary','Mostly quartz or feldspar','Sand-sized clastic grains','Compaction and cementation of sand','#c49a63','#805b39','fine'],
+['Limestone','Sedimentary','Calcite','Variable, often fine or bioclastic','Carbonate accumulation or precipitation','#d0c7ae','#8e897a','fine'],
+['Shale','Sedimentary','Clay minerals, quartz','Fine, fissile','Compaction of mud','#77756d','#41433f','layer'],
+['Conglomerate','Sedimentary','Rounded rock fragments, matrix','Coarse rounded clasts','Cementation of gravel','#9e8062','#554b43','clast'],
+['Marble','Metamorphic','Calcite or dolomite','Recrystallized, nonfoliated','Metamorphism of limestone or dolostone','#e4dfd5','#aaa6a1','vein'],
+['Slate','Metamorphic','Mica, chlorite, quartz','Slaty cleavage','Low-grade metamorphism of shale','#515b63','#303840','layer'],
+['Schist','Metamorphic','Mica, quartz, variable minerals','Schistose foliation','Medium-grade metamorphism','#8e8171','#c2b8a1','layer'],
+['Gneiss','Metamorphic','Quartz, feldspar, dark minerals','Compositional banding','High-grade metamorphism','#c5b7a4','#4a4847','band'],
+['Quartzite','Metamorphic','Quartz','Interlocking crystalline grains','Metamorphism of quartz sandstone','#d8c3ae','#a18b7a','fine']];
+rocks.forEach((r,i)=>{$('rockSelect').add(new Option(r[0],i));$('rockAnswer').add(new Option(r[0],i))});
+let renderer,scene,camera,mesh,az=.7,el=.35,dist=5,drag=null,frame=0,last=0,q=0;
+function draw(){if(!renderer)return;camera.position.set(dist*Math.cos(el)*Math.sin(az),dist*Math.sin(el),dist*Math.cos(el)*Math.cos(az));camera.lookAt(0,0,0);renderer.render(scene,camera)}
+function resize(){if(!renderer||!host.clientWidth||!host.clientHeight)return;renderer.setSize(host.clientWidth,host.clientHeight);camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();draw()}
+function texture(r){const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');x.fillStyle=r[5];x.fillRect(0,0,512,512);let seed=123;const rand=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);const k=r[7];for(let i=0;i<(k==='fine'?9000: k==='coarse'?900: k==='clast'?120: k==='pore'?600:350);i++){let a=rand()*512,b=rand()*512,z=(k==='clast'?30:k==='coarse'?9:k==='pore'?7:2)*(rand()+.4);x.fillStyle=rand()>.25?r[6]:r[5];x.globalAlpha=.3+rand()*.65;x.beginPath();x.ellipse(a,b,z,z*(.4+rand()*.6),rand()*6.28,0,6.28);x.fill()}x.globalAlpha=.8;if(['layer','band','vein'].includes(k)){for(let i=0;i<512;i+=k==='band'?45:15){x.strokeStyle=r[6];x.lineWidth=k==='band'?18:k==='vein'?3:2;x.beginPath();for(let j=0;j<=512;j+=4){let y=i+Math.sin(j/65+i/30)*9;j?x.lineTo(j,y):x.moveTo(j,y)}x.stroke()}}const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;return t}
+function build(){const r=rocks[+$('rockSelect').value];$('rockInfo').replaceChildren(...['Rock','Group','Composition','Texture','Formation'].map((l,i)=>{const d=document.createElement('div'),b=document.createElement('strong');b.textContent=l+': ';d.append(b,document.createTextNode(r[i]));return d}));if(!renderer)return;if(mesh){scene.remove(mesh);mesh.geometry.dispose();mesh.material.map.dispose();mesh.material.dispose()}const g=new T.IcosahedronGeometry(1.2,5),p=g.attributes.position;for(let i=0;i<p.count;i++){let x=p.getX(i),y=p.getY(i),z=p.getZ(i),f=1+.10*Math.sin(x*9+y*4)*Math.cos(z*7)+.07*Math.sin(y*17+z*11);p.setXYZ(i,x*f*1.2,y*f*.8,z*f)}g.computeVertexNormals();mesh=new T.Mesh(g,new T.MeshStandardMaterial({map:texture(r),roughness:r[7]==='glass'?.18:.85}));scene.add(mesh);draw()}
+function zoom(d){dist=Math.max(2.5,Math.min(12,dist+d));draw()}
+function init(){if(renderer)return;try{renderer=new T.WebGLRenderer({antialias:true})}catch(e){host.append('WebGL unavailable');return}renderer.setPixelRatio(Math.min(devicePixelRatio,2));host.append(renderer.domElement);const c=renderer.domElement;c.style.touchAction='none';scene=new T.Scene();scene.background=new T.Color(0x172633);camera=new T.PerspectiveCamera(42,1,.1,100);scene.add(new T.HemisphereLight(0xffffff,0x526578,2));const l=new T.DirectionalLight(0xffffff,2.5);l.position.set(3,5,4);scene.add(l);c.onpointerdown=e=>{drag=[e.clientX,e.clientY];c.setPointerCapture(e.pointerId)};c.onpointermove=e=>{if(!drag)return;az-=(e.clientX-drag[0])*.01;el=Math.max(-1.45,Math.min(1.45,el+(e.clientY-drag[1])*.01));drag=[e.clientX,e.clientY];draw()};for(const ev of ['pointerup','pointercancel','lostpointercapture'])c.addEventListener(ev,()=>drag=null);c.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY*.005)},{passive:false});new ResizeObserver(resize).observe(host);build();resize()}
+function tick(t){frame=0;if($('geoView_rocks').hidden||!$('rockSpin').checked)return;if(last&&!drag)az+=Math.min(.05,(t-last)/1000)*.5;last=t;draw();frame=requestAnimationFrame(tick)}function spin(){if(!frame&&$('rockSpin').checked&&!$('geoView_rocks').hidden){last=0;frame=requestAnimationFrame(tick)}}
+document.addEventListener('geo-crystal-view',e=>{if(e.detail==='rocks'){init();resize();spin()}});$('rockSelect').onchange=build;$('rockSpin').onchange=spin;$('rockReset').onclick=()=>{az=.7;el=.35;dist=5;draw()};$('rockIn').onclick=()=>zoom(-.5);$('rockOut').onclick=()=>zoom(.5);
+function question(){$('rockQuestion').textContent='Which rock forms by: '+rocks[q][4]+'?';$('rockAnswer').selectedIndex=-1;$('rockFeedback').textContent=''}$('rockCheck').onclick=()=>{$('rockFeedback').textContent=$('rockAnswer').selectedIndex<0?'Select a rock first.':+$('rockAnswer').value===q?'Correct!':'Correct answer: '+rocks[q][0]};$('rockNext').onclick=()=>{q=(q+1)%rocks.length;question()};question();build();
+
+host.geoExportCurrent = () => { if (!renderer) throw new Error('Open the model first.'); draw(); const select=$('rockSelect'); window.geoDownloadModelPNG(renderer.domElement, select.options[select.selectedIndex]?.text || 'rockCanvas'); };
+</script>
+<script type="module">
+import * as T from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+const $=id=>document.getElementById(id),host=$('fossilCanvas');
+const fossils=[
+['Ammonite','Cephalopod','Devonian–Cretaceous','Coiled chambered shell','Marine, free swimming'],
+['Trilobite','Arthropod','Cambrian–Permian','Segmented three-lobed exoskeleton','Marine seafloor'],
+['Brachiopod','Brachiopoda','Cambrian–present','Two valves with bilateral symmetry','Marine benthic'],
+['Gastropod','Mollusk','Cambrian–present','Spirally coiled shell','Marine, freshwater or terrestrial'],
+['Bivalve','Mollusk','Cambrian–present','Paired lateral valves','Aquatic benthic'],
+['Belemnite','Cephalopod','Mainly Jurassic–Cretaceous','Bullet-shaped internal guard','Marine, free swimming'],
+['Crinoid','Echinoderm','Ordovician–present','Jointed stem and branching arms','Marine benthic'],
+['Rugose coral','Cnidarian','Ordovician–Permian','Horn-shaped skeleton with radial septa','Marine benthic']];
+fossils.forEach((r,i)=>{$('fossilSelect').add(new Option(r[0],i));$('fossilAnswer').add(new Option(r[0],i))});
+let renderer,scene,camera,mesh,az=.7,el=.35,dist=5,drag=null,frame=0,last=0,q=0;
+function draw(){if(!renderer)return;camera.position.set(dist*Math.cos(el)*Math.sin(az),dist*Math.sin(el),dist*Math.cos(el)*Math.cos(az));camera.lookAt(0,0,0);renderer.render(scene,camera)}
+function resize(){if(!renderer||!host.clientWidth||!host.clientHeight)return;renderer.setSize(host.clientWidth,host.clientHeight);camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();draw()}
+function build(){const r=fossils[+$('fossilSelect').value],k=+$('fossilSelect').value;$('fossilInfo').replaceChildren(...['Fossil','Classification','Geological range','Morphology','Environment'].map((l,i)=>{const d=document.createElement('div'),b=document.createElement('strong');b.textContent=l+': ';d.append(b,document.createTextNode(r[i]));return d}));if(!renderer)return;if(mesh){scene.remove(mesh);mesh.traverse(o=>{o.geometry?.dispose();o.material?.dispose()})}mesh=new T.Group();const mat=()=>new T.MeshStandardMaterial({color:0xc4a477,roughness:.85});function add(g,x=0,y=0,z=0,sx=1,sy=1,sz=1){const o=new T.Mesh(g,mat());o.position.set(x,y,z);o.scale.set(sx,sy,sz);mesh.add(o);return o}function ball(x,y,z,a,b,c){return add(new T.SphereGeometry(1,24,16),x,y,z,a,b,c)}function tube(points,r){return add(new T.TubeGeometry(new T.CatmullRomCurve3(points),100,r,10,false))}if(k===0||k===3){const pts=[];for(let i=0;i<=160;i++){let t=i/160*5*Math.PI,rr=.08+.067*t;pts.push(new T.Vector3(rr*Math.cos(t),rr*Math.sin(t),k===3?t*.09-.7:0))}tube(pts,.19);for(let i=0;i<30;i++){let t=i/30*5*Math.PI,rr=.08+.067*t;ball(rr*Math.cos(t),rr*Math.sin(t),k===3?t*.09-.7:0,.22,.22,.22)}}else if(k===1){for(let i=0;i<9;i++){let y=.9-i*.22,w=.62*Math.sin((i+1)/10*Math.PI)+.2;ball(0,y,0,w,.18,.23);ball(0,y,.19,w*.38,.17,.18)}ball(0,1.05,0,.66,.38,.3)}else if(k===2||k===4){for(let side of [-1,1]){ball(0,0,side*.16,1,.85,.32);for(let i=0;i<13;i++){let t=Math.PI*i/12;const pts=[new T.Vector3(0,.65,side*.23),new T.Vector3(.5*Math.cos(t),.1-.45*Math.sin(t),side*.47),new T.Vector3(.92*Math.cos(t),-.65*Math.sin(t),side*.19)];tube(pts,.025)}}}else if(k===5){add(new T.CylinderGeometry(.32,.22,1.6,32),0,.1);add(new T.ConeGeometry(.22,.65,32),0,-1).rotation.z=Math.PI}else if(k===6){for(let i=0;i<12;i++)add(new T.CylinderGeometry(.13,.13,.13,16),0,-1+i*.14);ball(0,.65,0,.28,.25,.28);for(let i=0;i<5;i++){let t=i*2*Math.PI/5;const pts=[new T.Vector3(0,.65,0),new T.Vector3(.4*Math.cos(t),.95,.4*Math.sin(t)),new T.Vector3(.85*Math.cos(t),1.25,.85*Math.sin(t))];tube(pts,.075)}}else{add(new T.CylinderGeometry(.7,.08,1.8,40,1,true),0,0);for(let i=0;i<18;i++){let t=i*2*Math.PI/18;tube([new T.Vector3(0,.85,0),new T.Vector3(.65*Math.cos(t),.85,.65*Math.sin(t))],.025)}}scene.add(mesh);draw()}
+function zoom(d){dist=Math.max(2.5,Math.min(12,dist+d));draw()}
+function init(){if(renderer)return;try{renderer=new T.WebGLRenderer({antialias:true})}catch(e){host.append('WebGL unavailable');return}renderer.setPixelRatio(Math.min(devicePixelRatio,2));host.append(renderer.domElement);const c=renderer.domElement;c.style.touchAction='none';scene=new T.Scene();scene.background=new T.Color(0x172633);camera=new T.PerspectiveCamera(42,1,.1,100);scene.add(new T.HemisphereLight(0xffffff,0x526578,2));const l=new T.DirectionalLight(0xffffff,2.5);l.position.set(3,5,4);scene.add(l);c.onpointerdown=e=>{drag=[e.clientX,e.clientY];c.setPointerCapture(e.pointerId)};c.onpointermove=e=>{if(!drag)return;az-=(e.clientX-drag[0])*.01;el=Math.max(-1.45,Math.min(1.45,el+(e.clientY-drag[1])*.01));drag=[e.clientX,e.clientY];draw()};for(const ev of ['pointerup','pointercancel','lostpointercapture'])c.addEventListener(ev,()=>drag=null);c.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY*.005)},{passive:false});new ResizeObserver(resize).observe(host);build();resize()}
+function tick(t){frame=0;if($('geoView_fossils').hidden||!$('fossilSpin').checked)return;if(last&&!drag)az+=Math.min(.05,(t-last)/1000)*.5;last=t;draw();frame=requestAnimationFrame(tick)}function spin(){if(!frame&&$('fossilSpin').checked&&!$('geoView_fossils').hidden){last=0;frame=requestAnimationFrame(tick)}}
+document.addEventListener('geo-crystal-view',e=>{if(e.detail==='fossils'){init();resize();spin()}});$('fossilSelect').onchange=build;$('fossilSpin').onchange=spin;$('fossilReset').onclick=()=>{az=.7;el=.35;dist=5;draw()};$('fossilIn').onclick=()=>zoom(-.5);$('fossilOut').onclick=()=>zoom(.5);
+function question(){$('fossilQuestion').textContent='Which fossil has this morphology: '+fossils[q][3]+'?';$('fossilAnswer').selectedIndex=-1;$('fossilFeedback').textContent=''}$('fossilCheck').onclick=()=>{$('fossilFeedback').textContent=$('fossilAnswer').selectedIndex<0?'Select a fossil first.':+$('fossilAnswer').value===q?'Correct!':'Correct answer: '+fossils[q][0]};$('fossilNext').onclick=()=>{q=(q+1)%fossils.length;question()};question();build();
+
+host.geoExportCurrent = () => { if (!renderer) throw new Error('Open the model first.'); draw(); const select=$('fossilSelect'); window.geoDownloadModelPNG(renderer.domElement, select.options[select.selectedIndex]?.text || 'fossilCanvas'); };
+</script>
+<script type="module">
+import * as T from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+const $=id=>document.getElementById(id),host=$('psCanvas');let r,scene,camera,group,particles=[],az=.65,el=.45,dist=11,drag=null,started=null,frame=0,last=0;
+let annotations=[];
+function annotate(text,x,y,z,color){const c=document.createElement("canvas");c.width=768;c.height=112;const ctx=c.getContext("2d");ctx.font="bold 43px Arial";const w=Math.min(750,ctx.measureText(text).width+40);ctx.fillStyle="rgba(12,23,35,.94)";ctx.fillRect((768-w)/2,8,w,96);ctx.strokeStyle=color;ctx.lineWidth=4;ctx.strokeRect((768-w)/2,8,w,96);ctx.fillStyle="#ffffff";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(text,384,56,720);const tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;const sprite=new T.Sprite(new T.SpriteMaterial({map:tex,depthTest:false,depthWrite:false,transparent:true}));sprite.position.set(x,y,z);sprite.scale.set(2.5,.365,1);sprite.renderOrder=100;group.add(sprite);annotations.push(sprite);}
+function addLabels(){const t=trap(),x=targetX(),top=v=>surface(v)+thickness(v);annotate("Source rock",-1.7,-1.91,2.02,"#aeb5c1");annotate("Reservoir rock",-1.65,(surface(-1.65)-.45+top(-1.65))/2,2.02,"#e9b95e");if($("psSeal").checked)annotate("Cap rock / seal",1.55,top(1.55)+.25,2.02,"#a4c6eb");const special={fold:["Anticline crest",0,top(0)+.65,1.9],pinch:["Reservoir pinch-out",2.85,top(2.85)-.3,2.02],fault:["Fault plane",0,-.75,2.05],salt:["Salt dome",-2.3,.85,0],uncon:["Unconformity surface",0,top(0)+.65,1.9],reef:["Carbonate reef",0,top(0)+.65,1.9],combo:["Fold + pinch-out",0,top(0)+.65,1.9],channel:["Channel sandstone",.6,top(.6)+.65,1.9]}[t];annotate(...special,"#f4d990");if(+$("psMaturity").value){annotate("Migration pathway",1.65,-1.25,2.08,"#69e4b0");annotate($("psSeal").checked?"Potential accumulation":"Potential leakage",x,top(x)-.2,2.18,"#69e4b0");}annotations.forEach(o=>o.visible=$("psLabels").checked);}
+function draw(){if(!r)return;camera.position.set(dist*Math.cos(el)*Math.sin(az),dist*Math.sin(el),dist*Math.cos(el)*Math.cos(az));camera.lookAt(0,0,0);r.render(scene,camera)}
+function resize(){if(!r||!host.clientWidth||!host.clientHeight)return;r.setSize(host.clientWidth,host.clientHeight);camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();draw()}
+const trap=()=>$('psTrap').value;
+const descriptions={fold:'Folded reservoir beneath a continuous seal.',pinch:'Reservoir thins updip into sealing facies.',fault:'Displaced reservoir terminates against assumed sealing fault.',salt:'Reservoir arches beside an idealized impermeable salt body.',uncon:'Tilted reservoir truncated beneath an erosional surface and younger seal.',reef:'Carbonate buildup enclosed by sealing sediment.',combo:'Fold closure combined with lateral reservoir thinning.',channel:'Lenticular channel sandstone enclosed in mudstone.'};
+function surface(x){switch(trap()){case 'fold':return 1.15*Math.exp(-x*x/2.5);case 'fault':return .15*x+(x>=0?.65:0);case 'salt':return .9*Math.exp(-((x+1.2)**2)/1.3);case 'uncon':return .22*x;case 'reef':return -.3;case 'combo':return .85*Math.exp(-x*x/2);case 'channel':return -.45;default:return .25*x}}
+function thickness(x){switch(trap()){case 'pinch':return Math.max(.025,.65*(3-x)/6);case 'uncon':return Math.max(.025,.65-.22*x);case 'reef':return .025+1.15*Math.exp(-x*x/.85);case 'combo':return Math.max(.025,.65*(3-x)/6);case 'channel':return .025+.65*Math.exp(-((x-.6)**2)/.65);default:return .65}}
+function targetX(){return ({fold:0,pinch:2.2,fault:-.15,salt:-1.1,uncon:2.2,reef:0,combo:0,channel:.6})[trap()]}
+function band(bottom,top,color){const v=[],idx=[];const n=60;for(let i=0;i<=n;i++){let x=-3+6*i/n;v.push(x,bottom(x),-1.8,x,top(x),-1.8,x,bottom(x),1.8,x,top(x),1.8);if(i<n){let a=i*4;for(const [j,k] of [[0,1],[1,3],[3,2],[2,0]])idx.push(a+j,a+k,a+4+k,a+j,a+4+k,a+4+j)}}idx.push(0,2,3,0,3,1,n*4,n*4+1,n*4+3,n*4,n*4+3,n*4+2);const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(v,3));g.setIndex(idx);g.computeVertexNormals();group.add(new T.Mesh(g,new T.MeshStandardMaterial({color,side:T.DoubleSide,roughness:.8})));}
+function fluidBands(base,top){
+const g=+$('psGoc').value/100,w=+$('psOwc').value/100,sw=+$('psSw').value/100;
+for(const [id,v] of [['psGoc',g],['psOwc',w],['psSw',sw]])$(id+'Out').textContent=Math.round(v*100)+'%';
+if(!$('psFluids').checked){band(base,top,0xc69b52);return;}
+let lo=Infinity,hi=-Infinity;for(let i=0;i<=120;i++){let x=-3+i/20;lo=Math.min(lo,base(x));hi=Math.max(hi,top(x));}
+const charged=+$('psMaturity').value>0&&$('psSeal').checked&&sw<1;
+if(!charged){band(base,top,0x348bd1);return;}
+const ow=lo+(hi-lo)*w,go=lo+(hi-lo)*g;
+const clip=(x,y)=>Math.max(base(x),Math.min(top(x),y));
+const wc=x=>clip(x,ow),gc=x=>clip(x,go);
+const mix=(c)=>new T.Color(c).lerp(new T.Color(0x348bd1),sw);
+band(base,wc,0x348bd1);band(wc,gc,mix(0x43df8c));band(gc,top,mix(0xffa345));
+for(const [name,y,color] of [['OWC',ow,'#348bd1'],['GOC',go,'#ffa345']]){let xs=[];for(let i=0;i<=120;i++){let x=-3+i/20;if(y>base(x)&&y<top(x))xs.push(x);}if(xs.length){annotate(name,xs[Math.floor(xs.length/2)],y,2.12,color);}}
+}
+function build(){if(!r)return;group.traverse(o=>{o.geometry?.dispose();o.material?.map?.dispose();o.material?.dispose()});scene.remove(group);group=new T.Group();scene.add(group);particles=[];annotations=[];started=null;const base=x=>surface(x)-.45, top=x=>surface(x)+thickness(x);band(x=>-2.2,x=>-1.6,0x42434b);band(x=>-1.6,base,0x9d907a);fluidBands(base,top);if($('psSeal').checked)band(top,x=>top(x)+.35,0x71859c);if(trap()==='fault'){const m=new T.Mesh(new T.BoxGeometry(.045,3.6,3.65),new T.MeshStandardMaterial({color:0x873f32,transparent:true,opacity:.45}));m.position.y=-.35;group.add(m)}if(trap()==='salt'){const m=new T.Mesh(new T.SphereGeometry(1,32,20),new T.MeshStandardMaterial({color:0xe8d8d0}));m.scale.set(.65,1.7,1.2);m.position.set(-2.3,-.7,0);group.add(m)}$('psTrapInfo').textContent=descriptions[trap()];const mature=+$('psMaturity').value,seal=$('psSeal').checked;for(let i=0;i<20;i++){let m=new T.Mesh(new T.SphereGeometry(.065,10,8),new T.MeshBasicMaterial({color:mature===2?0xffa345:0x43df8c}));m.visible=false;group.add(m);particles.push(m)}$('psStatus').textContent=!mature?'Immature source: no illustrative hydrocarbon charge.':seal?'Mature source and assumed effective seal: potential accumulation if a trap is closed.':'No effective seal: illustrative leakage.';addLabels();draw()}
+function tick(t){frame=0;if($('geoView_petroleum').hidden){last=0;return}if(last&&$('psSpin').checked&&!drag)az+=Math.min(.05,(t-last)/1000)*.35;last=t;if(started!==null){let elapsed=(t-started)/1000;particles.forEach((m,i)=>{let u=Math.max(0,Math.min(1,(elapsed-i*.12)/4));m.visible=elapsed>=i*.12;let target=targetX();let x=(-2.6+5.2*(i%10)/9)*(1-u)+target*u;let end=surface(target)+thickness(target)*.65;let y=-1.9+(end+1.9)*Math.min(1,u*1.4);if(!$('psSeal').checked)y+=Math.max(0,u-.7)*7;m.position.set(x,y,1.88+(i%2)*.08)});if(elapsed>6.5)started=null}draw();if(started!==null||$('psSpin').checked)frame=requestAnimationFrame(tick)}
+function spin(){if(!frame){last=0;frame=requestAnimationFrame(tick)}}
+function init(){if(r)return;try{r=new T.WebGLRenderer({antialias:true})}catch(e){$('psStatus').textContent='WebGL unavailable';return}r.setPixelRatio(Math.min(devicePixelRatio,2));host.append(r.domElement);scene=new T.Scene();scene.background=new T.Color(0x172633);camera=new T.PerspectiveCamera(42,1,.1,100);scene.add(new T.HemisphereLight(0xffffff,0x777777,2));let light=new T.DirectionalLight(0xffffff,2);light.position.set(4,7,5);scene.add(light);group=new T.Group();scene.add(group);const c=r.domElement;c.onpointerdown=e=>{drag=[e.clientX,e.clientY];c.setPointerCapture(e.pointerId)};c.onpointermove=e=>{if(!drag)return;az-=(e.clientX-drag[0])*.008;el=Math.max(-.2,Math.min(1.3,el+(e.clientY-drag[1])*.008));drag=[e.clientX,e.clientY];draw()};c.onpointerup=c.onpointercancel=()=>drag=null;c.addEventListener('wheel',e=>{e.preventDefault();zoom(Math.sign(e.deltaY))},{passive:false});new ResizeObserver(resize).observe(host);build();resize()}
+function zoom(d){dist=Math.max(5,Math.min(24,dist+d));draw()}
+for(const id of ['psTrap','psMaturity','psSeal','psFluids'])$(id).onchange=build;for(const id of ['psGoc','psOwc','psSw'])$(id).oninput=()=>{if(+$('psGoc').value<+$('psOwc').value){if(id==='psGoc')$('psOwc').value=$('psGoc').value;else $('psGoc').value=$('psOwc').value;}build()};$('psLabels').onchange=()=>{annotations.forEach(o=>o.visible=$('psLabels').checked);draw()};$('psSpin').onchange=spin;$('psRun').onclick=()=>{if(!r||!+$('psMaturity').value)return;started=performance.now();spin()};$('psReset').onclick=()=>{az=.65;el=.45;dist=11;draw()};$('psIn').onclick=()=>zoom(-1);$('psOut').onclick=()=>zoom(1);document.addEventListener('geo-crystal-view',e=>{if(e.detail==='petroleum'){init();resize();spin()}});
+
+host.geoExportCurrent = () => { if (!r) throw new Error('Open the model first.'); draw(); const select=$('psTrap'); window.geoDownloadModelPNG(r.domElement, select.options[select.selectedIndex]?.text || 'psCanvas'); };
+</script>
+<style>
+#psFullscreenHost{position:relative;display:flex;flex-direction:column;gap:8px;padding-top:48px;min-width:0}
+#psFullscreenHost>.geo-fullscreen-button{position:absolute;top:8px;right:8px;z-index:20;background:#203c4d;color:white;border:1px solid #83b5c5;border-radius:8px;padding:9px 13px;cursor:pointer}
+#psFullscreenHost:fullscreen,#psFullscreenHost.geo-expanded{box-sizing:border-box;width:100vw!important;height:100vh!important;height:100dvh!important;background:#172633;color:white;padding:52px 12px 8px;overflow:hidden;display:flex!important;flex-direction:column}
+#psFullscreenHost.geo-expanded{position:fixed!important;inset:0!important;z-index:2147483647!important}
+#psFullscreenHost:fullscreen #psControls,#psFullscreenHost.geo-expanded #psControls{flex:0 0 auto;max-height:35vh;overflow:auto;gap:8px!important}
+#psFullscreenHost:fullscreen #psCanvas,#psFullscreenHost.geo-expanded #psCanvas{flex:1 1 0;height:auto!important;min-height:0!important;max-height:none!important}
+#psFullscreenHost:fullscreen p,#psFullscreenHost.geo-expanded p{margin:0;font-size:12px;flex:0 0 auto}
+#psFullscreenHost #psCanvas canvas{display:block;touch-action:none}
+</style><style>
+.geo-fs-tools{position:absolute!important;top:58px;left:12px;z-index:30;width:min(360px,calc(100% - 24px));max-height:calc(100% - 80px);overflow:auto;background:#172633f5;color:white;border:1px solid #83b5c5;border-radius:9px;padding:8px;box-sizing:border-box;overscroll-behavior:contain;font:14px Arial,sans-serif}.geo-fs-tools summary{cursor:pointer;padding:7px;font-weight:bold}.geo-fs-tools-body{display:flex;flex-direction:column;gap:8px}.geo-fs-tools .geo-visual-grid{display:flex;flex-wrap:wrap;gap:8px}.geo-fs-tools .geo-sidebar-panel{margin:0;width:100%;box-sizing:border-box}.geo-fs-tools input,.geo-fs-tools select{max-width:100%}.geo-fs-tools:not([open]){width:auto}.geo-fs-tools button{cursor:pointer}@media(max-width:600px){.geo-fs-tools{max-height:42%;width:min(320px,calc(100% - 24px))}}
+</style>
+<style>
+.geo-fs-hide{position:absolute;top:12px;left:12px;z-index:50;background:#203c4d;color:white;border:1px solid #83b5c5;border-radius:8px;padding:9px 13px;font:600 13px Arial,sans-serif;cursor:pointer;touch-action:manipulation}.geo-fs-hide[hidden]{display:none!important}.geo-fs-clean>.geo-fs-tools,.geo-fs-clean>#psControls,.geo-fs-clean>#psTrapInfo,.geo-fs-clean>#psStatus{display:none!important}#psFullscreenHost.geo-fs-clean{padding:0!important;gap:0!important}#psFullscreenHost.geo-fs-clean>#psCanvas{border-radius:0!important}.geo-fs-clean>.geo-fs-hide,.geo-fs-clean>.geo-fullscreen-button{opacity:.75}.geo-fs-clean>.geo-fs-hide:hover,.geo-fs-clean>.geo-fullscreen-button:hover{opacity:1}
+</style><script>(()=>{const $=id=>document.getElementById(id);let timer=null;const val=(id,min,max,fallback)=>{const n=parseFloat($(id).value);return Number.isFinite(n)?Math.max(min,Math.min(max,n)):fallback};function update(){const age=val('bhAge',10,500,150),depth=val('bhDepth',0,10,4),g=val('bhGrad',10,60,30),surface=val('bhSurface',0,40,20),f=+$('bhTime').value/100,d=depth*f,t=surface+g*d,stage=t<60?0:t<120?1:t<=200?2:3,ro=Math.max(.2,Math.exp(.0124*t-1.68));const x=55+520*f,y=25+160*f;let bands='';for(const [lo,hi,c] of [[0,60,'#65778b'],[60,120,'#23865b'],[120,200,'#b86d28'],[200,1000,'#793e43']]){const a=Math.max(0,(lo-surface)/g),b=Math.min(depth||1,(hi-surface)/g);if(b>a)bands+=`<rect x="55" y="${25+160*a/(depth||1)}" width="520" height="${160*(b-a)/(depth||1)}" fill="${c}" opacity=".45"/>`;} $('bhChart').innerHTML=bands+`<g fill="white" font-size="12"><text x="55" y="15">Burial depth (km)</text><text x="12" y="30">0</text><text x="8" y="190">${depth.toFixed(1)}</text><text x="55" y="207">${age} Ma</text><text x="545" y="207">0 Ma</text><text x="240" y="225">Geological age</text></g><path d="M55 25 V185 H575" fill="none" stroke="white"/><path d="M55 25 L575 ${depth?185:25}" stroke="#a5b5c5" stroke-dasharray="5 4"/><path d="M55 25 L${x} ${depth?y:25}" stroke="#ffd166" stroke-width="3"/><circle cx="${x}" cy="${depth?y:25}" r="5" fill="#ffd166"/>`; $('bhResult').textContent=`Age: ${(age*(1-f)).toFixed(1)} Ma | Burial: ${d.toFixed(2)} km | Temperature: ${t.toFixed(1)} °C | ${['Immature','Oil window','Gas window','Overmature'][stage]} | Approx. Ro proxy: ${ro.toFixed(2)}%`;if($('bhLink').checked){const v=String(stage===3?0:stage);if($('psMaturity').value!==v){$('psMaturity').value=v;$('psMaturity').dispatchEvent(new Event('change'));}}}for(const id of ['bhAge','bhDepth','bhGrad','bhSurface','bhTime','bhLink'])$(id).addEventListener('input',update);$('bhPlay').onclick=()=>{if(timer){clearInterval(timer);timer=null;$('bhPlay').textContent='Play history';return} $('bhTime').value=0;update();$('bhPlay').textContent='Pause history';timer=setInterval(()=>{if(document.hidden||$('geoView_petroleum').hidden||+$('bhTime').value>=100){clearInterval(timer);timer=null;$('bhPlay').textContent='Play history';return}$('bhTime').value=+$('bhTime').value+1;update()},100)};update()})();</script><style>
+#psFullscreenHost{display:grid;grid-template-columns:minmax(220px,290px) minmax(0,1fr);align-items:start;gap:12px}
+#psControls{grid-column:1;grid-row:1 / span 3;display:flex;flex-direction:column;gap:8px;max-height:650px;overflow:auto;padding:8px;border:1px solid #8196a5;border-radius:9px;min-width:0}
+#psControls h3{margin:0;font-size:15px}#psControls details{border:1px solid #8196a5;border-radius:7px;padding:8px;min-width:0}#psControls summary{cursor:pointer;font-weight:600;font-size:13px}#psControls .psGroupBody{display:flex;flex-direction:column;gap:9px;padding-top:9px}#psControls label{display:flex;flex-wrap:wrap;align-items:center;gap:5px;font-size:12px}#psControls select,#psControls input[type=range],#psControls input[type=number]{max-width:100%;min-width:0}#psControls select{width:100%}#psControls input[type=range]{flex:1 1 100%}#psControls #psBurial{flex:none!important}#psControls #psBurial p{font-size:11px;white-space:normal}#psCanvas,#psTrapInfo,#psStatus{grid-column:2}
+#psFullscreenHost:fullscreen,#psFullscreenHost.geo-expanded{display:grid!important;grid-template-columns:minmax(220px,300px) minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto auto;align-items:stretch}#psFullscreenHost:fullscreen #psControls,#psFullscreenHost.geo-expanded #psControls{max-height:100%;min-height:0}#psFullscreenHost:fullscreen #psCanvas,#psFullscreenHost.geo-expanded #psCanvas{height:100%!important}#psFullscreenHost.geo-fs-clean{grid-template-columns:1fr!important;grid-template-rows:1fr!important}#psFullscreenHost.geo-fs-clean>#psCanvas{grid-column:1;grid-row:1}
+@media(max-width:700px){#psFullscreenHost,#psFullscreenHost:fullscreen,#psFullscreenHost.geo-expanded{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto}#psControls{grid-column:1;grid-row:1;max-height:260px}#psCanvas,#psTrapInfo,#psStatus{grid-column:1}#psFullscreenHost:fullscreen #psControls,#psFullscreenHost.geo-expanded #psControls{max-height:32dvh}}
+</style><style>.volPanel{padding:10px;border:1px solid #8196a5;border-radius:8px;margin:8px 0;min-width:0}.volPanel label{display:block;margin:6px 0}.volPanel input,.volPanel select{width:100%;box-sizing:border-box}.volPanel [data-v=result]{white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0;font-size:13px;line-height:1.5}.volPanel button{margin:4px 0}</style><script>
+(()=>{for(const k of ['main','lab']){const root=document.getElementById(k+'Vol');const q=x=>root.querySelector('[data-v="'+x+'"]');let units='metric',report='';const n=x=>q(x).valueAsNumber;const fmt=x=>x.toLocaleString('en-US',{maximumSignificantDigits:6});function calc(){const a=n('area'),h=n('h'),ntg=n('ntg'),phi=n('phi'),sw=n('sw'),rf=n('rf'),oil=q('phase').value==='oil',fvf=n(oil?'bo':'bg');q('bo').parentElement.hidden=!oil;q('bg').parentElement.hidden=oil;const valid=[a,h,fvf].every(x=>Number.isFinite(x)&&x>0)&&[ntg,phi,sw,rf].every(x=>Number.isFinite(x)&&x>=0&&x<=100);if(!valid){report='';q('result').textContent='Enter positive area, thickness and FVF; percentages must be 0–100.';q('export').disabled=true;return;}const area=a*(units==='metric'?1e6:4046.8564224),th=h*(units==='metric'?1:.3048),pore=area*th*ntg/100*phi/100,ip=pore*(1-sw/100)/fvf,rec=ip*rf/100,conv=oil?6.28981077:35.3146667;if(![pore,ip,rec,ip*conv,rec*conv].every(Number.isFinite)){report='';q('result').textContent='Values too large.';q('export').disabled=true;return;}report=['GeoEdu 3D | Educational volumetrics',oil?'Oil scenario (STOIIP)':'Gas scenario (GIIP)','Area: '+a+(units==='metric'?' km²':' acres'),'Gross thickness: '+h+(units==='metric'?' m':' ft'),'NTG: '+ntg+'%; porosity: '+phi+'%; Sw: '+sw+'%; RF: '+rf+'%; FVF: '+fvf,'Net pore volume: '+fmt(pore)+' reservoir m³','Initially in place: '+fmt(ip)+' '+(oil?'stock tank m³':'standard m³')+' / '+fmt(ip*conv)+' '+(oil?'STB':'scf'),'Estimated recoverable: '+fmt(rec)+' m³ / '+fmt(rec*conv)+' '+(oil?'STB':'scf'),'Formula: A × h × NTG × porosity × (1 − Sw) / FVF; recoverable = in place × RF. Percentages converted to fractions.','Assumes uniform properties and single hydrocarbon phase. Not certified reserves. Gas standard conditions must match the supplied FVF.'].join('\n');q('result').textContent=report;q('export').disabled=false;}root.addEventListener('input',e=>{if(e.target===q('units')){const next=q('units').value;if(next!==units){const f=next==='field';q('area').value=n('area')*(f?1e6/4046.8564224:4046.8564224/1e6);q('h').value=n('h')*(f?1/.3048:.3048);units=next;}}calc();});q('import').onclick=()=>{if(k==='main'){const l=window.geoVolSelectedReservoir?.();if(!l){q('result').textContent='Select a formation and apply the Reservoir role first.';q('export').disabled=true;return;}q('h').value=l.thickness*(units==='metric'?1:1/.3048);q('phi').value=l.porosity;q('sw').value=l.sw;}else q('sw').value=document.getElementById('psSw').value;calc();};q('export').onclick=()=>{if(!report)return;const u=URL.createObjectURL(new Blob([report],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=u;a.download='GeoEdu3D-volumetrics.txt';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);};calc();}})();
+</script><style>
+.geo-local-export{position:absolute!important;right:12px!important;top:58px!important;left:auto!important;bottom:auto!important;z-index:100!important;display:flex!important;flex-direction:column;align-items:flex-end;gap:6px;max-width:calc(100% - 24px);pointer-events:auto!important}.geo-local-export button{display:block!important;background:#176c60!important;color:white!important;min-height:36px;box-shadow:0 2px 8px #0005}#psCanvas{position:relative!important}#psCanvas .geo-local-export{top:12px!important}.geo-fs-clean .geo-local-export{display:none!important}
+.geo-local-export button,.geo-local-diagram-export{background:#203c4d;color:#fff;border:1px solid #83b5c5;border-radius:7px;padding:8px 11px;font:600 12px Arial;cursor:pointer;width:auto;margin:0}
+.geo-local-diagram-export{margin:8px 0}.geo-fs-clean .geo-local-export{display:none!important}
+</style>
+<script>
+(()=>{
+window.geoDownloadModelPNG=(source,name)=>{const canvas=document.createElement('canvas');canvas.width=source.width;canvas.height=source.height;canvas.getContext('2d').drawImage(source,0,0);canvas.toBlob(blob=>{if(!blob){alert('Unable to export this model.');return;}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='GeoEdu3D_'+String(name).replace(/[^a-z0-9_-]+/gi,'_')+'.png';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)},'image/png')};
+window.geoExportVisible = function(id){try{if(id==='viewer'||id==='report'){if(typeof window.exportGeologyPNG!=='function')throw new Error('Open the model first.');window.exportGeologyPNG(id==='report'?'report':'3d');return;}const host=document.getElementById(id);if(!host?.geoExportCurrent)throw new Error('Open the model first.');host.geoExportCurrent();}catch(err){alert(err.message||'Export unavailable.');}};
+for(const bar of document.querySelectorAll('.geo-local-export'))for(const event of ['pointerdown','mousedown','touchstart','wheel'])bar.addEventListener(event,e=>e.stopPropagation());
+})();
+</script>
+<style>
+.geo-time-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#geoTimeFullscreen{width:auto;background:#203c4d;color:white;border:1px solid #83b5c5;border-radius:8px;padding:9px 13px;cursor:pointer}
+#fullGeologicalTime:fullscreen,#fullGeologicalTime.geo-time-expanded{box-sizing:border-box;width:100vw!important;height:100vh!important;height:100dvh!important;max-width:none!important;margin:0!important;border-radius:0;overflow:auto!important;background:#142533;padding:16px;overscroll-behavior:contain}
+#fullGeologicalTime.geo-time-expanded{position:fixed!important;inset:0;z-index:100000}
+#fullGeologicalTime:fullscreen .geo-time-heading,#fullGeologicalTime.geo-time-expanded .geo-time-heading{position:sticky;top:0;z-index:10;background:#142533;padding:8px 0}
+</style>
+<script>
+(()=>{const host=document.getElementById('fullGeologicalTime'),button=document.getElementById('geoTimeFullscreen');let fallback=false,marker=null,overflow='',pending=false;
+const native=()=>document.fullscreenElement||document.webkitFullscreenElement;
+function sync(){const active=fallback||native()===host;button.textContent=active?'↙ Exit full screen':'⛶ Full screen';button.setAttribute('aria-pressed',String(active));}
+function restore(){if(!fallback)return;host.classList.remove('geo-time-expanded');marker.replaceWith(host);document.body.style.overflow=overflow;fallback=false;marker=null;sync();}
+button.addEventListener('click',async()=>{if(pending)return;pending=true;try{if(fallback){restore();return;}if(native()===host){const exit=document.exitFullscreen||document.webkitExitFullscreen;if(exit)await exit.call(document);return;}if(native())return;const request=host.requestFullscreen||host.webkitRequestFullscreen;if(request){try{await request.call(host);if(native()===host)return;}catch(e){}}marker=document.createComment('time scale position');host.before(marker);document.body.append(host);overflow=document.body.style.overflow;document.body.style.overflow='hidden';fallback=true;host.classList.add('geo-time-expanded');}finally{pending=false;sync();}});
+document.addEventListener('fullscreenchange',sync);document.addEventListener('webkitfullscreenchange',sync);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&fallback){e.preventDefault();restore();}});sync();})();
+</script>
+<style id="geoMinimalMainInterface">
+/* Keep internal controls for compatibility; hide redundant main-screen UI. */
+.model-section > .section-toolbar .section-width-toggle,
+.model-section > .section-toolbar .section-reset-height,
+.model-section > .section-toolbar .section-resize-hint,
+.model-section > .geoedu-shortcuts {display:none !important;}
+.model-section, #viewer {resize:none !important;}
+</style>
+<style id="geoMinimalMainStep158">
+.model-section > .section-toolbar {display:none!important;}
+</style>
+<style id="geoDeveloperCreditStyle">
+#viewer {position:relative;}
+.geo-developer-credit {position:absolute;right:12px;bottom:12px;z-index:8;display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:7px 10px;border-radius:7px;background:rgba(15,25,35,.78);color:#dce5ed;font:11px/1.3 Arial,sans-serif;pointer-events:none;text-align:right;}
+.geo-developer-credit strong {color:#65d6c1;font-size:13px;}
+.geo-developer-credit small {font-size:10px;color:#c5d0da;}
+@media(max-width:600px){.geo-developer-credit{right:6px;bottom:6px;padding:5px 7px;font-size:9px;}.geo-developer-credit strong{font-size:11px;}}
+</style>
+<style id="geoCreditEverywhere">#crystalCanvas,#mineralCanvas,#rockCanvas,#fossilCanvas,#psCanvas{position:relative}.geo-developer-credit.geo-credit-footer{position:static;float:none;width:max-content;max-width:100%;margin:0 0 12px auto;box-sizing:border-box;} .geo-developer-credit{max-width:calc(100% - 24px);box-sizing:border-box;}</style>
+<style id="geoMainScreenCreditStyle">#geoMainScreenCredit{position:fixed;bottom:12px;right:12px;z-index:90;display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:7px 10px;border-radius:7px;background:rgba(15,25,35,.9);color:#dce5ed;font:11px/1.3 Arial,sans-serif;pointer-events:none;text-align:right;max-width:calc(100vw - 24px);box-sizing:border-box}#geoMainScreenCredit strong{color:#65d6c1;font-size:13px}#geoMainScreenCredit small{font-size:10px}@media(max-width:700px){#geoMainScreenCredit{bottom:calc(76px + env(safe-area-inset-bottom,0px));right:8px;font-size:9px}#geoMainScreenCredit strong{font-size:11px}}</style>
+<div id="geoMainScreenCredit" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div>
 </body>
 </html>
