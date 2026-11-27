@@ -741,6 +741,37 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 #geoWorkspaceMenu>summary:focus-visible{outline:2px solid #81e4cc;outline-offset:3px}
 #geoWorkspaceMenu .model-view-switch{margin:8px 0 0}
 </style>
+<style id="geo67Mobile">@media(max-width:820px){
+#geoSidebar{padding-bottom:calc(24px + env(safe-area-inset-bottom))!important;overscroll-behavior-y:contain}
+.workspace details>summary,.sidebar details>summary{min-height:44px;cursor:pointer;overflow-wrap:anywhere}
+.workspace button,.sidebar button{min-height:44px;touch-action:manipulation;white-space:normal}
+.workspace input[type=checkbox],.sidebar input[type=checkbox]{min-height:0;width:20px;height:20px;vertical-align:middle;flex-shrink:0}
+#geo57View{max-width:100%;height:clamp(280px,52dvh,520px)!important;touch-action:none}
+#geo57View canvas{width:100%;height:100%!important;touch-action:none}
+#geo57Controls select,#geo57Options select{max-width:100%}
+#geo59Summary{overflow-wrap:anywhere;max-width:100%}
+#geoView_diagrams .diagram-content-grid{min-width:0;max-width:100%}
+#geoView_diagrams canvas:not(#geo57View canvas){max-width:100%;height:auto}
+#geoSidebar input[type=range]{touch-action:pan-y}
+} </style>
+<style id="geo-ui68">
+#geoSidebar .geo-sidebar-panel{border-radius:9px;margin-bottom:8px;overflow-wrap:anywhere}
+#geoSidebar .geo-sidebar-panel>summary{padding:12px 10px;line-height:1.4;letter-spacing:.035em;font-weight:650;cursor:pointer}
+#geoSidebar .geo-sidebar-panel[open]>summary{border-bottom:1px solid currentColor;border-bottom-color:#7895a34d}
+#geoSidebar .field{margin:10px 0} #geoSidebar .field label{line-height:1.45;font-weight:500}
+#geoSidebar input:not([type=checkbox]):not([type=radio]):not([type=range]),#geoSidebar select{border-radius:7px;min-width:0}
+#geoSidebar button,#geoV2Toolbar button{border-radius:7px;line-height:1.35}
+#geoSidebar :is(button,input,select,summary):focus-visible,#geoV2Toolbar :is(button,select,a):focus-visible{outline:2px solid #46bda8;outline-offset:2px}
+#geoSidebar .layer-card{border-radius:9px;padding:12px}
+#geoV2Toolbar{border-radius:10px;gap:10px;align-items:center}
+#geoV2Toolbar .geo-v2-status{border:1px solid #7895a366;border-radius:6px;padding:6px 9px;font-size:12px;font-weight:600}
+.geo-ui68-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:8px 0 12px}
+.geo-ui68-tools input{flex:1 1 130px;min-width:0;width:auto}
+.geo-ui68-tools button{flex:1 1 auto;font-size:11px;padding:7px 9px}
+.geo-ui68-count{font-size:11px;opacity:.85;margin:0 0 8px}
+#geoSidebar .geo-ui68-filtered{display:none!important}
+@media(prefers-reduced-motion:no-preference){#geoSidebar button,#geoV2Toolbar button{transition:background-color .15s,border-color .15s}}
+</style>
 </head>
 
 <body>
@@ -916,7 +947,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 
 <div class="field">
     <label>Fault Position</label>
-    <input type="range" id="faultPosition" min="-3" max="3" value="0" step="0.1">
+    <input type="range" id="faultPosition" min="-2.5" max="2.5" value="0" step="0.1" oninput="window.createCrossSection(false)" disabled title="Section offset not yet supported">
 </div>
 
 <div class="field"><label><input type="checkbox" id="geoShowFaultTrace" checked style="width:auto"> Show fault line</label></div>
@@ -939,12 +970,12 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 <button class="add-button" id="geoUnApply" type="button">Apply Unconformity</button><button class="add-button" id="geoUnReset" type="button">Remove Unconformity</button>
 <p id="geoUnNote" class="sidebar-note" role="status">Choose a contact between formations. Folds and faults may be applied after the unconformity.</p>
 </details>
-<details class="geo-sidebar-panel" data-panel="geological-cross-section"><summary>GEOLOGICAL CROSS-SECTION</summary>
+<details class="geo-sidebar-panel" data-panel="geological-cross-section"><summary>GEOLOGICAL CROSS-SECTION</summary><div class="field"><label for="geoSectionName">Section name</label><input id="geoSectionName" maxlength="90" placeholder="Geological Cross-Section"></div><details id="geoTitle54" style="margin:8px 0"><summary>Section name typography</summary><div class="field"><label for="geoTitleFont54">Font family</label><select id="geoTitleFont54"><option>Times New Roman</option><option>Arial</option><option>Calibri</option><option>Cambria</option><option>Georgia</option><option>Verdana</option><option>Tahoma</option><option>Courier New</option></select><label for="geoTitleSize54">Font size (px)</label><input id="geoTitleSize54" type="number" min="8" max="24" value="15"><label><input id="geoTitleBold54" type="checkbox" checked> Bold</label><label><input id="geoTitleItalic54" type="checkbox"> Italic</label><label for="geoTitleColor54">Title color</label><input id="geoTitleColor54" type="color" value="#172633"></div></details>
 <div class="field">
     <label>Section Direction</label>
-    <select id="sectionDirection">
-        <option value="xz">Vertical Section (X-Z)</option>
-        <option value="yz">Vertical Section (Y-Z)</option>
+    <select id="sectionDirection" onchange="window.createCrossSection(false)">
+        <option value="xz">W–E vertical section (X–Y)</option>
+        <option value="yz">N–S vertical section (Z–Y)</option>
     </select>
 </div>
 
@@ -954,6 +985,11 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
            min="-3" max="3" value="0" step="0.1">
 </div>
 
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0"><label><input id="geoSectionGrid" type="checkbox" checked onchange="window.createCrossSection(false)"> Grid</label><label><input id="geoSectionScale" type="checkbox" checked onchange="window.createCrossSection(false)"> Scales</label><label><input id="geoScaleBar62" type="checkbox" checked onchange="window.createCrossSection(false)"> Scale bar</label><label>Grid opacity <input id="geoSectionGridOpacity" type="range" min="0" max="100" value="25" oninput="window.createCrossSection(false)"></label></div><details><summary>Scale style & units</summary><div class="field"><label>Scale type</label><select id="geo63Style"><option value="block">Alternating blocks</option><option value="line">Graduated line</option><option value="checker">Double-row checkerboard</option><option value="simple">Simple bar</option></select><label>Units</label><select id="geo63Unit"><option value="m">Meters</option><option value="km">Kilometers</option><option value="ft">Feet</option><option value="mi">Miles</option></select><label>Length (selected units; 0 = automatic)</label><input id="geo63Length" type="number" min="0" step="any" value="0"><label>Divisions</label><input id="geo63Div" type="number" min="1" max="10" value="4"><label>Color</label><input id="geo63Color" type="color" value="#172633"><label>Font</label><select id="geo63Font"><option>Times New Roman</option><option>Arial</option><option>Calibri</option><option>Georgia</option><option>Verdana</option></select><label>Font size</label><input id="geo63Size" type="number" min="8" max="24" value="11"><label><input id="geo63Bold" type="checkbox"> Bold</label><label><input id="geo63Italic" type="checkbox"> Italic</label></div><small>Graphical scales are calibrated to model distances. Manual length is limited to section length.</small></details><div class="field"><label>Measurement formation (upper contact)</label><select id="geoDipLayer" onchange="window.createCrossSection(false)"></select></div>
+<div class="field"><label>Section mode</label><select id="geoABMode" onchange="window.createCrossSection(false)"><option value="default">Existing section</option><option value="custom">Custom A–B</option></select><canvas id="geoABMap" width="280" height="200" style="width:100%;height:auto;touch-action:none;cursor:crosshair"></canvas><small>Click A then B, or drag either endpoint. North is up. Nominal model footprint.</small><div id="geoABInfo"></div></div><div class="field"><label>Measurement distance: <span id="geoDipDistance">350</span> m</label><input id="geoDipPoint" type="range" min="0" max="700" step="1" value="350" oninput="window.createCrossSection(false)"></div>
+<label><input id="geoDipShow" type="checkbox" checked onchange="window.createCrossSection(false)"> Show structural annotation</label>
+<div id="geoDipResult" aria-live="polite" style="font-size:12px;line-height:1.6;margin:8px 0"></div><p style="font-size:11px">Bedding angles use the nominal unfaulted surface; faulted custom measurements are withheld.</p>
+<div class="field"><label>Label Typography</label><label>Font family <select id="geoFont48"><option>Times New Roman</option><option>Arial</option><option>Calibri</option><option>Cambria</option><option>Georgia</option><option>Verdana</option><option>Tahoma</option><option>Courier New</option></select></label><label>Font size (px) <input id="geoSize48" type="number" min="8" max="32" value="12"></label><label><input id="geoBold48" type="checkbox" checked> Bold</label><label><input id="geoItalic48" type="checkbox"> Italic</label><label><input id="geoUnderline48" type="checkbox"> Underline</label><label>Label opacity <input id="geoOpacity48" type="range" min="0" max="100" value="100"></label><label>Line thickness <input id="geoWidth48" type="range" min="0.5" max="5" step="0.5" value="1.5"></label></div><div class="field"><label>Cross-section label & line styling</label><label><input type="checkbox" id="geoSectionFormationNames52" onchange="window.createCrossSection(false)"> Show formation names in cross-section</label><label><input type="checkbox" id="geoDragLabels47" checked> Drag geological labels</label><button type="button" onclick="geoResetLabels47()">Reset label positions</button><label>Formation boundary color <input type="color" id="geoBoundaryColor47" value="#263746"></label><label>Formation boundary style <select id="geoBoundaryStyle47"><option value="solid">Solid</option><option value="dash">Dashed</option><option value="dot">Dotted</option><option value="dashdot">Dash-dot</option></select></label><label>Fault line style <select id="geoFaultStyle47"><option value="dash">Dashed</option><option value="solid">Solid</option><option value="dot">Dotted</option><option value="dashdot">Dash-dot</option></select></label><label>Fold trace color <input type="color" id="geoFoldColor47" value="#9333a8"></label><label>Fold trace style <select id="geoFoldStyle47"><option value="dash">Dashed</option><option value="solid">Solid</option><option value="dot">Dotted</option><option value="dashdot">Dash-dot</option></select></label><label>Label text color <input type="color" id="geoLabelColor47" value="#172633"></label></div><div class="field"><label>Advanced structural annotations</label><label><input type="checkbox" id="geoFoldTrace40" checked onchange="window.createCrossSection(false)"> Fold axial traces</label><label><input type="checkbox" id="geoFaultInfo40" checked onchange="window.createCrossSection(false)"> Fault dip and displacement</label><label><input type="checkbox" id="geoWall40" checked onchange="window.createCrossSection(false)"> Hanging wall / footwall</label></div><div id="geoStructuralInfo40" aria-live="polite" style="font-size:12px;line-height:1.5"></div>
 <button class="add-button" onclick="createCrossSection()">
     GENERATE CROSS-SECTION
 </button>
@@ -966,6 +1002,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 <h3>PETROLEUM SYSTEM MODELING</h3>
 <p style="font-size:12px;color:#b6c6d0">Educational assignments only; no actual oil discovery or volumetric estimate.</p>
 <div class="field"><label>Formation</label><select id="petroFormation"></select></div>
+<details open><summary>Formation order (top to bottom)</summary><p style="font-size:11px">Drag formations or use arrows. This changes the geological stack in all project views. Petroleum properties stay with each formation.</p><div id="petroOrder53"></div></details>
 <div class="field"><label>Petroleum system role</label><select id="petroRole"><option value="none">Unassigned</option><option value="reservoir">Reservoir</option><option value="seal">Seal</option><option value="source">Source rock</option><option value="carrier">Carrier rock</option><option value="overburden">Overburden rock</option></select></div>
 <div class="field"><label>Porosity (%)</label><input type="number" id="petroPorosity" min="0" max="100" step="0.1" value="15"></div>
 <div class="field"><label>Permeability (mD)</label><input type="number" id="petroPermeability" min="0" max="1000000" step="0.1" value="100"></div>
@@ -1053,6 +1090,14 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
         <label>Cut position <input id="geoCutPosition" type="range" min="-350" max="350" value="0" step="10" disabled></label>
         <button type="button" id="geoShowAllLayers">Show all layers</button>
       </div>
+      <details style="margin:8px 0"><summary>3D scale style &amp; units</summary><div class="geo-visual-grid">
+<label>Scale style <select id="modelScaleStyle69"><option value="blocks">Alternating blocks</option><option value="line">Graduated line</option><option value="checker">Checkerboard</option><option value="simple">Simple bar</option></select></label>
+<label>Units <select id="modelScaleUnit69"><option value="auto">Automatic</option><option value="m">Meters</option><option value="km">Kilometers</option><option value="ft">Feet</option><option value="mi">Miles</option></select></label>
+<label>Divisions <input id="modelScaleDiv69" type="number" min="1" max="10" value="4"></label>
+<label>Scale color <input id="modelScaleColor69" type="color" value="#ffffff"></label>
+<label>Font <select id="modelScaleFont69"><option>Times New Roman</option><option selected>Arial</option><option>Calibri</option><option>Georgia</option><option>Verdana</option></select></label>
+<label><input id="modelScaleBold69" type="checkbox"> Bold</label><label><input id="modelScaleItalic69" type="checkbox"> Italic</label>
+</div></details>
       <div class="geo-layer-visibility" id="geoLayerVisibility" aria-label="Toggle geological formation visibility"></div>
       <p class="visual-hint">Cutaway clips the model along a vertical plane. Hidden layers and opacity are visualization-only; the geological data is unchanged.</p>
     </details>
@@ -1063,7 +1108,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
       <span><kbd>2</kbd> Diagrams</span>
       <span><kbd>?</kbd> Help</span>
     </div>
-    <div id="viewer"><div class="geo-developer-credit" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div><div class="geo-local-export" role="group" aria-label="Model export"><button type="button" onclick="geoExportVisible('viewer')">↓ Export Geological Model (PNG)</button><button type="button" onclick="geoExportVisible('report')">Export Report</button></div>
+    <div id="viewer"><div class="geo-developer-credit" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div><div class="geo-local-export" role="group" aria-label="Model export"><button type="button" onclick="geoExportVisible('viewer')">↓ Export Geological Model (PNG)</button><button type="button" onclick="geoExportVisible('report')">Export Report (PNG)</button><button type="button" onclick="exportGeologyPDF('report')">Export Report (PDF)</button></div>
         <div class="hint">
             Drag to rotate · Scroll to zoom
         </div>
@@ -1076,7 +1121,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
     </div>
 
 <div id="geoView_presets" class="educational-workspace-view" hidden><div class="geo-developer-credit geo-credit-footer" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div>
-<h2>Ready-Made Models</h2>
+<div class="geo-presets-heading"><h2>Ready-Made Models</h2><button type="button" id="geoPresetsFullscreen" aria-pressed="false">⛶ Full screen</button></div>
 <p class="preset-intro">Choose an educational example, read the explanation, then load it into the 3D viewer. Loading replaces your current formations and structure: save your project first.</p>
 <div class="preset-grid" id="presetGrid" aria-label="Example geological models"></div>
 <div class="preset-lesson" id="presetLesson" aria-live="polite">Choose an example to preview its geological lesson.</div>
@@ -1124,7 +1169,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 <div id="geoView_crystals" class="educational-workspace-view" hidden>
 <h2>Mineralogy — Crystal Systems</h2><p>Explore idealized crystallographic unit cells. These are geometric teaching models, not atomic structures or predictions of natural crystal habit.</p>
 <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center"><label>Crystal system <select id="crystalSystem"></select></label><label><input type="checkbox" id="crystalAxes" checked> Show axes</label><label><input type="checkbox" id="crystalSpin"> Auto rotate</label><button type="button" id="crystalReset">Reset view</button></div>
-<div id="crystalCanvas" style="height:420px;max-height:65vh;min-height:260px;background:#172633;border-radius:10px;overflow:hidden;position:relative;margin:12px 0"><div class="geo-developer-credit" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div><div class="geo-local-export" role="group" aria-label="Model export"><button type="button" onclick="geoExportVisible('crystalCanvas')">↓ Export Crystal Model (PNG)</button></div></div><p>Drag to rotate · Scroll to zoom</p><div id="crystalInfo" aria-live="polite"></div></div>
+<details style="margin:12px 0"><summary>Crystal symmetry &amp; styling</summary><p id="crystalSymGroup"></p><label><input type="checkbox" id="csRot"> Rotational symmetry axes</label> <label><input type="checkbox" id="csMirror"> Mirror planes</label> <label><input type="checkbox" id="csInv"> Inversion center</label> <label><input type="checkbox" id="csLabels" checked> Symmetry labels</label><div style="display:flex;flex-wrap:wrap;gap:12px"><label>Axis order <select id="csOrder"><option value="0">All permitted</option><option>2</option><option>3</option><option>4</option><option>6</option></select></label><span id="csCounts" aria-live="polite"></span><label><input type="checkbox" id="csSeparate"> Color by fold order</label><label>2-fold <input type="color" id="csC2" value="#ffcc55"></label><label>3-fold <input type="color" id="csC3" value="#66ddaa"></label><label>4-fold <input type="color" id="csC4" value="#ff88aa"></label><label>6-fold <input type="color" id="csC6" value="#88bbff"></label><label>Axis color <input type="color" id="csColor" value="#ffcc55"></label><label>Plane color <input type="color" id="csPlane" value="#77ddff"></label><label>Plane opacity <input type="range" id="csOpacity" min="0" max="100" value="22"></label><label>Axis style <select id="csStyle"><option>Solid</option><option>Dashed</option><option>Dotted</option></select></label><label>Font <select id="csFont"><option>Times New Roman</option><option>Arial</option><option>Calibri</option><option>Georgia</option></select></label><label><input type="checkbox" id="csBold"> Bold</label><label><input type="checkbox" id="csItalic"> Italic</label></div><p>Idealized highest-symmetry point groups, not necessarily the symmetry of every mineral example. Elements may extend outside the primitive unit cell.</p></details><div id="crystalCanvas" style="height:420px;max-height:65vh;min-height:260px;background:#172633;border-radius:10px;overflow:hidden;position:relative;margin:12px 0"><div class="geo-developer-credit" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div><div class="geo-local-export" role="group" aria-label="Model export"><button type="button" onclick="geoExportVisible('crystalCanvas')">↓ Export Crystal Model (PNG)</button></div></div><p>Drag to rotate · Scroll to zoom</p><div id="crystalInfo" aria-live="polite"></div></div>
 <div id="geoView_learning" class="educational-workspace-view" hidden><section id="geoLearningPanel" role="region" aria-label="GeoEdu 3D Learning Center">
   <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2>Geology Learning Center</h2><button type="button" id="geoLearningClose" aria-label="Return to 3D model">✕</button></div>
   <p>Follow a short guided activity, learn key terms, and export your study notes.</p>
@@ -1134,7 +1179,12 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
   <label for="geoLearningTerm">Geological glossary</label>
   <select id="geoLearningTerm"><option value="formation">Formation</option><option value="lithology">Lithology</option><option value="anticline">Anticline</option><option value="syncline">Syncline</option><option value="fault">Fault</option><option value="crosssection">Cross-section</option><option value="stratigraphy">Stratigraphy</option></select>
   <p id="geoLearningDefinition" class="geo-learning-tip" aria-live="polite"></p>
-  <button id="geoLearningExport" type="button">Export learning notes (.txt)</button>
+  <button id="geoLearningExport" type="button">Export learning notes (.txt)</button><details id="scaleLab64" style="margin-top:18px;border:1px solid #648294;padding:14px;border-radius:10px"><summary style="cursor:pointer;font-weight:bold">Geological Scale Learning Lab</summary>
+<h3>Scale theory</h3><p>Representative fraction (RF): 1:50,000 means one map unit equals 50,000 ground units. Verbal scale: 1 cm = 500 m. A graphical scale remains valid when the map and bar are resized together proportionally.</p><p>Large-scale maps (1:5,000) cover smaller areas in greater detail than small-scale maps (1:1,000,000). Numerical and verbal scales require calibrated physical output.</p>
+<h3>Distance, area and scale conversion</h3><label>Scale denominator (1:n)<input id="sl64n" type="number" min="1" value="50000"></label><label>Map distance (cm)<input id="sl64d" type="number" min="0" step="any" value="4"></label><label>Map area (cm²)<input id="sl64a" type="number" min="0" step="any" value="2"></label><output id="sl64result" style="display:block;white-space:pre-line" aria-live="polite"></output>
+<h3>Graphical scale generator</h3><label>Ground length (m)<input id="sl64len" type="number" min="1" value="1000"></label><label>Divisions<input id="sl64div" type="number" min="1" max="10" value="4"></label><label>Style<select id="sl64style"><option value="block">Alternating blocks</option><option value="line">Graduated line</option><option value="checker">Checkerboard</option><option value="simple">Simple bar</option></select></label><canvas id="sl64bar" width="640" height="130" style="width:100%;background:white"></canvas><p>Illustrative bar: use alongside a proportionally scaled map, not as a physical ruler.</p><button type="button" id="sl64png">Download scale PNG</button>
+<h3>Vertical exaggeration</h3><label>Horizontal scale denominator<input id="sl64h" type="number" min="1" value="10000"></label><label>Vertical scale denominator<input id="sl64v" type="number" min="1" value="5000"></label><output id="sl64ve"></output><canvas id="sl64plot" width="640" height="240" style="width:100%;background:white"></canvas><p>VE = horizontal denominator / vertical denominator. Elevation is measured relative to a chosen datum; exaggeration changes apparent slopes.</p>
+<h3>Practice quiz</h3><div id="sl64quiz"></div><button type="button" id="sl64check">Check answers</button><output id="sl64score" aria-live="polite"></output><p><button type="button" id="sl64notes">Download calculations (.txt)</button></p></details>
   <p style="font-size:12px;opacity:.8">Educational illustrations are simplified and are not substitutes for validated subsurface interpretations.</p>
 </section></div>
 <div id="geoView_feedback" class="educational-workspace-view" hidden><section style="padding:20px;max-width:700px;margin:auto"><h2>Feedback &amp; Reviews</h2><p>Share your experience, rate GeoEdu 3D and suggest improvements. Your feedback helps shape future updates.</p><a class="geo-feedback-link" href="https://docs.google.com/forms/d/e/1FAIpQLSeQO8U0GQsfCQpkVQyCehnkcyf8ZNjOwd5xKpd7bwj1F6NkLw/viewform" onclick="if(typeof gtag==='function')gtag('event','feedback_form_click',{source:'workspace'})">Share your feedback ↗</a><p>Opens Google Forms in this tab. Use Back to return.</p></section></div>
@@ -1152,7 +1202,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 </section>
 </div>
 <div id="geoView_diagrams" class="educational-workspace-view geological-diagrams-view" hidden><div class="geo-developer-credit geo-credit-footer" aria-label="Original developer: Mohammed Simko Nayif Pasha"><span>Designed &amp; Developed by</span><strong>Mohammed Simko Nayif Pasha</strong><small>© 2026 GeoEdu 3D</small></div>
-<h2>Geological Diagrams &amp; Legend</h2>
+<div class="geo-diagrams-heading"><h2>Geological Diagrams &amp; Legend</h2><button type="button" id="geoDiagramsFullscreen" aria-pressed="false">⛶ Full screen</button></div>
 <p>Display the geological cross-section, stratigraphic column, and formation legend together. Choose which diagrams to show.</p>
 <div class="diagram-visibility-controls" role="group" aria-label="Visible geological diagrams">
 <label><input type="checkbox" data-diagram-toggle="cross" checked> Cross-Section</label>
@@ -1162,19 +1212,19 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 </div>
 <div class="diagram-content-grid">
 <div id="diagram_cross" class="diagram-card"><section class="geology-panel" data-section-id="cross" data-section-title="Geological Cross-Section">
-            <h2>Geological Cross-Section</h2>
-            <canvas id="crossSectionCanvas" width="600" height="350"></canvas><button type="button" class="geo-local-diagram-export" onclick="exportGeologyPNG('cross')">Export Cross-Section (PNG)</button>
+            <h2 id="geoSectionHeading" hidden></h2><input id="geoSectionNameLocal" type="hidden"><div id="geoSectionLocalControls"></div>
+            <div id="geo57Controls" style="margin:8px 0"><label>Cross-section display</label><select id="geo57Mode"><option value="2d">2D Cross-Section</option><option value="cut">3D Cross-Section (cutaway)</option><option value="plane">3D Section Plane</option></select><div id="geo57Options" hidden><label><input id="geo58Labels" type="checkbox" checked> Show 3D section formation names</label><label><input id="geo60Lithology" type="checkbox" checked> Show lithology names</label><label><input id="geo60Patterns" type="checkbox" checked> Show lithology patterns</label><label><input id="geo59Info" type="checkbox" checked> Show section information</label><label>Section opacity</label><input id="geo57Opacity" type="range" min="0" max="100" value="65"><label><input id="geo57Reverse" type="checkbox"> Reverse cut side</label><button type="button" id="geo57Reset">Reset view</button></div></div><div id="geo57View" style="display:none;position:relative;width:100%;height:420px;touch-action:none"><div id="geo57Title" style="position:absolute;top:8px;left:0;right:0;text-align:center;pointer-events:none;z-index:1"></div></div><small id="geo57Status"></small><div id="geo59Summary" hidden style="white-space:pre-wrap;font:12px/1.5 Arial;padding:8px;background:#e9eef2;color:#172633;border-radius:6px"></div><canvas id="crossSectionCanvas" width="600" height="510"></canvas><label>Download cross-section</label><select id="geo61Choice"><option value="current">Current display</option><option value="2d">2D Cross-Section</option><option value="cut">3D Cross-Section</option><option value="plane">3D Section Plane</option><option value="all">All three sections</option></select><button type="button" id="geo61PNG">Download PNG</button><button type="button" id="geo61PDF">Download PDF</button>
         </section></div>
 <div id="diagram_column" class="diagram-card"><section class="geology-panel" data-section-id="column" data-section-title="Stratigraphic Column">
             <h2>Stratigraphic Column</h2>
-            <canvas id="stratigraphicCanvas" width="600" height="650"></canvas><button type="button" class="geo-local-diagram-export" onclick="exportGeologyPNG('column')">Export Stratigraphic Column (PNG)</button>
+            <details id="strat49Controls" style="margin:8px 0"><summary>Stratigraphic Column Formatting</summary><div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:8px 0"><label>Font <select id="strat49Font"><option>Times New Roman</option><option>Arial</option><option>Calibri</option><option>Cambria</option><option>Georgia</option><option>Verdana</option><option>Tahoma</option><option>Courier New</option></select></label><label>Size <input id="strat49Size" type="range" min="8" max="24" value="13"></label><label><input id="strat49Bold" type="checkbox"> Bold</label><label><input id="strat49Italic" type="checkbox"> Italic</label><label>Text color <input id="strat49Color" type="color" value="#172633"></label><label>Label opacity <input id="strat49Opacity" type="range" min="0" max="100" value="100"></label><label>Contact color <input id="strat49LineColor" type="color" value="#263746"></label><label>Line style <select id="strat49Style"><option value="solid">Solid</option><option value="dashed">Dashed</option><option value="dotted">Dotted</option><option value="dashdot">Dash-dot</option></select></label><label>Line width <input id="strat49Width" type="range" min="0.5" max="5" step="0.5" value="1.5"></label><button type="button" id="strat49Reset">Reset formatting</button></div></details><canvas id="stratigraphicCanvas" width="600" height="650"></canvas><button type="button" class="geo-local-diagram-export" onclick="exportGeologyPNG('column')">Export Stratigraphic Column (PNG)</button><button type="button" class="geo-local-diagram-export" onclick="exportGeologyPDF('column')">Export Stratigraphic Column (PDF)</button>
         </section></div>
 <div id="diagram_legend" class="diagram-card diagram-legend"><section class="legend-panel" data-section-id="legend" data-section-title="Geological Legend" aria-label="Automatic geological legend">
         <div class="legend-heading">
             <h2>Geological Legend</h2>
             <span id="legendSummary">Formation colors, lithology and thickness</span>
         </div>
-        <div id="geologicalLegend" class="legend-grid" aria-live="polite"></div><button type="button" class="geo-local-diagram-export" onclick="exportGeologyPNG('legend')">Export Legend (PNG)</button>
+        <div id="geologicalLegend" class="legend-grid" aria-live="polite"></div><button type="button" class="geo-local-diagram-export" onclick="exportGeologyPNG('legend')">Export Legend (PNG)</button><button type="button" class="geo-local-diagram-export" onclick="exportGeologyPDF('legend')">Export Legend (PDF)</button>
     </section></div>
 </div>
 </div>
@@ -1315,6 +1365,7 @@ document.getElementById('sidebarWorkspaceView').addEventListener('change',event=
      document.getElementById('diagram_'+name).hidden=!t.checked;
      state[name]=t.checked;
    });
+   document.querySelector("#geoView_diagrams .diagram-content-grid").dataset.visibleCount=String(Object.values(state).filter(Boolean).length);
    try{localStorage.setItem(key,JSON.stringify(state))}catch(e){}
  }
  toggles.forEach(t=>{if(typeof saved[t.dataset.diagramToggle]==='boolean')t.checked=saved[t.dataset.diagramToggle];t.addEventListener('change',sync)});
@@ -1421,7 +1472,129 @@ scene.add(light);
 
 const model = new THREE.Group();
 scene.add(model);
+// Model orientation: north -Z, east +X, elevation +Y.
+const northHUD = document.createElement('canvas');
+northHUD.id = 'geoModelNorthHUD';
+northHUD.width = 240; northHUD.height = 240;
+northHUD.setAttribute('role','img');
+northHUD.setAttribute('aria-label','Model compass N E S W');
+northHUD.title = 'Model North = −Z; East = +X; Elevation = +Y (not geographic north)';
+viewer.appendChild(northHUD);
+const northVector = new THREE.Vector3();
+function drawModelNorth(ctx,x,y,size){
+    camera.updateMatrixWorld(); model.updateWorldMatrix(true,false);
+    const project=(a,b,c)=>new THREE.Vector3(a,b,c).transformDirection(model.matrixWorld).transformDirection(camera.matrixWorldInverse);
+    const n=project(0,0,-1), e=project(1,0,0);
+    // Use camera right to determine heading, even at low viewing elevations.
+    const angle=Math.atan2(n.x,e.x);
+    ctx.save();ctx.translate(x,y);ctx.scale(size/120,size/120);
+    ctx.fillStyle='rgba(10,22,32,.88)';ctx.strokeStyle='#63818e';ctx.lineWidth=1;
+    ctx.beginPath();ctx.arc(60,55,49,0,Math.PI*2);ctx.fill();ctx.stroke();
+    ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='bold 13px Arial';
+    for(const [label,offset] of [['N',0],['E',Math.PI/2],['S',Math.PI],['W',-Math.PI/2]]){
+        const t=angle+offset, dx=Math.sin(t),dy=-Math.cos(t);
+        ctx.fillStyle=label==='N'?'#5eead4':'#e2e8f0';ctx.strokeStyle=ctx.fillStyle;
+        ctx.fillText(label,60+dx*39,55+dy*39);
+        ctx.beginPath();ctx.moveTo(60+dx*17,55+dy*17);ctx.lineTo(60+dx*29,55+dy*29);ctx.stroke();
+        if(label==='N'){ctx.beginPath();ctx.moveTo(60+dx*29,55+dy*29);ctx.lineTo(60+dx*18-dy*5,55+dy*18+dx*5);ctx.lineTo(60+dx*18+dy*5,55+dy*18-dx*5);ctx.closePath();ctx.fill();}
+    }
+    ctx.fillStyle='#e2e8f0';ctx.font='9px Arial';ctx.fillText('MODEL COMPASS',60,110);
+    ctx.restore();
+}
+function updateModelNorth(){const c=northHUD.getContext('2d');c.clearRect(0,0,240,240);drawModelNorth(c,0,0,240);}
 
+
+// Scale at the model origin, on a camera-parallel reference plane.
+const scaleHUD=document.createElement('canvas');
+scaleHUD.id='geoModelScaleHUD'; scaleHUD.width=480; scaleHUD.height=112;
+scaleHUD.setAttribute('role','img'); viewer.appendChild(scaleHUD);
+let scaleVisible=true;
+scaleHUD.title='Reference scale at model centre';
+
+function drawModelScale(ctx,x,y,w,h){
+ camera.updateMatrixWorld(); model.updateWorldMatrix(true,false);
+ const origin=model.getWorldPosition(new THREE.Vector3());
+ const right=new THREE.Vector3(1,0,0).transformDirection(camera.matrixWorld);
+ const a=origin.clone().project(camera), b=origin.clone().add(right).project(camera);
+ const ppm=Math.abs(b.x-a.x)*w/2/100;
+ if(!Number.isFinite(ppm)||ppm<=0)return;
+ const get=id=>document.getElementById('modelScale'+id+'69');
+ const chosen=get('Unit').value, factors={m:1,km:1000,ft:.3048,mi:1609.344};
+ const target=Math.min(150,w*.30)/ppm;
+ const unit=chosen==='auto'?(target>=1000?'km':'m'):chosen, factor=factors[unit];
+ const power=10**Math.floor(Math.log10(target/factor));
+ const value=([1,2,5].filter(v=>v*power<=target/factor).pop()||1)*power;
+ const distance=value*factor,length=distance*ppm;
+ const n=Math.max(1,Math.min(10,Math.round(Number(get('Div').value)||4))),style=get('Style').value,color=get('Color').value;
+ ctx.save();ctx.translate(x,y);ctx.fillStyle='rgba(10,22,32,.88)';ctx.fillRect(0,0,240,56);
+ ctx.font=`${get('Italic').checked?'italic ':''}${get('Bold').checked?'bold ':''}11px ${get('Font').value}`;ctx.fillStyle=color;ctx.fillText('Scale at model centre (view plane)',8,12);
+ ctx.strokeStyle=color;ctx.lineWidth=1;ctx.setLineDash([]);
+ if(style==='blocks'||style==='checker'){
+ const rows=style==='checker'?2:1;
+ for(let r=0;r<rows;r++)for(let i=0;i<n;i++){ctx.fillStyle=(i+r)%2?'#101923':color;ctx.fillRect(8+i*length/n,23+r*8/rows,length/n,8/rows);ctx.strokeRect(8+i*length/n,23+r*8/rows,length/n,8/rows);}
+ }else{ctx.beginPath();ctx.moveTo(8,27);ctx.lineTo(8+length,27);for(let i=0;i<=n;i++){if(style==='simple'&&i!==0&&i!==n)continue;const xx=8+i*length/n;ctx.moveTo(xx,22);ctx.lineTo(xx,32);}ctx.stroke();}
+ ctx.fillStyle=color;ctx.fillText('0',8,44);ctx.fillText(Number(value.toPrecision(6))+' '+unit,Math.max(20,8+length-18),44);
+ ctx.restore();
+ scaleHUD.setAttribute('aria-label','Reference scale '+distance+' metres');
+}
+function updateModelScale(){scaleHUD.hidden=!scaleVisible;if(!scaleVisible)return;const c=scaleHUD.getContext('2d');c.clearRect(0,0,480,112);c.save();c.scale(2,2);drawModelScale(c,0,0,viewer.clientWidth,viewer.clientHeight);c.restore();}
+const scaleToggle=document.createElement('button');scaleToggle.type='button';scaleToggle.id='geoScaleToggle';scaleToggle.textContent='Hide scale';scaleToggle.onclick=()=>{scaleVisible=!scaleVisible;scaleToggle.textContent=scaleVisible?'Hide scale':'Show scale';updateModelScale();};viewer.appendChild(scaleToggle);
+scaleToggle.title='Click to show or hide scale';
+const scaleGroup=document.createElement('div');scaleGroup.id='geoScaleGroup';viewer.appendChild(scaleGroup);scaleGroup.append(scaleToggle,scaleHUD);
+for(const id of ["Style","Unit","Div","Color","Font","Bold","Italic"]){document.getElementById("modelScale"+id+"69").addEventListener("input",updateModelScale);}
+
+const dimensionHUD=document.createElement('canvas');dimensionHUD.id='geoDimensionHUD';viewer.appendChild(dimensionHUD);
+let dimensionsVisible=true;
+const dimensionToggle=document.createElement('button');dimensionToggle.id='geoDimensionToggle';dimensionToggle.type='button';dimensionToggle.textContent='Hide dimensions';viewer.appendChild(dimensionToggle);
+dimensionToggle.onclick=()=>{dimensionsVisible=!dimensionsVisible;dimensionToggle.textContent=dimensionsVisible?'Hide dimensions':'Show dimensions';updateDimensions();};
+function drawDimensions(ctx,w,h){
+ if(!dimensionsVisible||!w||!h)return;
+ camera.updateMatrixWorld();model.updateWorldMatrix(true,false);
+ const total=layers.reduce((sum,l)=>sum+Number(l.thickness),0), low=-total/200,high=total/200;
+ const project=p=>{const v=new THREE.Vector3(...p).applyMatrix4(model.matrixWorld).project(camera);return {x:(v.x+1)*w/2,y:(1-v.y)*h/2,z:v.z};};
+ const dims=[{a:[-3.5,low-.3,3.05],b:[3.5,low-.3,3.05],e:[[-3.5,low,2.5],[3.5,low,2.5]],label:'700 m'},{a:[3.95,low-.3,-2.5],b:[3.95,low-.3,2.5],e:[[3.5,low,-2.5],[3.5,low,2.5]],label:'500 m'},{a:[-4.1,low,2.5],b:[-4.1,high,2.5],e:[[-3.5,low,2.5],[-3.5,high,2.5]],label:Math.round(total)+' m (layers)'}];
+ ctx.save();ctx.translate(dimOffset.x*w,dimOffset.y*h);ctx.globalAlpha=Number(dimOpacity.value);ctx.lineWidth=1.2;ctx.strokeStyle='rgba(220,240,245,.85)';ctx.fillStyle='#e8faff';ctx.font='bold 12px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
+ for(const d of dims){const a=project(d.a),b=project(d.b),e=d.e.map(project);if([a,b,...e].some(p=>!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.z< -1||p.z>1))continue;const dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy);if(len<18)continue;const ux=dx/len,uy=dy/len;ctx.beginPath();ctx.moveTo(e[0].x,e[0].y);ctx.lineTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.lineTo(e[1].x,e[1].y);ctx.stroke();for(const [p,sign] of [[a,1],[b,-1]]){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+sign*ux*7-uy*3,p.y+sign*uy*7+ux*3);ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+sign*ux*7+uy*3,p.y+sign*uy*7-ux*3);ctx.stroke();}let angle=Math.atan2(dy,dx);if(angle>Math.PI/2||angle< -Math.PI/2)angle+=Math.PI;ctx.save();ctx.translate((a.x+b.x)/2,(a.y+b.y)/2);ctx.rotate(angle);ctx.lineWidth=3;ctx.strokeStyle='rgba(10,20,28,.85)';ctx.strokeText(d.label,0,-10);ctx.fillText(d.label,0,-10);ctx.restore();}ctx.restore();
+}
+let integratedAxesVisible=true;
+const axesControls=document.createElement('div');axesControls.id='geoIntegratedAxesControls';
+const axesButton=document.createElement('button');axesButton.type='button';axesButton.textContent='Hide model axes';
+const axesOpacity=document.createElement('input');axesOpacity.type='range';axesOpacity.min='0';axesOpacity.max='1';axesOpacity.step='.05';axesOpacity.value='.8';axesOpacity.title='Axis opacity';axesOpacity.setAttribute('aria-label','Axis opacity');
+axesControls.append(axesButton,axesOpacity);viewer.appendChild(axesControls);
+axesButton.onclick=()=>{integratedAxesVisible=!integratedAxesVisible;axesButton.textContent=integratedAxesVisible?'Hide model axes':'Show model axes';updateDimensions();};
+axesOpacity.oninput=()=>updateDimensions();
+function drawIntegratedAxes(ctx,w,h){
+ if(!integratedAxesVisible||!w||!h)return;
+ camera.updateMatrixWorld();model.updateWorldMatrix(true,false);
+ const low=-layers.reduce((sum,l)=>sum+Number(l.thickness),0)/200;
+ const origin=[-3.5,low,2.5];
+ const project=p=>{const v=new THREE.Vector3(...p).applyMatrix4(model.matrixWorld).project(camera);return {x:(v.x+1)*w/2,y:(1-v.y)*h/2,z:v.z};};
+ const a=project(origin);ctx.save();ctx.translate(axisOffset.x*w,axisOffset.y*h);ctx.globalAlpha=Number(axesOpacity.value);ctx.lineWidth=1.7;ctx.font='bold 14px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
+ for(const [label,color,end] of [['X','#ff6262',[4.1,low,2.5]],['Y','#64e58c',[-3.5,-low+.6,2.5]],['Z','#6ba6ff',[-3.5,low,4.0]]]){
+ const b=project(end);if([a,b].some(p=>!Number.isFinite(p.x)||!Number.isFinite(p.y)||Math.abs(p.z)>1))continue;
+ const dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy);if(len<8)continue;const ux=dx/len,uy=dy/len;
+ ctx.strokeStyle=color;ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.beginPath();ctx.moveTo(b.x,b.y);ctx.lineTo(b.x-ux*9-uy*4,b.y-uy*9+ux*4);ctx.lineTo(b.x-ux*9+uy*4,b.y-uy*9-ux*4);ctx.closePath();ctx.fill();ctx.fillText(label,b.x+ux*12,b.y+uy*12);
+ }ctx.restore();
+}
+function updateDimensions(){const w=viewer.clientWidth,h=viewer.clientHeight,dpr=Math.min(window.devicePixelRatio||1,2);if(dimensionHUD.width!==Math.round(w*dpr)||dimensionHUD.height!==Math.round(h*dpr)){dimensionHUD.width=Math.round(w*dpr);dimensionHUD.height=Math.round(h*dpr);}const c=dimensionHUD.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);drawDimensions(c,w,h);drawIntegratedAxes(c,w,h);}
+
+
+const dimOffset={x:0,y:0},axisOffset={x:0,y:0};
+const dimControls=document.createElement('div');dimControls.id='geoDimControls';viewer.appendChild(dimControls);dimControls.append(dimensionToggle);
+const dimOpacity=document.createElement('input');Object.assign(dimOpacity,{type:'range',min:'0',max:'1',step:'.05',value:'1',title:'Dimension opacity'});dimOpacity.setAttribute('aria-label','Dimension opacity');dimOpacity.oninput=updateDimensions;dimControls.append(dimOpacity);
+function addControlDrag(panel,button,opacity){
+ const label=document.createElement('label');label.textContent='Opacity ';opacity.before(label);label.append(opacity);
+ let drag=null,pos=null,moved=false;
+ function place(){if(!pos)return;const w=Math.max(0,viewer.clientWidth-panel.offsetWidth),h=Math.max(0,viewer.clientHeight-panel.offsetHeight);panel.style.setProperty('left',Math.round(pos.x*w)+'px','important');panel.style.setProperty('top',Math.round(pos.y*h)+'px','important');panel.style.setProperty('right','auto','important');panel.style.setProperty('bottom','auto','important');}
+ button.title='Click to toggle; hold and drag to move controls';
+ button.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.stopPropagation();moved=false;const r=panel.getBoundingClientRect();drag={id:e.pointerId,sx:e.clientX,sy:e.clientY,x:e.clientX-r.left,y:e.clientY-r.top};button.setPointerCapture(e.pointerId);});
+ button.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;e.stopPropagation();if(!moved&&Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<5)return;moved=true;e.preventDefault();const r=viewer.getBoundingClientRect(),w=Math.max(0,viewer.clientWidth-panel.offsetWidth),h=Math.max(0,viewer.clientHeight-panel.offsetHeight);pos={x:w?Math.max(0,Math.min(1,(e.clientX-r.left-viewer.clientLeft-drag.x)/w)):0,y:h?Math.max(0,Math.min(1,(e.clientY-r.top-viewer.clientTop-drag.y)/h)):0};place();});
+ for(const event of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(event,e=>{if(drag?.id===e.pointerId)drag=null;e.stopPropagation();});
+ button.addEventListener('click',e=>{if(moved&&e.detail!==0){e.preventDefault();e.stopImmediatePropagation();moved=false;}},true);
+ for(const event of ['pointerdown','mousedown','touchstart','wheel'])panel.addEventListener(event,e=>e.stopPropagation());
+ new ResizeObserver(place).observe(viewer);
+}
+addControlDrag(dimControls,dimensionToggle,dimOpacity);addControlDrag(axesControls,axesButton,axesOpacity);
 
 const grid = new THREE.GridHelper(16, 16, 0x547080, 0x344653);
 scene.add(grid);
@@ -1555,7 +1728,7 @@ function refreshGeologicalTimeViews() {
     updateGeologicalTimeSummary();
 }
 
-function drawStratigraphicColumn() {
+function drawStratigraphicColumnFallback() {
 
     const canvas = document.getElementById("stratigraphicCanvas");
     if (!canvas) return;
@@ -1714,6 +1887,176 @@ function drawStratigraphicColumn() {
         590
     );
 }
+function drawStratigraphicColumnFormatted() {
+
+    const canvas = document.getElementById("stratigraphicCanvas");
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+
+    const width = canvas.width;
+    const height = canvas.height;
+
+    ctx.clearRect(0, 0, width, height);
+
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, width, height);
+
+    const left = 155;
+    const top = 65;
+    const columnWidth = 245;
+    const columnHeight = 490;
+
+    const totalThickness = layers.reduce(
+        (sum, layer) => sum + Number(layer.thickness), 0
+    );
+
+    if (totalThickness <= 0) return;
+
+    const opt = id => document.getElementById('strat49'+id)?.value;
+    const font = (n,bold=false) => `${document.getElementById('strat49Italic')?.checked?'italic ':''}${document.getElementById('strat49Bold')?.checked || bold?'bold ':''}${Math.round(n*Number(opt('Size')||13)/13)}px ${opt('Font')||'Times New Roman'}`;
+    const label = (...args) => {ctx.save();ctx.fillStyle=opt('Color')||'#172633';ctx.globalAlpha=Number(opt('Opacity')??100)/100;ctx.fillText(...args);ctx.restore();};
+    const line = () => {ctx.strokeStyle=opt('LineColor')||'#263746';ctx.lineWidth=Number(opt('Width')||1.5);ctx.setLineDash(({solid:[],dashed:[8,5],dotted:[2,4],dashdot:[8,4,2,4]})[opt('Style')]||[]);};
+    // Title
+    ctx.fillStyle = "#172633";
+    ctx.font = font(19, true);
+    ctx.textAlign = "center";
+    label("STRATIGRAPHIC COLUMN", width / 2, 30);
+
+    let currentY = top;
+    let depth = 0;
+
+    layers.forEach((layer, index) => {
+
+        const thickness = Number(layer.thickness);
+
+        const layerHeight =
+            (thickness / totalThickness) * columnHeight;
+
+        // Lithology pattern
+        const texture = createLithologyTexture(
+            layer.lithology || "sandstone",
+            layer.color
+        );
+
+        ctx.drawImage(
+            texture.image,
+            left,
+            currentY,
+            columnWidth,
+            layerHeight
+        );
+
+        texture.dispose();
+
+        // Formation boundary
+        ctx.strokeStyle = "#263746";
+        ctx.lineWidth = 1.5;
+
+        line();
+        ctx.strokeRect(
+            left,
+            currentY,
+            columnWidth,
+            layerHeight
+        );
+
+        // Formation name
+        ctx.fillStyle = "#172633";
+        ctx.font = font(13, true);
+        ctx.textAlign = "left";
+
+        label(
+            layer.name,
+            10,
+            currentY + Math.min(layerHeight / 2 + 4, 20)
+        );
+
+        // Optional geological age annotation below formation name.
+        if (layer.geologicalTime?.period && layerHeight >= 35) {
+            ctx.fillStyle = "#334155";
+            ctx.font = font(11, false);
+            ctx.textAlign = "left";
+            const timeLabel = ageDescription(layer);
+            label(timeLabel.length > 19 ? timeLabel.slice(0, 18) + "…" : timeLabel,
+                10, currentY + Math.min(layerHeight / 2 + 19, 35));
+        }
+
+        // Thickness label
+        ctx.font = font(12, false);
+        ctx.textAlign = "right";
+
+        label(
+            thickness + " m",
+            585,
+            currentY + Math.min(layerHeight / 2 + 4, 20)
+        );
+
+        // Depth boundary
+        depth += thickness;
+
+        ctx.beginPath();
+        ctx.strokeStyle = "#526777";
+        ctx.moveTo(left - 8, currentY + layerHeight);
+        ctx.lineTo(left, currentY + layerHeight);
+        line(); ctx.stroke();
+
+        ctx.fillStyle = "#263746";
+        ctx.font = font(11, false);
+        ctx.textAlign = "left";
+
+        label(
+            depth + " m",
+            left - 45,
+            currentY + layerHeight + 4
+        );
+
+        currentY += layerHeight;
+    });
+
+    // Outer border
+    ctx.strokeStyle = "#172633";
+    ctx.lineWidth = 2;
+
+    line();
+        ctx.strokeRect(
+        left,
+        top,
+        columnWidth,
+        columnHeight
+    );
+
+    // Depth scale title
+    ctx.fillStyle = "#172633";
+    ctx.font = font(12, true);
+    ctx.textAlign = "center";
+
+    label(
+        "DEPTH",
+        left - 35,
+        top - 12
+    );
+
+    label(
+        "THICKNESS",
+        545,
+        top - 12
+    );
+
+    // Total thickness
+    ctx.font = font(13, true);
+
+    label(
+        "Total thickness: " + totalThickness + " m",
+        width / 2,
+        590
+    );
+}
+function drawStratigraphicColumn() {
+    try { drawStratigraphicColumnFormatted(); }
+    catch (error) { console.warn('Stratigraphic formatting failed; restoring standard drawing', error); try { drawStratigraphicColumnFallback(); } catch (fallbackError) { console.error('Stratigraphic drawing failed', fallbackError); } }
+}
+window.drawStratigraphicColumn = drawStratigraphicColumn;
 
 let faultEnabled = false;
 
@@ -1952,29 +2295,55 @@ function mainMigFeedback(){const st=mainMigGet();const el=document.getElementByI
  document.getElementById('mainMigResetButton').addEventListener('click',mainMigReset);
 document.getElementById('mainMigShow').addEventListener('change',mainMigBuild);document.getElementById('mainMigStage').addEventListener('change',mainMigBuild);
 
+function geoFormationLineMaterial(layer){
+ const s=layer.formationStyle||{}, color=s.lineColor||'#25313a';
+ const opts={color,transparent:true,opacity:Number(s.lineOpacity??100)/100};
+ const patterns={dashed:[.16,.09],dotted:[.025,.09],longdash:[.32,.12]};
+ const p=patterns[s.lineStyle];
+ return p?new THREE.LineDashedMaterial({...opts,dashSize:p[0],gapSize:p[1]}):new THREE.LineBasicMaterial(opts);
+}
+function geoFormationNameSprite(layer){
+ const s=layer.formationStyle||{}, c=document.createElement('canvas');c.width=1024;c.height=160;
+ const x=c.getContext('2d');const size=Number(s.fontSize)||24;
+ x.font=`${s.bold?'bold ':''}${size*2}px ${s.font||'Times New Roman'}`;
+ x.textAlign='center';x.textBaseline='middle';x.lineWidth=6;x.strokeStyle='rgba(0,0,0,.8)';x.fillStyle=s.textColor||'#ffffff';
+ x.strokeText(layer.name,512,80,970);x.fillText(layer.name,512,80,970);
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;
+ const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthTest:false,depthWrite:false}));sprite.scale.set(3.2,.5,1);sprite.renderOrder=51;return sprite;
+}
+function geoFormationStyleControls(card,layer){
+ const s=layer.formationStyle||(layer.formationStyle={});
+ const d=document.createElement('details');d.style.marginTop='8px';const summary=document.createElement('summary');summary.textContent='3D label & boundary styling';d.append(summary);card.append(d);
+ function field(label,key,type,def,options){const row=document.createElement('label');row.style.cssText='display:block;margin:6px 0;font-size:12px';row.append(document.createTextNode(label+' '));const el=document.createElement(type==='select'?'select':'input');if(type==='select'){for(const [v,n] of options){const o=document.createElement('option');o.value=v;o.textContent=n;el.append(o);}}else el.type=type;if(type==='checkbox')el.checked=s[key]??def;else el.value=s[key]??def;if(type==='number'){el.min=8;el.max=48;}if(type==='range'){el.min=0;el.max=100;}el.setAttribute('aria-label',label);el.addEventListener('change',()=>{s[key]=type==='checkbox'?el.checked:type==='number'||type==='range'?Number(el.value):el.value;updateModel();});row.append(el);d.append(row);}
+ field('Show formation name (3D only)','showName','checkbox',false);field('Allow label dragging','dragName','checkbox',true); const reset=document.createElement('button');reset.type='button';reset.textContent='Reset this label position';reset.onclick=()=>{delete s.labelOffset;updateModel();};d.append(reset);const resetAll=document.createElement('button');resetAll.type='button';resetAll.textContent='Reset all formation label positions';resetAll.onclick=()=>{for(const l of layers)if(l.formationStyle)delete l.formationStyle.labelOffset;updateModel();};d.append(resetAll);field('Font','font','select','Times New Roman',['Times New Roman','Arial','Calibri','Cambria','Georgia','Verdana','Tahoma','Courier New'].map(v=>[v,v]));field('Font size','fontSize','number',24);field('Bold','bold','checkbox',false);field('Label color','textColor','color','#ffffff');field('Show boundary','outline','checkbox',true);field('Boundary style','lineStyle','select','solid',[['solid','Solid'],['dashed','Dashed'],['dotted','Dotted'],['longdash','Long dash']]);field('Boundary color','lineColor','color','#25313a');field('Boundary opacity','lineOpacity','range',100);
+}
+
+function geoReleaseModelChildren(root) {
+    const geometries=new Set(), materials=new Set(), textures=new Set();
+    for(const child of [...root.children]) {
+        child.traverse(o=>{
+            if(o.geometry && !o.isSprite) geometries.add(o.geometry);
+            for(const m of (Array.isArray(o.material)?o.material:[o.material])) {
+                if(!m) continue;
+                materials.add(m);
+                if(m.map?.isTexture) textures.add(m.map);
+            }
+        });
+        root.remove(child);
+    }
+    textures.forEach(t=>t.dispose());
+    materials.forEach(m=>m.dispose());
+    geometries.forEach(g=>g.dispose());
+}
+
 function updateModel() {
     const mig=mainMigGet(); if(mig.group){model.remove(mig.group);mig.group.traverse(o=>{o.geometry?.dispose();o.material?.dispose()});mig.group=null;mig.tracks=[];}
     geoUnSync();
     if (typeof sdReset === "function") sdReset();
 
-    // Remove the previous geological model
-    while (model.children.length > 0) {
-        const object = model.children[0];
-        model.remove(object);
-        object.geometry?.dispose();
-
-        if (object.material) {
-    if (Array.isArray(object.material)) {
-        object.material.forEach(m => {
-            m.map?.dispose();
-            m.dispose();
-        });
-    } else {
-        object.material.map?.dispose();
-        object.material.dispose();
-    }
-}
-    }
+    // Release owned resources, including nested model objects. Sprite geometry
+    // is shared internally by Three.js and must not be disposed here.
+    geoReleaseModelChildren(model);
 
     const total = layers.reduce(
         (sum, layer) => sum + layer.thickness, 0
@@ -2100,13 +2469,26 @@ const material = new THREE.MeshStandardMaterial({
 
         const outline = new THREE.LineSegments(
             edges,
-            new THREE.LineBasicMaterial({ color: 0x25313a })
+            geoFormationLineMaterial(layer)
         );
 
+        outline.computeLineDistances();
         outline.position.y = centerY;
         outline.userData.geoLayerIndex = layers.indexOf(layer);
         outline.userData.geoOutline = true;
         model.add(outline);
+        outline.visible = layer.formationStyle?.outline !== false;
+        if(layer.formationStyle?.showName){
+            const label=geoFormationNameSprite(layer);
+            label.userData.geoLayerIndex=layers.indexOf(layer);
+            label.userData.geoFormationName=true;
+            label.position.set(0,centerY + (foldType==='none'?0:(foldType==='anticline'?1:-1)*amplitude),2.65);
+            label.userData.formationLayer=layer;
+            label.userData.formationBase=label.position.clone();
+            const offset=layer.formationStyle.labelOffset;
+            if(Array.isArray(offset)&&offset.length===3&&offset.every(Number.isFinite))label.position.add(new THREE.Vector3(...offset));
+            model.add(label);
+        }
         if (document.getElementById('petroHighlight')?.checked && layer.petroleum?.role === 'reservoir') {
             const highlight = new THREE.LineSegments(
                 new THREE.EdgesGeometry(geometry),
@@ -2254,8 +2636,10 @@ function renderLayerList() {
         card.className = "layer-card";
 
         const title = document.createElement("strong");
-        title.textContent = "Formation " + (index + 1);
+        title.textContent = "Formation " + (index + 1) + " — " + layer.name;
         card.appendChild(title);
+        const edit54=document.createElement('details');edit54.style.marginTop='8px';
+        const summary54=document.createElement('summary');summary54.textContent='Edit formation';edit54.append(summary54);card.append(edit54);
 
         const name = document.createElement("input");
         name.value = layer.name;
@@ -2263,12 +2647,14 @@ function renderLayerList() {
 
         name.addEventListener("change", () => {
             layer.name = name.value.trim() || "Unnamed Formation";
+            title.textContent = "Formation " + (index + 1) + " — " + layer.name;
+            updateModel();
 drawStratigraphicColumn();
             updateGeologicalLegend();
             setStatus("Formation name updated.");
         });
 
-        card.appendChild(name);
+        edit54.appendChild(name);
 
         const ageTitle = document.createElement("label");
         ageTitle.textContent = "Geological period";
@@ -2286,7 +2672,7 @@ drawStratigraphicColumn();
             refreshGeologicalTimeViews();
             setStatus(`${layer.name}: geological period updated.`);
         });
-        card.append(ageTitle, periodSelect);
+        edit54.append(ageTitle, periodSelect);
 
         const subdivisionLabel = document.createElement("label");
         subdivisionLabel.textContent = "Epoch / geological subdivision";
@@ -2327,12 +2713,12 @@ drawStratigraphicColumn();
             refreshGeologicalTimeViews();
             setStatus(`${layer.name}: geological subdivision updated.`);
         });
-        card.append(subdivisionLabel, subdivisionSelect);
+        edit54.append(subdivisionLabel, subdivisionSelect);
 
         const colorLabel = document.createElement("label");
         colorLabel.textContent = "Formation color";
         colorLabel.style.cssText = "display:block;margin-top:9px;margin-bottom:6px;font-size:12px;color:#b6c6d0";
-        card.appendChild(colorLabel);
+        edit54.appendChild(colorLabel);
         const color = document.createElement("input");
         color.type = "color";
         color.value = layer.color;
@@ -2344,12 +2730,12 @@ drawStratigraphicColumn();
 drawStratigraphicColumn();
         });
 
-        card.appendChild(color);
+        edit54.appendChild(color);
 // Lithology type selector, with a visible label like Geological Period.
 const lithologyLabel = document.createElement("label");
 lithologyLabel.textContent = "Lithology";
 lithologyLabel.style.cssText = "display:block;margin-top:9px;margin-bottom:6px;font-size:12px;color:#b6c6d0";
-card.appendChild(lithologyLabel);
+edit54.appendChild(lithologyLabel);
 const lithology = document.createElement("select");
 lithology.setAttribute("aria-label", "Lithology");
 
@@ -2383,7 +2769,7 @@ drawStratigraphicColumn();
     setStatus(layer.name + " lithology updated.");
 });
 
-card.appendChild(lithology);
+edit54.appendChild(lithology);
 
         const thickness = document.createElement("input");
         thickness.type = "number";
@@ -2406,7 +2792,7 @@ drawStratigraphicColumn();
             setStatus("Formation thickness updated.");
         });
 
-        card.appendChild(thickness);
+        edit54.appendChild(thickness);
 
         const actions = document.createElement("div");
         actions.className = "layer-actions";
@@ -2429,7 +2815,8 @@ drawStratigraphicColumn();
         remove.onclick = () => deleteLayer(index);
         actions.appendChild(remove);
 
-        card.appendChild(actions);
+        edit54.appendChild(actions);
+        geoFormationStyleControls(card,layer);
         list.appendChild(card);
     }); 
 drawStratigraphicColumn();
@@ -2735,12 +3122,12 @@ function pointerToNDC(event) {
     );
 }
 function petroleumSpriteAtPointer(event) {
-    if (!document.getElementById('petroDragLabels')?.checked ||
-        !document.getElementById('petroLabels')?.checked) return null;
     pointerToNDC(event);
+    model.updateWorldMatrix(true,true);
     petroleumRaycaster.setFromCamera(petroleumPointer, camera);
-    const sprites = model.children.filter(obj => obj.isSprite && obj.userData.petroleumLayer);
-    return petroleumRaycaster.intersectObjects(sprites, false)[0]?.object || null;
+    const petroEnabled=document.getElementById('petroDragLabels')?.checked && document.getElementById('petroLabels')?.checked;
+    const sprites=model.children.filter(obj=>obj.isSprite && obj.visible && ((obj.userData.formationLayer && obj.userData.formationLayer.formationStyle?.dragName!==false) || (petroEnabled && obj.userData.petroleumLayer)));
+    return petroleumRaycaster.intersectObjects(sprites,false)[0]?.object || null;
 }
 // Manual right-hand-rule strike and dip orientation visualization.
 // Model convention: north = -Z, east = +X, elevation = +Y.
@@ -2818,6 +3205,15 @@ document.getElementById('sdClear').addEventListener('click', () => {
     sdClearGraphics();
     document.getElementById('sdResult').textContent = 'Illustration hidden. Enter strike and dip, then click Calculate.';
 });
+
+function geo67Pinch(el, zoom, cancel) {
+ const pts=new Map(); let multi=false,last=0;
+ const span=()=>{const [a,b]=[...pts.values()];return Math.hypot(a.x-b.x,a.y-b.y)};
+ el.addEventListener('pointerdown',e=>{if(e.pointerType!=='touch')return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pts.size>=2){multi=true;last=span();cancel();el.setPointerCapture(e.pointerId);e.preventDefault();e.stopImmediatePropagation();}},true);
+ el.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});if(!multi)return;if(pts.size>=2){const d=span();if(last>0&&d>0)zoom(last/d);last=d;}e.preventDefault();e.stopImmediatePropagation();},true);
+ for(const name of ['pointerup','pointercancel','lostpointercapture'])el.addEventListener(name,e=>{if(!pts.has(e.pointerId))return;pts.delete(e.pointerId);if(multi){cancel();if(pts.size>=2)last=span();if(!pts.size){multi=false;last=0;}e.stopImmediatePropagation();}},true);
+}
+
 // Mouse rotation
 let dragging = false;
 let previousX = 0;
@@ -2835,11 +3231,11 @@ renderer.domElement.addEventListener("pointerdown", event => {
         petroleumRaycaster.setFromCamera(petroleumPointer, camera);
         if (!petroleumRaycaster.ray.intersectPlane(petroleumDragPlane, petroleumHit)) return;
         petroleumDragOffset.copy(petroleumWorldPoint).sub(petroleumHit);
-        activePetroleumDrag = {sprite, layer: sprite.userData.petroleumLayer};
+        activePetroleumDrag = {sprite, layer: sprite.userData.formationLayer || sprite.userData.petroleumLayer, formation: !!sprite.userData.formationLayer, pointerId:event.pointerId};
         renderer.domElement.style.cursor = 'grabbing';
         renderer.domElement.setPointerCapture(event.pointerId);
         const index = layers.indexOf(activePetroleumDrag.layer);
-        if (index >= 0) {
+        if (index >= 0 && !activePetroleumDrag.formation) {
             document.getElementById('petroFormation').value = String(index);
             loadPetroleumProperties();
             syncPetroleumLabelControls();
@@ -2855,6 +3251,7 @@ renderer.domElement.addEventListener("pointerdown", event => {
 
 renderer.domElement.addEventListener("pointermove", event => {
     if (activePetroleumDrag) {
+        if(event.pointerId!==activePetroleumDrag.pointerId)return;
         pointerToNDC(event);
         petroleumRaycaster.setFromCamera(petroleumPointer, camera);
         if (!petroleumRaycaster.ray.intersectPlane(petroleumDragPlane, petroleumHit)) return;
@@ -2864,6 +3261,12 @@ renderer.domElement.addEventListener("pointermove", event => {
         model.worldToLocal(petroleumLocalPoint);
         const layer = activePetroleumDrag.layer;
         const sprite = activePetroleumDrag.sprite;
+        if(activePetroleumDrag.formation){
+            if(sprite.parent!==model){activePetroleumDrag=null;return;}
+            sprite.position.copy(petroleumLocalPoint);
+            layer.formationStyle.labelOffset=sprite.position.clone().sub(sprite.userData.formationBase).toArray();
+            event.preventDefault();return;
+        }
         const centerY = sprite.userData.baseCenterY;
         const nextX = THREE.MathUtils.clamp(petroleumLocalPoint.x, -5, 5);
         const nextY = THREE.MathUtils.clamp(petroleumLocalPoint.y - centerY, -3, 3);
@@ -2899,6 +3302,10 @@ function endPointerInteraction(event) {
 }
 renderer.domElement.addEventListener('pointerup', endPointerInteraction);
 renderer.domElement.addEventListener('pointercancel', endPointerInteraction);
+renderer.domElement.addEventListener('lostpointercapture', endPointerInteraction);
+renderer.domElement.style.touchAction='none';
+
+geo67Pinch(renderer.domElement, factor=>camera.position.multiplyScalar(factor).clampLength(7,35),()=>{dragging=false;activePetroleumDrag=null;renderer.domElement.style.cursor='default';});
 
 // Zoom
 renderer.domElement.addEventListener("wheel", event => {
@@ -3201,12 +3608,16 @@ function animate(now = performance.now()) {
     requestAnimationFrame(animate);
     const dt = Math.max(0, Math.min(0.05, (now - geoModelLastFrame) / 1000));
     geoModelLastFrame = now;
+    if (document.hidden || activeMainView !== "model") return;
     if (geoModelAutoRotate.checked && activeMainView === 'model' && !document.hidden && !dragging && !activePetroleumDrag) {
         model.rotation.y = (model.rotation.y + Number(geoModelRotationSpeed.value) * Math.PI / 180 * dt) % (2 * Math.PI);
     }
     mainMigTick(dt);
     sdGraphics.rotation.copy(model.rotation);
     renderer.render(scene, camera);
+    updateModelNorth();
+    updateModelScale();
+    updateDimensions();
 }
 
 
@@ -3219,7 +3630,7 @@ function applyGeoVisualization(){
     model.traverse(object=>{
         const index=object.userData.geoLayerIndex;
         if(index===undefined) return;
-        object.visible=!geoVisualState.hidden.has(index);
+        object.visible=!geoVisualState.hidden.has(index) && (!object.userData.geoOutline || layers[index]?.formationStyle?.outline !== false);
         const materials=Array.isArray(object.material)?object.material:[object.material];
         materials.filter(Boolean).forEach(mat=>{
             mat.clippingPlanes=geoVisualState.cut?[geoClipPlane]:[];
@@ -3433,8 +3844,56 @@ renderLayerList();
 animate();
 
 
-window.createCrossSection = function(showStatus = true) {
 
+const geoAB={a:[-3.5,0],b:[3.5,0],next:0,drag:null};
+const abMap=document.getElementById('geoABMap'), abCtx=abMap.getContext('2d');
+function abPixel(p){return [14+(p[0]+3.5)*36,10+(p[1]+2.5)*36]}
+function abDraw(){abCtx.fillStyle='#e4ebef';abCtx.fillRect(0,0,280,200);abCtx.strokeStyle='#64748b';abCtx.strokeRect(14,10,252,180);abCtx.fillStyle='#172633';abCtx.font='12px Arial';abCtx.fillText('N ↑',240,24);let a=abPixel(geoAB.a),b=abPixel(geoAB.b);abCtx.strokeStyle='#d12c35';abCtx.lineWidth=2;abCtx.beginPath();abCtx.moveTo(...a);abCtx.lineTo(...b);abCtx.stroke();[a,b].forEach((p,i)=>{abCtx.beginPath();abCtx.arc(...p,5,0,Math.PI*2);abCtx.fillStyle='#d12c35';abCtx.fill();abCtx.fillStyle='#172633';abCtx.fillText(i?'B':'A',p[0]+7,p[1]-7)});}
+function abPoint(e){const r=abMap.getBoundingClientRect();return [Math.max(-3.5,Math.min(3.5,((e.clientX-r.left)*280/r.width-14)/36-3.5)),Math.max(-2.5,Math.min(2.5,((e.clientY-r.top)*200/r.height-10)/36-2.5))]}
+abMap.onpointerdown=e=>{const p=abPoint(e);let k=['a','b'].find(k=>Math.hypot(p[0]-geoAB[k][0],p[1]-geoAB[k][1])<.25);geoAB.drag=k|| (geoAB.next++%2?'b':'a');geoAB[geoAB.drag]=p;abMap.setPointerCapture(e.pointerId);document.getElementById('geoABMode').value='custom';window.createCrossSection(false)};
+abMap.onpointermove=e=>{if(geoAB.drag){geoAB[geoAB.drag]=abPoint(e);window.createCrossSection(false)}};abMap.onpointerup=abMap.onpointercancel=()=>geoAB.drag=null;
+const geoLabels47={hits:[],offsets:new Map(),counts:new Map(),drag:null,bounds:null};
+function geoMode47(){return document.getElementById('geoABMode').value==='custom'?'custom':document.getElementById('sectionDirection').value;}
+function geoDash47(id){return ({solid:[],dash:[8,5],dot:[2,4],dashdot:[8,4,2,4]})[document.getElementById(id).value]||[];}
+function geoColor47(id){return document.getElementById(id).value;}
+function geoTag47(ctx,text,x,y,bounds,font='bold 11px Arial',maxWidth=Infinity){const st=geoLabels47,$=id=>document.getElementById(id),size=Math.max(8,Math.min(32,Number($('geoSize48').value)||12));const base=geoMode47()+'|'+text;const n=st.counts.get(base)||0;st.counts.set(base,n+1);const key=base+'|'+n;const o=st.offsets.get(key)||[0,0];const [l,t,w,h]=bounds;ctx.save();ctx.font=($('geoItalic48').checked?'italic ':'')+($('geoBold48').checked?'bold ':'')+size+'px "'+$('geoFont48').value+'"';ctx.globalAlpha=Number($('geoOpacity48').value)/100;ctx.textAlign='center';const tw=Math.min(w-4,maxWidth,ctx.measureText(text).width+12);const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));const xx=clamp(x+o[0],l+tw/2,l+w-tw/2),yy=clamp(y+o[1],t+size+3,t+h-6);ctx.fillStyle='rgba(255,255,255,.88)';ctx.fillRect(xx-tw/2,yy-size-3,tw,size+9);ctx.fillStyle=geoColor47('geoLabelColor47');ctx.fillText(text,xx,yy,tw-6);if($('geoUnderline48').checked){ctx.strokeStyle=ctx.fillStyle;ctx.lineWidth=1;ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(xx-(tw-6)/2,yy+2);ctx.lineTo(xx+(tw-6)/2,yy+2);ctx.stroke();}ctx.restore();if(Number($('geoOpacity48').value)>0)st.hits.push({key,x:xx,y:yy,w:tw,top:yy-size-3,bottom:yy+6,baseX:x,baseY:y});}
+window.geoResetLabels47=()=>{geoLabels47.offsets.clear();window.createCrossSection(false);};
+function geoNiceScale62(m){if(!(m>0))return 0;const p=10**Math.floor(Math.log10(m));return ([5,2,1].find(v=>v*p<=m)||.5)*p;}
+function geo63Config(len){const $=id=>document.getElementById(id),unit=$('geo63Unit').value,f={m:1,km:1000,ft:.3048,mi:1609.344}[unit],manual=Number($('geo63Length').value),m=manual>0?Math.min(len,manual*f):geoNiceScale62(len/3/f)*f;return {m,unit,f,n:$('geo63Style').value==='simple'?1:Math.max(1,Math.min(10,Math.round(Number($('geo63Div').value)||4))),style:$('geo63Style').value,color:$('geo63Color').value,size:Math.max(8,Math.min(24,Number($('geo63Size').value)||11)),font:($('geo63Italic').checked?'italic ':'')+($('geo63Bold').checked?'bold ':'') ,family:$('geo63Font').value};}
+function geo63Text(v){return Number(v.toPrecision(5)).toString();}
+function geoBar62(ctx,len,plotWidth=480,left=75){if(!document.getElementById('geoScaleBar62').checked||!(len>0))return;const q=geo63Config(len),w=plotWidth*q.m/len,x=left,y=478,h=8;ctx.save();ctx.setLineDash([]);ctx.globalAlpha=1;ctx.strokeStyle=q.color;ctx.fillStyle=q.color;ctx.font=q.font+q.size+'px '+q.family;ctx.textAlign='left';ctx.fillText('Horizontal scale ('+q.unit+')',x,y-10);if(q.style==='block'||q.style==='checker'){const rows=q.style==='checker'?2:1;for(let r=0;r<rows;r++)for(let i=0;i<q.n;i++){ctx.fillStyle=(i+r)%2?'#fff':q.color;ctx.fillRect(x+i*w/q.n,y+r*h/rows,w/q.n,h/rows);ctx.strokeRect(x+i*w/q.n,y+r*h/rows,w/q.n,h/rows);}}else{ctx.beginPath();ctx.moveTo(x,y+h/2);ctx.lineTo(x+w,y+h/2);ctx.stroke();}ctx.fillStyle=q.color;ctx.textAlign='center';for(let i=0;i<=q.n;i++){const t=x+i*w/q.n;ctx.beginPath();ctx.moveTo(t,y-2);ctx.lineTo(t,y+h+2);ctx.stroke();if(i===0||i===q.n||w/q.n>q.size*3)ctx.fillText(geo63Text(q.m/q.f*i/q.n),t,y+h+q.size+3);}ctx.restore();}
+function abSection(showStatus){abDraw();const a=geoAB.a,b=geoAB.b,dx=b[0]-a[0],dz=b[1]-a[1],len=Math.hypot(dx,dz),az=(Math.atan2(dx,-dz)*180/Math.PI+360)%360;const c=document.getElementById('crossSectionCanvas'),ctx=c.getContext('2d');ctx.fillStyle='#f4f6f8';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#172633';ctx.font='12px Arial';document.getElementById('geoABInfo').textContent=`Length ${(len*100).toFixed(1)} m | Azimuth ${az.toFixed(1)}°`;if(len<.001){ctx.fillText('Select two distinct endpoints.',30,40);return}const ux=dx/len,uz=dz/len;let segments=[],lo=Infinity,hi=-Infinity;
+for(const mesh of model.children){if(!mesh.isMesh||!Number.isInteger(mesh.userData.geoLayerIndex))continue;const g=mesh.geometry,p=g.attributes.position,idx=g.index;const n=idx?idx.count:p.count;const vertex=i=>{const j=idx?idx.getX(i):i;return [p.getX(j)+mesh.position.x,p.getY(j)+mesh.position.y,p.getZ(j)+mesh.position.z]};const dist=v=>(v[0]-a[0])*uz-(v[2]-a[1])*ux;const project=v=>[(v[0]-a[0])*ux+(v[2]-a[1])*uz,v[1]];for(let i=0;i<n;i+=3){const vs=[vertex(i),vertex(i+1),vertex(i+2)],ds=vs.map(dist),hits=[];for(let j=0;j<3;j++){const k=(j+1)%3;if(Math.abs(ds[j])<1e-8)hits.push(project(vs[j]));if(ds[j]*ds[k]<-1e-16){const t=ds[j]/(ds[j]-ds[k]);hits.push(project(vs[j].map((v,m)=>v+t*(vs[k][m]-v))))}}if(hits.length<2)continue;const q=hits[0],r=hits.find(v=>Math.hypot(v[0]-q[0],v[1]-q[1])>1e-7);if(!r)continue;lo=Math.min(lo,q[1],r[1]);hi=Math.max(hi,q[1],r[1]);segments.push([q,r,mesh.userData.geoLayerIndex]);}}
+if(!segments.length){ctx.fillText('No mesh intersection.',30,40);return}geoBar62(ctx,len*100);const L=75,T=55,W=480,H=250;lo-=.05;hi+=.05;const X=x=>L+x/len*W,Y=y=>T+(hi-y)/(hi-lo)*H;ctx.save();ctx.beginPath();ctx.rect(L,T,W,H);ctx.clip();const grouped=new Map();for(const [q,r,i] of segments){if(!grouped.has(i))grouped.set(i,[]);grouped.get(i).push([q,r]);}
+const bands=new Map();for(const [i,edges] of grouped){const layer=layers[i];const tex=createLithologyTexture(layer?.lithology||"sandstone",layer?.color||"#888");ctx.fillStyle=ctx.createPattern(tex.image,"repeat")||layer?.color||"#888";const spans=[];bands.set(i,spans);for(let px=0;px<W;px++){const t=(px+.5)/W*len;const ys=[];for(const [q,r] of edges){if((q[0]<=t&&r[0]>t)||(r[0]<=t&&q[0]>t))ys.push(q[1]+(r[1]-q[1])*(t-q[0])/(r[0]-q[0]));}ys.sort((a,b)=>a-b);const unique=ys.filter((y,j)=>!j||Math.abs(y-ys[j-1])>1e-6);for(let j=0;j+1<unique.length;j+=2){const y1=Y(unique[j+1]),y2=Y(unique[j]);ctx.fillRect(L+px,y1,1.1,y2-y1);spans.push({px,y1,y2,upper:unique[j+1]});}}tex.dispose();}
+for(const [q,r,i] of segments){ctx.strokeStyle=geoColor47('geoBoundaryColor47');ctx.setLineDash(geoDash47('geoBoundaryStyle47'));ctx.lineWidth=Number(document.getElementById('geoWidth48').value);ctx.beginPath();ctx.moveTo(X(q[0]),Y(q[1]));ctx.lineTo(X(r[0]),Y(r[1]));ctx.stroke()}ctx.restore();ctx.strokeStyle='#172633';ctx.lineWidth=1;ctx.strokeRect(L,T,W,H);const grid=document.getElementById('geoSectionGrid').checked,scale=document.getElementById('geoSectionScale').checked;for(let i=0;i<=5;i++){const x=L+W*i/5,y=T+H*i/5;if(grid){ctx.strokeStyle=`rgba(23,38,51,${Number(document.getElementById('geoSectionGridOpacity').value)/100})`;ctx.beginPath();ctx.moveTo(x,T);ctx.lineTo(x,T+H);ctx.moveTo(L,y);ctx.lineTo(L+W,y);ctx.stroke()}if(scale){ctx.fillStyle='#172633';ctx.textAlign='center';ctx.fillText((len*100*i/5).toFixed(0),x,T+H+15);ctx.textAlign='right';ctx.fillText(((hi-(hi-lo)*i/5)*100).toFixed(0),L-5,y+4)}}ctx.textAlign='left';ctx.fillStyle='#172633';ctx.fillText('A',L,T-10);ctx.fillText('B',L+W-10,T-10);ctx.fillText(`Section | ${(len*100).toFixed(1)} m | Azimuth ${az.toFixed(1)}°`,L,350);ctx.fillText('Mesh slice • relative elevation (m)',L,370);ctx.fillText('Developed by Mohammed Simko Nayif Pasha | GeoEdu 3D',L,445);const $=id=>document.getElementById(id), checked=id=>$(id).checked, num=id=>Number($(id).value);
+const sel=$('geoDipLayer'), old=sel.value;sel.replaceChildren(...layers.map((l,i)=>new Option(l.name,i)));if(old!==''&&Number(old)<layers.length)sel.value=old;
+const slider=$('geoDipPoint');slider.max=Math.round(len*100);const d=Math.min(len,Number(slider.value)/100);$('geoDipDistance').textContent=Math.round(d*100);
+const fold=$('foldType').value, amp=num('foldAmplitude')/100, wave=Math.max(.01,num('foldWavelength')/100), total=layers.reduce((v,l)=>v+Number(l.thickness),0), datum=total/200, dip=Math.max(1,Math.min(90,num('faultDip'))), rad=dip*Math.PI/180, fp=num('faultPosition'), slip=num('faultDisplacement'), ft=$('faultType').value;
+const oldTag47=(text,x,y)=>{ctx.font='bold 11px Arial';ctx.textAlign='center';const w=Math.min(W-4,ctx.measureText(text).width+8);x=Math.max(L+w/2,Math.min(L+W-w/2,x));y=Math.max(T+12,Math.min(T+H-4,y));ctx.fillStyle='rgba(255,255,255,.85)';ctx.fillRect(x-w/2,y-11,w,14);ctx.fillStyle='#172633';ctx.fillText(text,x,y,w-6);};
+const tag=(text,x,y)=>geoTag47(ctx,text,x,y,[L,T,W,H]);
+ctx.save();ctx.beginPath();ctx.rect(L,T,W,H);ctx.clip();
+for(const [i,spans] of bands){const best=spans.reduce((a,b)=>!a||((b.y2-b.y1)-Math.abs(b.px-W/2)*.08)>((a.y2-a.y1)-Math.abs(a.px-W/2)*.08)?b:a,null);if(best&&best.y2-best.y1>12)tag((checked('geoSectionFormationNames52')?layers[i].name+' ': '')+'('+layers[i].thickness+' m)',L+best.px,(best.y1+best.y2)/2);}
+const info=[];if(checked('geoFoldTrace40')&&fold!=='none'&&amp>0&&Math.abs(ux)>1e-7){for(let k=Math.ceil(Math.min(a[0],b[0])/(wave/2));k<=Math.floor(Math.max(a[0],b[0])/(wave/2))&&info.length<30;k++){const t=(k*wave/2-a[0])/ux;ctx.strokeStyle=geoColor47('geoFoldColor47');ctx.lineWidth=Number(document.getElementById('geoWidth48').value);ctx.setLineDash(geoDash47('geoFoldStyle47'));ctx.beginPath();ctx.moveTo(X(t),T);ctx.lineTo(X(t),T+H);ctx.stroke();ctx.setLineDash([]);tag(((k%2===0)===(fold==='anticline'))?'Anticline':'Syncline',X(t),T+30);info.push('Nominal fold trace');}}
+if(faultEnabled){const fx=y=>fp+(datum-y)/Math.tan(rad);const f=t=>datum-(a[0]+ux*t-fp)*Math.tan(rad);if(checked('geoShowFaultTrace')){ctx.strokeStyle=$('geoFaultTraceColor').value;ctx.lineWidth=num('geoFaultTraceWeight')*1.5;ctx.setLineDash(geoDash47('geoFaultStyle47'));ctx.beginPath();if(dip>89.99&&Math.abs(ux)>1e-7){const t=(fp-a[0])/ux;ctx.moveTo(X(t),T);ctx.lineTo(X(t),T+H);}else{ctx.moveTo(X(0),Y(f(0)));ctx.lineTo(X(len),Y(f(len)));}ctx.stroke();ctx.setLineDash([]);}
+if(checked('geoFaultInfo40'))info.push('Fault dip '+dip.toFixed(1)+'° | slip '+slip.toFixed(1)+' m'+(ft==='strike'?' (strike-slip)':' | throw '+(slip*Math.sin(rad)).toFixed(1)+' m | heave '+(slip*Math.cos(rad)).toFixed(1)+' m'));
+if(checked('geoWall40')&&dip<89.99){for(const t of [len*.15,len*.85])tag(a[0]+ux*t>fx((lo+hi)/2)?'Hanging wall':'Footwall',X(t),T+H-12);}}
+const wx=a[0]+ux*d, idx=Number(sel.value), contact=datum-layers.slice(0,idx).reduce((v,l)=>v+Number(l.thickness)/100,0), surf=x=>(geoUnActive()?geoUnY(x,contact):contact)+(fold==='none'?0:(fold==='anticline'?1:-1)*amp*Math.cos(2*Math.PI*x/wave));const h=.0001, y=surf(wx), slope=(surf(wx+h)-surf(wx-h))/(2*h), corner=Math.abs((surf(wx+h)-y)/h-(y-surf(wx-h))/h)>.02;const trueDip=Math.atan(Math.abs(slope))*180/Math.PI, apparent=Math.atan(Math.abs(slope*ux))*180/Math.PI;
+const msg=faultEnabled||corner?'Bedding measurement unavailable at faulted or discontinuous geometry.':trueDip<.01?'Strike undefined | True dip 0° | Apparent dip 0°':`Strike ${slope<0?'000':'180'}° RHR | True dip ${trueDip.toFixed(1)}° | Apparent dip ${apparent.toFixed(1)}°`;$('geoDipResult').textContent=msg;if(checked('geoDipShow')&&!faultEnabled&&!corner){ctx.strokeStyle='#d12c35';ctx.lineWidth=2;ctx.beginPath();ctx.arc(X(d),Y(y),4,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(X(d-.2),Y(y-.2*slope*ux));ctx.lineTo(X(d+.2),Y(y+.2*slope*ux));ctx.stroke();}ctx.restore();ctx.fillStyle='#172633';ctx.font='10px Arial';ctx.textAlign='left';if(checked('geoDipShow'))ctx.fillText(msg,L,390,W);ctx.fillText(info.filter((v,i,a)=>a.indexOf(v)===i).join(' | '),L,410,W);$('geoStructuralInfo40').textContent=info.filter((v,i,a)=>a.indexOf(v)===i).join(' | ')||'No active structural annotations.';if(scale){ctx.textAlign='center';ctx.fillText('Horizontal distance (m) | VE '+(H/(hi-lo)/(W/len)).toFixed(2)+'×',L+W/2,335);ctx.save();ctx.translate(15,T+H/2);ctx.rotate(-Math.PI/2);ctx.fillText('Relative elevation (m)',0,0);ctx.restore();}
+if(showStatus)setStatus('Custom mesh section generated.');}
+
+function geoSectionTitle(){return document.getElementById("geoSectionName").value.trim()||"Geological Cross-Section";}
+function geoSectionFile(){return geoSectionTitle().replace(/[^a-z0-9_-]+/gi,"_").slice(0,90)||"cross_section";}
+function geoSectionDrawTitle(){const c=document.getElementById("crossSectionCanvas"),x=c.getContext("2d");x.save();const q=id=>document.getElementById(id);const size=Math.max(8,Math.min(24,Number(q('geoTitleSize54').value)||15));x.fillStyle=q('geoTitleColor54').value;x.font=`${q('geoTitleItalic54').checked?'italic ':''}${q('geoTitleBold54').checked?'bold ':''}${size}px "${q('geoTitleFont54').value}"`;x.textAlign="center";const name=document.getElementById("geoSectionName").value.trim();if(name)x.fillText(name,c.width/2,Math.max(19,size+2),c.width-30);x.restore();}
+window.createCrossSection = function(showStatus = true) {
+try {
+    geoLabels47.hits=[];geoLabels47.counts.clear();
+    const custom=document.getElementById('geoABMode').value==='custom', direction=document.getElementById('sectionDirection').value, pos=document.getElementById('sectionPosition');
+    pos.min=direction==='yz'?-3.5:-2.5;pos.max=direction==='yz'?3.5:2.5;pos.disabled=custom;
+    const offset=Number(pos.value);if(!custom){geoAB.a=direction==='yz'?[offset,-2.5]:[-3.5,offset];geoAB.b=direction==='yz'?[offset,2.5]:[3.5,offset];}
+    abDraw(); if(custom||direction==='yz'||Math.abs(offset)>1e-8)return abSection(showStatus);
+
+    document.getElementById("geoDipPoint").max=700;
     const canvas = document.getElementById("crossSectionCanvas");
     const ctx = canvas.getContext("2d");
 
@@ -3447,7 +3906,7 @@ window.createCrossSection = function(showStatus = true) {
     ctx.fillStyle = "#f4f6f8";
     ctx.fillRect(0, 0, width, height);
 
-    const left = 60;
+    const left = 75;
     const top = 55;
     const sectionWidth = 480;
     const sectionHeight = 250;
@@ -3563,10 +4022,12 @@ window.createCrossSection = function(showStatus = true) {
     ctx.fillStyle = "#172633";
     ctx.font = "bold 17px Arial";
     ctx.textAlign = "center";
-    ctx.fillText("GEOLOGICAL CROSS-SECTION", width / 2, 27);
+    
 
     let currentY = topWorld;
 
+    // Clip all formation fills, outlines and labels to the section frame.
+    ctx.save(); ctx.beginPath(); ctx.rect(left, top, sectionWidth, sectionHeight); ctx.clip();
     // Draw each deformed geological formation
     layers.forEach(layer => {
 
@@ -3629,40 +4090,22 @@ window.createCrossSection = function(showStatus = true) {
         ctx.restore();
 
         // Formation boundary
-        ctx.strokeStyle = "#263746";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
+        ctx.strokeStyle = geoColor47("geoBoundaryColor47");
+        ctx.lineWidth = Number(document.getElementById("geoWidth48").value);ctx.setLineDash(geoDash47("geoBoundaryStyle47"));
+        ctx.stroke();ctx.setLineDash([]);
 
         // Formation label
         const labelPosition = transformPoint(0, 0, centerY);
 
         const label =
-            layer.name + " (" + layer.thickness + " m)";
+            (document.getElementById("geoSectionFormationNames52").checked ? layer.name + " " : "") + "(" + layer.thickness + " m)";
 
-        ctx.font = "bold 12px Arial";
-        ctx.textAlign = "center";
-
-        const textWidth = ctx.measureText(label).width;
-
-        ctx.fillStyle = "rgba(255,255,255,0.85)";
-
-        ctx.fillRect(
-            labelPosition.x - textWidth / 2 - 6,
-            labelPosition.y - 10,
-            textWidth + 12,
-            20
-        );
-
-        ctx.fillStyle = "#172633";
-
-        ctx.fillText(
-            label,
-            labelPosition.x,
-            labelPosition.y + 4
-        );
+        geoTag47(ctx,label,labelPosition.x,labelPosition.y+4,[left,top,sectionWidth,sectionHeight],'bold 12px Arial');
 
         currentY -= layerHeight;
     });
+
+    ctx.restore();
 
     // Draw the fault plane
     if (faultEnabled && document.getElementById("geoShowFaultTrace").checked) {
@@ -3692,7 +4135,7 @@ window.createCrossSection = function(showStatus = true) {
 
         ctx.strokeStyle = document.getElementById("geoFaultTraceColor").value;
         ctx.lineWidth = Number(document.getElementById("geoFaultTraceWeight").value)*1.5;
-        ctx.setLineDash([8, 5]);
+        ctx.setLineDash(geoDash47('geoFaultStyle47'));
         ctx.stroke();
 
         ctx.setLineDash([]);
@@ -3741,6 +4184,27 @@ window.createCrossSection = function(showStatus = true) {
         sectionHeight
     );
 
+    geoBar62(ctx,700,sectionWidth,left);
+    // Calibrated nominal section coordinates (100 metres per scene unit).
+    ctx.save();
+    const showGrid = document.getElementById('geoSectionGrid').checked;
+    const showScale = document.getElementById('geoSectionScale').checked;
+    const opacity = Number(document.getElementById('geoSectionGridOpacity').value)/100;
+    ctx.font = '10px Arial';
+    for(let j=0;j<=7;j++){
+        const x=left+j*sectionWidth/7;
+        if(showGrid){ctx.strokeStyle=`rgba(23,38,51,${opacity})`;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,top);ctx.lineTo(x,top+sectionHeight);ctx.stroke();}
+        if(showScale){ctx.fillStyle='#172633';ctx.textAlign='center';ctx.fillText(String(j*100),x,top+sectionHeight+13);}
+    }
+    for(let j=0;j<=5;j++){
+        const y=top+j*sectionHeight/5;
+        if(showGrid){ctx.strokeStyle=`rgba(23,38,51,${opacity})`;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(left+sectionWidth,y);ctx.stroke();}
+        if(showScale){ctx.fillStyle='#172633';ctx.textAlign='right';ctx.fillText(String(Number((totalThickness*(0.5-j/5)).toFixed(2))),left-5,y+3);}
+    }
+    ctx.fillStyle='#172633';ctx.textAlign='left';ctx.fillText('A (W)',left,top-8);ctx.textAlign='right';ctx.fillText("A′ (E)",left+sectionWidth,top-8);
+    if(showScale){ctx.textAlign='center';ctx.fillText('Horizontal distance (m)',left+sectionWidth/2,top+sectionHeight+27);ctx.save();ctx.translate(13,top+sectionHeight/2);ctx.rotate(-Math.PI/2);ctx.fillText('Relative elevation (m)',0,0);ctx.restore();ctx.fillText('Vertical exaggeration: '+(verticalScale/(sectionWidth/7)).toFixed(2)+'× | datum: model centre',left+sectionWidth/2,top+sectionHeight+41);}
+    ctx.restore();
+
     // Scale and structural information
     ctx.fillStyle = "#333";
     ctx.font = "12px Arial";
@@ -3749,28 +4213,77 @@ window.createCrossSection = function(showStatus = true) {
     ctx.fillText(
         "Total thickness: " + totalThickness + " m",
         left,
-        top + sectionHeight + 20
+        top + sectionHeight + 58
     );
 
     ctx.fillText(
         "Fold: " + foldType.toUpperCase() +
         " | Fault: " + (faultEnabled ? faultType.toUpperCase() : "NONE"),
         left,
-        top + sectionHeight + 38
+        top + sectionHeight + 74
     );
 
     if (faultEnabled && faultType === "strike") {
         ctx.fillText(
             "Strike-slip movement occurs perpendicular to this section.",
             left,
-            top + sectionHeight + 56
+            top + sectionHeight + 90
         );
     }
 
+    // Local bedding gradient in physical scene coordinates, independent of canvas exaggeration.
+    const sel=document.getElementById('geoDipLayer'), old=sel.value;
+    sel.replaceChildren(...layers.map((l,i)=>new Option(l.name,i)));
+    if(Number(old)<layers.length && old!=='')sel.value=old;
+    const idx=Number(sel.value), distance=Number(document.getElementById('geoDipPoint').value), wx=xMin+distance/100;
+    document.getElementById('geoDipDistance').textContent=distance;
+    const contact=topWorld-layers.slice(0,idx).reduce((a,l)=>a+Number(l.thickness)/100,0);
+    const surface=x=> (geoUnActive()?geoUnY(x,contact):contact)+(foldType==='none'?0:(foldType==='anticline'?1:-1)*amplitude*Math.cos(2*Math.PI*x/wavelength));
+    const h=0.0001, y=surface(wx), slope=(surface(wx+h)-surface(wx-h))/(2*h);
+    const nearFault=faultEnabled && Math.abs(wx-(faultPosition+(topWorld-y)/tanDip))<0.02;
+    const corner=Math.abs((surface(wx+h)-y)/h-(y-surface(wx-h))/h)>0.02;
+    const dipAngle=Math.atan(Math.abs(slope))*180/Math.PI;
+    const flat=dipAngle<0.01;
+    const text=nearFault||corner?'Measurement undefined at discontinuity.':flat?'Strike: undefined | True dip: 0° | Apparent dip: 0°':`Strike: ${slope<0?'000°':'180°'} (RHR) | True dip: ${dipAngle.toFixed(1)}° ${slope<0?'E':'W'} | Apparent dip: ${dipAngle.toFixed(1)}°`;
+    document.getElementById('geoDipResult').textContent=text;
+    if(document.getElementById('geoDipShow').checked){
+      const point=transformPoint(wx,0,contact);
+      ctx.save();ctx.fillStyle='#172633';ctx.font='11px Arial';ctx.textAlign='left';ctx.fillText(text,left,430);ctx.fillText('Upper contact | nominal distance '+distance+' m | W–E section',left,446);
+      if(!nearFault&&!corner){ctx.beginPath();ctx.rect(left,top,sectionWidth,sectionHeight);ctx.clip();ctx.strokeStyle='#d12c35';ctx.lineWidth=2;ctx.beginPath();ctx.arc(point.x,point.y,4,0,Math.PI*2);ctx.stroke();const dx=0.25;ctx.beginPath();ctx.moveTo(point.x-dx*sectionWidth/7,point.y+dx*slope*verticalScale);ctx.lineTo(point.x+dx*sectionWidth/7,point.y-dx*slope*verticalScale);ctx.stroke();}ctx.restore();
+    }
+    // Step 15.40: nominal structural interpretation, drawn into the export canvas.
+    const enabled40=id=>document.getElementById(id).checked;
+    const info40=[];
+    ctx.save();ctx.beginPath();ctx.rect(left,top,sectionWidth,sectionHeight);ctx.clip();
+    function tag40(label,x,y){geoTag47(ctx,label,x,y,[left,top,sectionWidth,sectionHeight],'bold 10px Arial');}
+    if(enabled40('geoFoldTrace40') && foldType!=='none' && amplitude>0){
+      const step=wavelength/2, count=Math.floor(xMax/step)-Math.ceil(xMin/step)+1;
+      if(count<=30){for(let k=Math.ceil(xMin/step);k<=Math.floor(xMax/step);k++){
+        const wx=k*step, crest=(k%2===0)===(foldType==='anticline'), x=toCanvasX(wx);
+        ctx.strokeStyle=geoColor47('geoFoldColor47');ctx.lineWidth=Number(document.getElementById('geoWidth48').value);ctx.setLineDash(geoDash47('geoFoldStyle47'));ctx.beginPath();ctx.moveTo(x,top);ctx.lineTo(x,top+sectionHeight);ctx.stroke();ctx.setLineDash([]);tag40(crest?'Anticline':'Syncline',x,top+35);
+      }}else info40.push('Axial traces omitted: too many folds for this view.');
+      info40.push('Fold traces: nominal pre-fault axial positions.');
+    }
+    if(faultEnabled){
+      const fx=faultPosition+topWorld/tanDip;
+      if(enabled40('geoFaultInfo40')){
+        const slip=displacement*100;
+        const msg=faultType==='strike'?`Fault dip ${safeDip.toFixed(1)}° | Along-strike slip ${slip.toFixed(1)} m (out of section)`:`Fault dip ${safeDip.toFixed(1)}° | Slip ${slip.toFixed(1)} m | Throw ${(slip*Math.sin(dipRadians)).toFixed(1)} m | Heave ${(slip*Math.cos(dipRadians)).toFixed(1)} m`;
+        info40.push(msg);tag40('Dip '+safeDip.toFixed(1)+'°',toCanvasX(fx),toCanvasY(0)+25);
+        ctx.restore();ctx.save();ctx.font='10px Arial';ctx.fillStyle='#172633';ctx.textAlign='left';ctx.fillText(msg,left,410,sectionWidth);ctx.restore();ctx.save();ctx.beginPath();ctx.rect(left,top,sectionWidth,sectionHeight);ctx.clip();
+      }
+      if(enabled40('geoWall40') && safeDip<89.999){
+        if(fx>xMin && fx<xMax){tag40('Footwall',toCanvasX((xMin+fx)/2),top+sectionHeight-12);tag40('Hanging wall',toCanvasX((fx+xMax)/2),top+sectionHeight-12);}
+      }else if(enabled40('geoWall40'))info40.push('Vertical fault: hanging wall and footwall not defined.');
+    }
+    ctx.restore();document.getElementById('geoStructuralInfo40').textContent=info40.join(' | ')||'No active structural annotations.';
     if (showStatus) setStatus("Deformed geological cross-section generated.");
+} finally {geoSectionDrawTitle();}
 };
 
 window.createCrossSection(false);
+
+(()=>{const c=document.getElementById('crossSectionCanvas'), toggle=document.getElementById('geoDragLabels47');const point=e=>{const r=c.getBoundingClientRect();return [(e.clientX-r.left)*c.width/r.width,(e.clientY-r.top)*c.height/r.height]};const hit=(x,y)=>[...geoLabels47.hits].reverse().find(h=>Math.abs(x-h.x)<=h.w/2&&y>=h.top&&y<=h.bottom);function sync(){c.style.touchAction=toggle.checked?'none':'auto';c.style.cursor=toggle.checked?'grab':'default';}toggle.addEventListener('change',sync);sync();c.addEventListener('pointerdown',e=>{if(!toggle.checked)return;const [x,y]=point(e),h=hit(x,y);if(!h)return;e.preventDefault();geoLabels47.drag={key:h.key,dx:x-h.x,dy:y-h.y,baseX:h.baseX,baseY:h.baseY};c.setPointerCapture(e.pointerId);c.style.cursor='grabbing';});c.addEventListener('pointermove',e=>{const d=geoLabels47.drag;if(!d)return;const [x,y]=point(e);geoLabels47.offsets.set(d.key,[x-d.dx-d.baseX,y-d.dy-d.baseY]);window.createCrossSection(false);});for(const ev of ['pointerup','pointercancel','lostpointercapture'])c.addEventListener(ev,()=>{geoLabels47.drag=null;sync();});for(const id of ['geoBoundaryColor47','geoBoundaryStyle47','geoFaultStyle47','geoFoldColor47','geoFoldStyle47','geoLabelColor47','geoFont48','geoSize48','geoBold48','geoItalic48','geoUnderline48','geoOpacity48','geoWidth48'])document.getElementById(id).addEventListener('input',()=>window.createCrossSection(false));})();
 
 // Step 3: browser-only PNG exports. No project data is uploaded.
 function exportSafeName() {
@@ -3778,12 +4291,13 @@ function exportSafeName() {
         .trim().replace(/[^a-z0-9_-]+/gi, '_').slice(0, 70) || 'GeoEdu3D';
 }
 function exportDownload(canvas, suffix) {
+    canvas = geoCreditCanvas(canvas);
     canvas.toBlob(blob => {
         if (!blob) { setStatus('Could not create PNG image.'); return; }
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `${exportSafeName()}_${suffix}.png`;
+        link.download = `${exportSafeName()}_${suffix==='cross'?geoSectionFile():suffix}.png`;
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -3798,6 +4312,10 @@ function exportThreeCanvas() {
     out.height = renderer.domElement.height;
     const ctx = out.getContext('2d');
     ctx.drawImage(renderer.domElement, 0, 0);
+    {const dpr=renderer.getPixelRatio();ctx.save();ctx.scale(dpr,dpr);drawDimensions(ctx,out.width/dpr,out.height/dpr);drawIntegratedAxes(ctx,out.width/dpr,out.height/dpr);ctx.restore();}
+    const northSize = Math.min(100 * renderer.getPixelRatio(), out.width * 0.3, out.height * 0.225);
+    drawModelNorth(ctx, out.width - northSize - 12 * renderer.getPixelRatio(), 12 * renderer.getPixelRatio(), northSize);
+    if(scaleVisible){const dpr=renderer.getPixelRatio();ctx.save();ctx.scale(dpr,dpr);const ew=out.width/dpr,eh=out.height/dpr;drawModelScale(ctx,Math.max(0,(ew-240)/2),Math.max(0,eh-84),ew,eh);ctx.restore();}
     return out;
 }
 function exportLegendCanvas() {
@@ -3854,6 +4372,13 @@ function exportReportCanvas() {
     ctx.fillText('GeoEdu 3D | Educational visualization; not a validated geological interpretation.', margin, height - 25);
     return out;
 }
+window.exportGeologyPDF=function(kind){try{
+ let pages=[];if(Array.isArray(kind)){pages=kind;kind='cross';}else if(kind==='report'){window.createCrossSection(false);pages=[exportThreeCanvas(),exportLegendCanvas(),document.getElementById('crossSectionCanvas'),document.getElementById('stratigraphicCanvas')];}else if(kind==='cross'){window.createCrossSection(false);pages=[document.getElementById('crossSectionCanvas')];}else if(kind==='column')pages=[document.getElementById('stratigraphicCanvas')];else if(kind==='legend')pages=[exportLegendCanvas()];else pages=[exportThreeCanvas()];
+ const enc=new TextEncoder(), chunks=[], offsets=[0];let size=0;const add=v=>{const b=typeof v==='string'?enc.encode(v):v;chunks.push(b);size+=b.length;};const obj=(n,v)=>{offsets[n]=size;add(n+' 0 obj\n');add(v);add('\nendobj\n');};add('%PDF-1.4\n');obj(1,'<< /Type /Catalog /Pages 2 0 R >>');obj(2,'<< /Type /Pages /Count '+pages.length+' /Kids ['+pages.map((_,i)=>(3+i*3)+' 0 R').join(' ')+'] >>');
+ pages.forEach((source,i)=>{const c=geoCreditCanvas(source), n=3+i*3, landscape=c.width>c.height, pw=landscape?842:595,ph=landscape?595:842, f=Math.min((pw-48)/c.width,(ph-48)/c.height),w=c.width*f,h=c.height*f;const raw=atob(c.toDataURL('image/jpeg',.94).split(',')[1]),bytes=Uint8Array.from(raw,ch=>ch.charCodeAt(0));obj(n,`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pw} ${ph}] /Resources << /XObject << /Im0 ${n+1} 0 R >> >> /Contents ${n+2} 0 R >>`);offsets[n+1]=size;add(`${n+1} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${c.width} /Height ${c.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bytes.length} >>\nstream\n`);add(bytes);add('\nendstream\nendobj\n');const cmd=`q ${w.toFixed(3)} 0 0 ${h.toFixed(3)} ${((pw-w)/2).toFixed(3)} ${((ph-h)/2).toFixed(3)} cm /Im0 Do Q\n`;obj(n+2,`<< /Length ${enc.encode(cmd).length} >>\nstream\n${cmd}endstream`);});
+ const start=size;add('xref\n0 '+offsets.length+'\n0000000000 65535 f \n');for(let i=1;i<offsets.length;i++)add(String(offsets[i]).padStart(10,'0')+' 00000 n \n');add('trailer\n<< /Size '+offsets.length+' /Root 1 0 R >>\nstartxref\n'+start+'\n%%EOF\n');const url=URL.createObjectURL(new Blob(chunks,{type:'application/pdf'})),a=document.createElement('a');a.href=url;a.download=exportSafeName()+'_'+(kind==='cross'?geoSectionFile():kind)+'.pdf';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);setStatus('PDF export started.');
+ }catch(e){console.error(e);setStatus('PDF export failed: '+e.message); alert('PDF export failed: '+e.message);}};
+
 window.exportGeologyPNG = function(kind) {
     try {
         let out;
@@ -3875,6 +4400,11 @@ window.exportGeologyPNG = function(kind) {
 
 
 // Educational petroleum properties: persisted inside each formation.
+function renderPetroOrder53(){
+ const host=document.getElementById('petroOrder53'); if(!host)return; host.replaceChildren();
+ function reorder(from,to){if(!Number.isInteger(from)||!Number.isInteger(to)||from<0||to<0||from>=layers.length||to>=layers.length||from===to)return; const picker=document.getElementById('petroFormation');const selected=layers[Number(picker.value)]; const moved=layers.splice(from,1)[0];layers.splice(to,0,moved);updateModel();renderLayerList();picker.value=String(Math.max(0,layers.indexOf(selected)));loadPetroleumProperties();setStatus('Stratigraphic order updated.');}
+ layers.forEach((layer,i)=>{const row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:5px;margin:5px 0;padding:5px;border:1px solid #607080;border-radius:5px';row.draggable=true;row.addEventListener('dragstart',e=>{e.dataTransfer.setData('application/x-geoedu-petro-order',String(i));e.dataTransfer.effectAllowed='move';});row.addEventListener('dragover',e=>{if(Array.from(e.dataTransfer.types).includes('application/x-geoedu-petro-order')){e.preventDefault();e.dataTransfer.dropEffect='move';}});row.addEventListener('drop',e=>{e.preventDefault();const v=e.dataTransfer.getData('application/x-geoedu-petro-order');if(v!=='')reorder(Number(v),i);});const label=document.createElement('span');label.style.cssText='flex:1;overflow-wrap:anywhere;font-size:12px;cursor:grab';label.textContent='☰ '+(i+1)+'. '+layer.name+' — '+(layer.petroleum?.role||'none');row.append(label);for(const [delta,txt] of [[-1,'↑'],[1,'↓']]){const b=document.createElement('button');b.type='button';b.textContent=txt;b.style.cssText='width:auto;margin:0;padding:4px 8px';b.disabled=i+delta<0||i+delta>=layers.length;b.setAttribute('aria-label',(delta<0?'Move up ':'Move down ')+layer.name);b.onclick=()=>reorder(i,i+delta);row.append(b);}host.append(row);});
+}
 function refreshPetroleumPanel() {
     const picker = document.getElementById('petroFormation');
     if (!picker) return;
@@ -3888,6 +4418,7 @@ function refreshPetroleumPanel() {
     });
     picker.value = String(Number.isInteger(previous) && previous >= 0 && previous < layers.length ? previous : 0);
     loadPetroleumProperties();
+    renderPetroOrder53();
 }
 window.geoVolSelectedReservoir = () => { const l=layers[Number(document.getElementById('petroFormation').value)]; return l?.petroleum?.role==='reservoir' ? {name:l.name, thickness:l.thickness, porosity:l.petroleum.porosity, sw:l.petroleum.sw ?? 30} : null; };
 function loadPetroleumProperties() {
@@ -4245,6 +4776,18 @@ initGeoDictionary();
 
 document.getElementById('geoShowFoldAxes').addEventListener('change', updateModel);
 for (const id of ['geoShowFoldAxisLabels','geoShowFaultTrace','geoFaultTraceWeight','geoFaultTraceColor','geoShowDisplacement','geoDisplacementWeight','geoDisplacementColor']) document.getElementById(id).addEventListener('change', updateModel);
+
+
+(()=>{const $=id=>document.getElementById(id), host=$('geo57View'), mode=$('geo57Mode'), canvas=$('crossSectionCanvas');let r,sc,cam,group,theta=.65,phi=.48,dist=13,target=new THREE.Vector3(),drag=null,queued=false;
+function init(){if(r)return;r=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});r.localClippingEnabled=true;r.setPixelRatio(Math.min(devicePixelRatio,2));host.appendChild(r.domElement);r.domElement.style.cssText='width:100%;height:100%;touch-action:none';sc=new THREE.Scene();sc.background=new THREE.Color('#e9eef2');cam=new THREE.PerspectiveCamera(42,1,.01,200);group=new THREE.Group();sc.add(group,new THREE.AmbientLight(0xffffff,1.5));const light=new THREE.DirectionalLight(0xffffff,2);light.position.set(5,10,8);sc.add(light);}
+function render(){if(!r||mode.value==='2d')return;const w=host.clientWidth,h=host.clientHeight;if(!w||!h)return;if(r.domElement.width!==Math.floor(w*r.getPixelRatio())||r.domElement.height!==Math.floor(h*r.getPixelRatio()))r.setSize(w,h,false);if(cam.aspect!==w/h){cam.aspect=w/h;cam.updateProjectionMatrix();}cam.position.set(target.x+dist*Math.cos(phi)*Math.sin(theta),target.y+dist*Math.sin(phi),target.z+dist*Math.cos(phi)*Math.cos(theta));cam.lookAt(target);r.render(sc,cam);}
+function rebuild(){queued=false;if(mode.value==='2d')return;try{init();geoReleaseModelChildren(group);const a=geoAB.a,b=geoAB.b,dx=b[0]-a[0],dz=b[1]-a[1],len=Math.hypot(dx,dz);if(len<.001){$('geo57Status').textContent='Select distinct section endpoints.';render();return;}const ux=dx/len,uz=dz/len,normal=new THREE.Vector3(uz,0,-ux),origin=new THREE.Vector3(a[0],0,a[1]);if($('geo57Reverse').checked)normal.negate();const plane=new THREE.Plane().setFromNormalAndCoplanarPoint(normal,origin);let lo=Infinity,hi=-Infinity;const segs=[];for(const mesh of model.children){if(!mesh.isMesh||!Number.isInteger(mesh.userData.geoLayerIndex))continue;const g=mesh.geometry.clone();mesh.updateMatrix();g.applyMatrix4(mesh.matrix);g.computeBoundingBox();lo=Math.min(lo,g.boundingBox.min.y);hi=Math.max(hi,g.boundingBox.max.y);const mat=new THREE.MeshStandardMaterial({color:layers[mesh.userData.geoLayerIndex]?.color||'#888888',side:THREE.DoubleSide,clippingPlanes:mode.value==='cut'?[plane]:[],transparent:mode.value==='plane',opacity:mode.value==='plane'?.28:1,depthWrite:mode.value!=='plane'});group.add(new THREE.Mesh(g,mat));const p=g.attributes.position,idx=g.index,n=idx?idx.count:p.count;const v=i=>new THREE.Vector3().fromBufferAttribute(p,idx?idx.getX(i):i);for(let i=0;i<n;i+=3){const vs=[v(i),v(i+1),v(i+2)],ds=vs.map(v=>plane.distanceToPoint(v)),hits=[];for(let j=0;j<3;j++){const k=(j+1)%3;if(Math.abs(ds[j])<1e-7)hits.push(vs[j]);if(ds[j]*ds[k]<-1e-14)hits.push(vs[j].clone().lerp(vs[k],ds[j]/(ds[j]-ds[k])));}if(hits.length<2)continue;const q=hits[0],t=hits.find(v=>v.distanceTo(q)>1e-7);if(!t)continue;const project=v=>(v.x-a[0])*ux+(v.z-a[1])*uz;segs.push([project(q),q.y,project(t),t.y,mesh.userData.geoLayerIndex]);}}
+if(!Number.isFinite(lo)){render();return;}const opacity=Number($('geo57Opacity').value)/100;const groups=new Map();for(const e of segs){if(!groups.has(e[4]))groups.set(e[4],[]);groups.get(e[4]).push(e);}const world=(t,y)=>[a[0]+ux*t+normal.x*.002,y,a[1]+uz*t+normal.z*.002];for(const [i,edges] of groups){const verts=[],lines=[];let best=null;const steps=320;for(let k=0;k<steps;k++){const l=k*len/steps,h=(k+1)*len/steps,t=(l+h)/2,ys=[];for(const [x,y,X,Y] of edges)if((x<=t&&X>t)||(X<=t&&x>t))ys.push(y+(Y-y)*(t-x)/(X-x));ys.sort((a,b)=>a-b);const u=ys.filter((y,j)=>!j||Math.abs(y-ys[j-1])>1e-6);for(let j=0;j+1<u.length;j+=2){const score=(u[j+1]-u[j])*(1-.6*Math.abs(t-len/2)/(len/2));if(!best||score>best.score)best={score,t,y:(u[j]+u[j+1])/2};const A=world(l,u[j]),B=world(h,u[j]),C=world(h,u[j+1]),D=world(l,u[j+1]);verts.push(...A,...B,...C,...A,...C,...D);}}for(const [x,y,X,Y] of edges){if(x<0||x>len||X<0||X>len)continue;lines.push(...world(x,y),...world(X,Y));}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));const patterned=$('geo60Patterns').checked,base=layers[i]?.color||'#888888',uv=[];for(let j=0;j<verts.length;j+=3){uv.push(((verts[j]-a[0])*ux+(verts[j+2]-a[1])*uz)/2,verts[j+1]/2);}g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));const tex60=patterned?createLithologyTexture(layers[i]?.lithology,base):null;if(tex60){tex60.wrapS=tex60.wrapT=THREE.RepeatWrapping;}group.add(new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:patterned?0xffffff:base,map:tex60,side:THREE.DoubleSide,transparent:opacity<1,opacity,depthWrite:opacity===1})));const lg=new THREE.BufferGeometry();lg.setAttribute('position',new THREE.Float32BufferAttribute(lines,3));group.add(new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:$('geoBoundaryColor47').value})));if(best&&($('geo58Labels').checked||$('geo60Lithology').checked)){const lith=String(layers[i]?.lithology||'Unspecified').replace(/[_-]/g,' ').replace(/^./,v=>v.toUpperCase()),text=[$('geo58Labels').checked?String(layers[i]?.name||'Formation '+(i+1)):'',$('geo60Lithology').checked?lith:''].filter(Boolean).join(' | '),size=Math.max(8,Math.min(32,Number($('geoSize48').value)||12)),c=document.createElement('canvas'),x=c.getContext('2d'),font=($('geoItalic48').checked?'italic ':'')+($('geoBold48').checked?'bold ':'')+(size*3)+'px '+$('geoFont48').value;x.font=font;c.width=Math.ceil(x.measureText(text).width+24);c.height=size*4+12;x.font=font;x.textAlign='center';x.textBaseline='middle';x.lineWidth=5;x.strokeStyle='rgba(255,255,255,.85)';x.strokeText(text,c.width/2,c.height/2);x.fillStyle=$('geoLabelColor47').value;x.fillText(text,c.width/2,c.height/2);if($('geoUnderline48').checked){x.fillRect(12,c.height*.78,c.width-24,2);}const tex=new THREE.CanvasTexture(c);const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false,depthWrite:false,opacity:Number($('geoOpacity48').value)/100}));sprite.position.set(...world(best.t,best.y));sprite.scale.set(c.width/300,c.height/300,1);sprite.renderOrder=100;group.add(sprite);}}const datum=layers.reduce((v,l)=>v+Number(l.thickness),0)/200;const scale=$('geoSectionScale').checked,grid=$('geoSectionGrid').checked;function annotation(text,t,y){const c=document.createElement('canvas'),x=c.getContext('2d');x.font='36px Arial';c.width=Math.ceil(x.measureText(text).width+20);c.height=52;x.font='36px Arial';x.fillStyle='#172633';x.textAlign='center';x.textBaseline='middle';x.fillText(text,c.width/2,26);const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false,depthWrite:false,transparent:true}));sp.position.set(...world(t,y));sp.scale.set(c.width/260,c.height/260,1);sp.renderOrder=110;group.add(sp);}function line(t,y,T,Y,alpha){const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...world(t,y)),new THREE.Vector3(...world(T,Y))]);group.add(new THREE.Line(g,new THREE.LineBasicMaterial({color:0x43566a,transparent:true,opacity:alpha,depthTest:false,depthWrite:false})));}if(scale||grid){const alpha=Number($('geoSectionGridOpacity').value)/100;for(let k=0;k<=5;k++){const t=len*k/5,y=lo+(hi-lo)*k/5;if(grid){line(t,lo,t,hi,alpha);line(0,y,len,y,alpha);}if(scale){annotation((t*100).toFixed(0),t,lo-.18);annotation(((y)*100).toFixed(0),-.25,y);}}if(scale){annotation('Horizontal distance (m)',len/2,lo-.48);annotation('Relative elevation (m)',-.3,hi+.45);annotation('A',0,hi+.15);annotation('B',len,hi+.15);}}if($('geoScaleBar62').checked){const q=geo63Config(len*100),d=q.m/100,y=lo-.85;function barLine(t,Y,T,Z){const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...world(t,Y)),new THREE.Vector3(...world(T,Z))]);group.add(new THREE.Line(g,new THREE.LineBasicMaterial({color:q.color,depthTest:false,depthWrite:false})));}function barRect(t,T,Y,Z,color){const A=world(t,Y),B=world(T,Y),C=world(T,Z),D=world(t,Z),g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute([...A,...B,...C,...A,...C,...D],3));group.add(new THREE.Mesh(g,new THREE.MeshBasicMaterial({color,side:THREE.DoubleSide,depthTest:false,depthWrite:false})));}function barText(text,t,Y){const c=document.createElement('canvas'),x=c.getContext('2d'),font=q.font+(q.size*3)+'px '+q.family;x.font=font;c.width=Math.ceil(x.measureText(text).width+12);c.height=q.size*4+8;x.font=font;x.fillStyle=q.color;x.textAlign='center';x.textBaseline='middle';x.fillText(text,c.width/2,c.height/2);const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false,depthWrite:false,transparent:true}));sp.position.set(...world(t,Y));sp.scale.set(c.width/260,c.height/260,1);sp.renderOrder=110;group.add(sp);}if(q.style==='block'||q.style==='checker'){const rows=q.style==='checker'?2:1;for(let r=0;r<rows;r++)for(let i=0;i<q.n;i++)barRect(i*d/q.n,(i+1)*d/q.n,y+r*.08/rows,y+(r+1)*.08/rows,(i+r)%2?'#ffffff':q.color);}else barLine(0,y,d,y);for(let i=0;i<=q.n;i++){const t=i*d/q.n;barLine(t,y-.035,t,y+.10);if(i===0||i===q.n||d/q.n>.45)barText(geo63Text(q.m/q.f*i/q.n),t,y-.16);}barText('Section scale ('+q.unit+')',d/2,y+.22);} const summary=$('geo59Summary');summary.hidden=!$('geo59Info').checked;summary.textContent=['Section length: '+(len*100).toFixed(1)+' m | Azimuth: '+((Math.atan2(dx,-dz)*180/Math.PI+360)%360).toFixed(1)+'°','Model elevation range: '+(lo*100).toFixed(1)+' to '+(hi*100).toFixed(1)+' m (model origin datum) | 3D vertical exaggeration: 1×','Total formation thickness: '+(datum*200).toFixed(1)+' m | Fold: '+$('foldType').value+' | Fault: '+(faultEnabled?$('faultType').value:'none'),$('geoDipResult').textContent,$('geoStructuralInfo40').textContent].filter(Boolean).join('\n');target.y=(lo+hi)/2;const title=$('geo57Title');title.textContent=$('geoSectionName').value.trim();title.style.fontFamily=$('geoTitleFont54').value;title.style.fontSize=$('geoTitleSize54').value+'px';title.style.fontWeight=$('geoTitleBold54').checked?'bold':'normal';title.style.fontStyle=$('geoTitleItalic54').checked?'italic':'normal';title.style.color=$('geoTitleColor54').value;$('geo57Status').textContent='Mesh-derived section • '+(len*100).toFixed(1)+' m • drag to rotate, Shift-drag to pan, scroll to zoom.';render();}catch(e){$('geo57Status').textContent='3D section unavailable: '+e.message;}}
+function schedule(){if(!queued&&mode.value!=='2d'){queued=true;requestAnimationFrame(rebuild);}}const old=window.createCrossSection;window.createCrossSection=function(...args){try{return old.apply(this,args)}finally{schedule()}};mode.addEventListener('change',()=>{const active=mode.value!=='2d';host.style.display=active?'block':'none';canvas.style.display=active?'none':'';$('geo57Options').hidden=!active;$('geo59Summary').hidden=!active||!$('geo59Info').checked;$('geo57Status').textContent='';if(active){window.createCrossSection(false);schedule();}});for(const id of ['geoScaleBar62','geo59Info','geoSectionScale','geoSectionGrid','geoSectionGridOpacity','geo57Opacity','geo57Reverse','geo58Labels','geo60Lithology','geo60Patterns','geoFont48','geoSize48','geoBold48','geoItalic48','geoUnderline48','geoOpacity48','geoLabelColor47'])$(id).addEventListener('input',schedule);$('geo57Reset').onclick=()=>{theta=.65;phi=.48;dist=13;target.x=target.z=0;render()};host.addEventListener('pointerdown',e=>{drag=[e.clientX,e.clientY];host.setPointerCapture(e.pointerId)});host.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag[0],dy=e.clientY-drag[1];drag=[e.clientX,e.clientY];if(e.shiftKey){target.x-=dx*.012*Math.cos(theta);target.z+=dx*.012*Math.sin(theta);target.y+=dy*.012;}else{theta-=dx*.008;phi=Math.max(-1.45,Math.min(1.45,phi+dy*.008));}render()});for(const ev of ['pointerup','pointercancel','lostpointercapture'])host.addEventListener(ev,()=>drag=null);host.addEventListener('wheel',e=>{e.preventDefault();dist=Math.max(2,Math.min(60,dist*Math.exp(e.deltaY*.001)));render()},{passive:false});geo67Pinch(host,factor=>{dist=Math.max(2,Math.min(60,dist*factor));render();},()=>{drag=null;});new ResizeObserver(render).observe(host);function capture3D(){if(!r)throw new Error('3D renderer unavailable');render();const c=document.createElement('canvas');c.width=r.domElement.width;const info=$('geo59Summary');const rows=info.hidden?[]:info.textContent.split('\n');c.height=r.domElement.height+rows.length*96;const x=c.getContext('2d');x.fillStyle='#e9eef2';x.fillRect(0,0,c.width,c.height);x.drawImage(r.domElement,0,0);x.font='14px Arial';x.fillStyle='#172633';let yy=r.domElement.height+17;for(const row of rows){let line='';for(const word of row.split(' ')){if(x.measureText(line+' '+word).width>c.width-20&&line){x.fillText(line,10,yy);yy+=16;line=word;}else line+=(line?' ':'')+word;}x.fillText(line,10,yy);yy+=16;}const t=$('geo57Title');x.font=(t.style.fontStyle||'normal')+' '+(t.style.fontWeight||'normal')+' '+(Number($('geoTitleSize54').value)*r.getPixelRatio())+'px '+t.style.fontFamily;x.fillStyle=t.style.color;x.textAlign='center';x.fillText(t.textContent,c.width/2,30);return c;}
+function capture61(which){if(which==='2d'){old(false);const c=document.createElement('canvas');c.width=canvas.width;c.height=canvas.height;c.getContext('2d').drawImage(canvas,0,0);return c;}mode.value=which;mode.dispatchEvent(new Event('change'));rebuild();if(!r||!$('geo57Status').textContent.startsWith('Mesh-derived'))throw new Error($('geo57Status').textContent||'3D section unavailable');return capture3D();}
+function export61(format){const prior=mode.value,choice=$('geo61Choice').value,selected=choice==='current'?prior:choice,types=selected==='all'?['2d','cut','plane']:[selected],names={'2d':'2D Cross-Section',cut:'3D Cross-Section',plane:'3D Section Plane'};try{const pages=types.map(t=>{const src=capture61(t),c=document.createElement('canvas');c.width=src.width;c.height=src.height+36;const x=c.getContext('2d');x.fillStyle='#e9eef2';x.fillRect(0,0,c.width,c.height);x.fillStyle='#172633';x.font='bold 18px Arial';x.fillText(names[t],12,24);x.drawImage(src,0,36);return c;});if(format==='pdf'){window.exportGeologyPDF(pages);return;}const out=document.createElement('canvas');out.width=Math.max(...pages.map(c=>c.width));out.height=pages.reduce((h,c)=>h+c.height+12,0);const x=out.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,out.width,out.height);let y=0;for(const c of pages){x.drawImage(c,(out.width-c.width)/2,y);y+=c.height+12;}const a=document.createElement('a');a.download=exportSafeName()+'_'+geoSectionFile()+'_'+selected+'.png';a.href=geoCreditCanvas(out).toDataURL('image/png');a.click();}catch(e){alert('Section export failed: '+e.message);}finally{mode.value=prior;mode.dispatchEvent(new Event('change'));if(prior!=='2d')rebuild();}}
+$('geo61PNG').onclick=()=>export61('png');$('geo61PDF').onclick=()=>export61('pdf');const png61=window.exportGeologyPNG,pdf61=window.exportGeologyPDF;window.exportGeologyPNG=function(k){if(k==='cross')return export61('png');return png61(k)};window.exportGeologyPDF=function(k){if(k==='cross')return export61('pdf');return pdf61(k)};})();
+
 </script>
 
 
@@ -4462,7 +5005,7 @@ for (const id of ['geoShowFoldAxisLabels','geoShowFaultTrace','geoFaultTraceWeig
     const refresh=document.createElement('button');refresh.type='button';refresh.textContent='Refresh diagrams';
     const cross=document.createElement('button');cross.type='button';cross.textContent='Save cross-section PNG';
     const column=document.createElement('button');column.type='button';column.textContent='Save column PNG';
-    toolbar.append(summary,refresh,cross,column);grid.before(toolbar);
+    const pdf=document.createElement("button");pdf.type="button";pdf.textContent="Save cross-section PDF";pdf.onclick=()=>window.exportGeologyPDF("cross");toolbar.append(summary,refresh,cross,column,pdf);grid.before(toolbar);
     const help=document.createElement('p');help.className='geo-diagram-help';help.textContent='Depths and thicknesses use metres (m). The cross-section is an educational schematic; horizontal coordinates are model units, not surveyed distances.';
     toolbar.after(help);
     function getLayers(){return Array.isArray(window.layers)?window.layers:(typeof layers!=='undefined'&&Array.isArray(layers)?layers:[]);}
@@ -4477,7 +5020,7 @@ for (const id of ['geoShowFoldAxisLabels','geoShowFaultTrace','geoFaultTraceWeig
       updateSummary();
     }
     function download(canvasId,filename){
-      redraw();const canvas=document.getElementById(canvasId);if(!canvas)return;
+      redraw();const source=document.getElementById(canvasId);if(!source)return;const canvas=geoCreditCanvas(source);
       canvas.toBlob(blob=>{
         if(!blob){alert('Unable to export this diagram.');return;}
         const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.click();
@@ -4485,7 +5028,7 @@ for (const id of ['geoShowFoldAxisLabels','geoShowFaultTrace','geoFaultTraceWeig
       },'image/png');
     }
     refresh.addEventListener('click',redraw);
-    cross.addEventListener('click',()=>download('crossSectionCanvas','GeoEdu3D_cross_section.png'));
+    cross.addEventListener('click',()=>download('crossSectionCanvas','GeoEdu3D_'+geoSectionFile()+'.png'));
     column.addEventListener('click',()=>download('stratigraphicCanvas','GeoEdu3D_stratigraphic_column.png'));
     view.addEventListener('click',e=>{if(e.target.closest('[data-diagram-toggle],#showAllDiagrams'))updateSummary();});
     updateSummary();
@@ -4593,12 +5136,31 @@ systems.forEach((r,i)=>$('crystalSystem').add(new Option(r[0],i)));
 let renderer,scene,camera,group,axes,angle=.65,tilt=.4,dist=5,frame=0;
 function draw(){if(!renderer)return;camera.position.set(dist*Math.cos(tilt)*Math.sin(angle),dist*Math.sin(tilt),dist*Math.cos(tilt)*Math.cos(angle));camera.lookAt(0,0,0);renderer.render(scene,camera);}
 function resize(){if(!renderer||!host.clientWidth)return;renderer.setSize(host.clientWidth,host.clientHeight);camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();draw();}
+function symmetry(u,v,w,pts){
+const k=+$('crystalSystem').value, names=['m−3m','4/mmm','mmm','6/mmm','−3m','2/m','−1'];
+$('crystalSymGroup').textContent='Highest-symmetry point group: '+names[k];
+const x=new T.Vector3(1,0,0),y=new T.Vector3(0,1,0),z=new T.Vector3(0,0,1), V=(a,b,c)=>new T.Vector3(a,b,c).normalize(), R=[], M=[];
+const add=(n,d)=>R.push([n,d.clone().normalize()]);
+if(k===0){for(const d of [x,y,z]){add(4,d);M.push(d);}for(const a of [-1,1])for(const b of [-1,1])add(3,V(1,a,b));for(const a of [-1,1])for(const d of [V(1,a,0),V(1,0,a),V(0,1,a)]){add(2,d);M.push(d);}}
+if(k===1||k===2){add(k===1?4:2,y);add(2,x);add(2,z);M.push(x,y,z);if(k===1)for(const a of [-1,1]){const d=V(1,0,a);add(2,d);M.push(d);}}
+if(k===3){add(6,y);M.push(y);for(let j=0;j<6;j++){const a=j*Math.PI/6,d=V(Math.cos(a),0,Math.sin(a));add(2,d);M.push(d);}}
+if(k===4){add(3,u.clone().add(v).add(w));for(const d of [u.clone().sub(v),v.clone().sub(w),w.clone().sub(u)]){add(2,d);M.push(d.clone().normalize());}}
+if(k===5){add(2,v);M.push(v.clone().normalize());}
+const orders=[...new Set(R.map(r=>r[0]))].sort((a,b)=>a-b), sel=$('csOrder'), previous=sel.value;
+sel.replaceChildren(new Option('All permitted (automatic)','0'),...orders.map(n=>new Option(n+'-fold ('+(360/n)+'°)',String(n))));sel.value=orders.includes(+previous)?previous:'0';
+$('csCounts').textContent=orders.length?orders.map(n=>n+'-fold: '+R.filter(r=>r[0]===n).length+' axes').join(' | '):'Identity only (1-fold); no nontrivial rotation axes.';
+const L=Math.max(...pts.map(p=>p.length()))*1.16, col=$('csColor').value;
+function label(text,pos,color=col){if(!$('csLabels').checked)return;const c=document.createElement('canvas');c.width=256;c.height=80;const q=c.getContext('2d');q.font=($('csItalic').checked?'italic ':'')+($('csBold').checked?'bold ':'')+'44px '+$('csFont').value;q.fillStyle=color;q.textAlign='center';q.fillText(text,128,55);const sp=new T.Sprite(new T.SpriteMaterial({map:new T.CanvasTexture(c),depthTest:false}));sp.position.copy(pos);sp.scale.set(.65,.203,1);group.add(sp);}
+if($('csRot').checked)for(const [n,d] of R){const f=+$('csOrder').value;if(f&&n!==f)continue;const axisColor=$('csSeparate').checked?$('csC'+n).value:col;const style=$('csStyle').value,mat=style==='Solid'?new T.LineBasicMaterial({color:axisColor}):new T.LineDashedMaterial({color:axisColor,dashSize:style==='Dotted'?.025:.14,gapSize:.07});const line=new T.Line(new T.BufferGeometry().setFromPoints([d.clone().multiplyScalar(-L),d.clone().multiplyScalar(L)]),mat);line.computeLineDistances();group.add(line);label(String(n)+'-fold',d.clone().multiplyScalar(L*1.12),axisColor);}
+if($('csMirror').checked)for(const d of M){const mesh=new T.Mesh(new T.CircleGeometry(L,48),new T.MeshBasicMaterial({color:$('csPlane').value,transparent:true,opacity:+$('csOpacity').value/100,side:T.DoubleSide,depthWrite:false}));mesh.quaternion.setFromUnitVectors(z,d);group.add(mesh);}
+if($('csInv').checked){group.add(new T.Mesh(new T.SphereGeometry(.065,16,12),new T.MeshBasicMaterial({color:col,depthTest:false})));label('−1',new T.Vector3(0,.16,0));}
+}
 function build(){if(!renderer)return;while(group.children.length){const o=group.children[0];group.remove(o);o.traverse(x=>{x.geometry?.dispose();x.material?.map?.dispose();x.material?.dispose();});}const r=systems[+$('crystalSystem').value], [name,a,b,c,al,be,ga]=r, rad=Math.PI/180, A=al*rad,B=be*rad,G=ga*rad;
-const u=new T.Vector3(a,0,0),v=new T.Vector3(b*Math.cos(G),0,b*Math.sin(G)),cx=c*Math.cos(B),cz=c*(Math.cos(A)-Math.cos(B)*Math.cos(G))/Math.sin(G),w=new T.Vector3(cx,Math.sqrt(Math.max(0,c*c-cx*cx-cz*cz)),cz);const center=u.clone().add(v).add(w).multiplyScalar(.5);const pts=[];for(let i=0;i<8;i++)pts.push(new T.Vector3().addScaledVector(u,i&1?1:0).addScaledVector(v,i&2?1:0).addScaledVector(w,i&4?1:0).sub(center));const faces=[0,2,3,0,3,1,4,5,7,4,7,6,0,1,5,0,5,4,2,6,7,2,7,3,0,4,6,0,6,2,1,3,7,1,7,5];const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(pts.flatMap(p=>p.toArray()),3));geo.setIndex(faces);geo.computeVertexNormals();group.add(new T.Mesh(geo,new T.MeshStandardMaterial({color:0x59b9df,transparent:true,opacity:.65,side:T.DoubleSide,flatShading:true})));const lines=[];for(let i=0;i<8;i++)for(const bit of [1,2,4])if(!(i&bit))lines.push(pts[i],pts[i|bit]);group.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(lines),new T.LineBasicMaterial({color:0xffffff})));axes=new T.Group();for(const [vec,color,label] of [[u,0xff7777,'a'],[v,0x75ef9b,'b'],[w,0x77aaff,'c']]){const origin=center.clone().negate(),len=vec.length()*1.25;axes.add(new T.ArrowHelper(vec.clone().normalize(),origin,len,color,.13,.08));const canvas=document.createElement('canvas');canvas.width=128;canvas.height=64;const ctx=canvas.getContext('2d');ctx.fillStyle='#ffffff';ctx.font='bold 42px Arial';ctx.fillText(label,42,45);const sprite=new T.Sprite(new T.SpriteMaterial({map:new T.CanvasTexture(canvas),depthTest:false}));sprite.scale.set(.45,.225,1);sprite.position.copy(origin).addScaledVector(vec,1.38);axes.add(sprite);}group.add(axes);axes.visible=$('crystalAxes').checked;$('crystalInfo').textContent=name+' — '+r[7]+' | Mineral examples: '+r[8]+'. '+(name==='Hexagonal'?'Shown as a primitive unit cell; the familiar six-sided prism is a crystal habit.':'');draw();}
+const u=new T.Vector3(a,0,0),v=new T.Vector3(b*Math.cos(G),0,b*Math.sin(G)),cx=c*Math.cos(B),cz=c*(Math.cos(A)-Math.cos(B)*Math.cos(G))/Math.sin(G),w=new T.Vector3(cx,Math.sqrt(Math.max(0,c*c-cx*cx-cz*cz)),cz);const center=u.clone().add(v).add(w).multiplyScalar(.5);const pts=[];for(let i=0;i<8;i++)pts.push(new T.Vector3().addScaledVector(u,i&1?1:0).addScaledVector(v,i&2?1:0).addScaledVector(w,i&4?1:0).sub(center));const faces=[0,2,3,0,3,1,4,5,7,4,7,6,0,1,5,0,5,4,2,6,7,2,7,3,0,4,6,0,6,2,1,3,7,1,7,5];const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(pts.flatMap(p=>p.toArray()),3));geo.setIndex(faces);geo.computeVertexNormals();group.add(new T.Mesh(geo,new T.MeshStandardMaterial({color:0x59b9df,transparent:true,opacity:.65,side:T.DoubleSide,flatShading:true})));const lines=[];for(let i=0;i<8;i++)for(const bit of [1,2,4])if(!(i&bit))lines.push(pts[i],pts[i|bit]);group.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(lines),new T.LineBasicMaterial({color:0xffffff})));axes=new T.Group();for(const [vec,color,label] of [[u,0xff7777,'a'],[v,0x75ef9b,'b'],[w,0x77aaff,'c']]){const origin=center.clone().negate(),len=vec.length()*1.25;axes.add(new T.ArrowHelper(vec.clone().normalize(),origin,len,color,.13,.08));const canvas=document.createElement('canvas');canvas.width=128;canvas.height=64;const ctx=canvas.getContext('2d');ctx.fillStyle='#ffffff';ctx.font='bold 42px Arial';ctx.fillText(label,42,45);const sprite=new T.Sprite(new T.SpriteMaterial({map:new T.CanvasTexture(canvas),depthTest:false}));sprite.scale.set(.45,.225,1);sprite.position.copy(origin).addScaledVector(vec,1.38);axes.add(sprite);}group.add(axes);symmetry(u,v,w,pts);axes.visible=$('crystalAxes').checked;$('crystalInfo').textContent=name+' — '+r[7]+' | Mineral examples: '+r[8]+'. '+(name==='Hexagonal'?'Shown as a primitive unit cell; the familiar six-sided prism is a crystal habit.':'');draw();}
 function init(){if(renderer)return;try{renderer=new T.WebGLRenderer({antialias:true});}catch(e){host.append(document.createTextNode('3D crystal viewer unavailable: WebGL is required.'));return;}renderer.setPixelRatio(Math.min(devicePixelRatio,2));host.append(renderer.domElement);renderer.domElement.style.touchAction='none';scene=new T.Scene();scene.background=new T.Color(0x172633);camera=new T.PerspectiveCamera(42,1,.1,100);scene.add(new T.HemisphereLight(0xffffff,0x546678,2));const light=new T.DirectionalLight(0xffffff,2);light.position.set(3,5,4);scene.add(light);group=new T.Group();scene.add(group);let last=null;const el=renderer.domElement;el.addEventListener('pointerdown',e=>{last=[e.clientX,e.clientY];el.setPointerCapture(e.pointerId)});el.addEventListener('pointermove',e=>{if(!last)return;angle-=(e.clientX-last[0])*.01;tilt=Math.max(-1.45,Math.min(1.45,tilt+(e.clientY-last[1])*.01));last=[e.clientX,e.clientY];draw()});for(const event of ['pointerup','pointercancel','lostpointercapture'])el.addEventListener(event,()=>last=null);el.addEventListener('wheel',e=>{e.preventDefault();dist=Math.max(2.8,Math.min(10,dist+e.deltaY*.005));draw()},{passive:false});new ResizeObserver(resize).observe(host);build();resize();}
 function tick(){frame=0;if($('geoView_crystals').hidden||!$('crystalSpin').checked)return;angle+=.008;draw();frame=requestAnimationFrame(tick);}
 function spin(){if(!frame&&$('crystalSpin').checked&&!$('geoView_crystals').hidden)frame=requestAnimationFrame(tick);}
-document.addEventListener('geo-crystal-view',e=>{if(e.detail==='crystals'){init();resize();spin();}});$('crystalSystem').addEventListener('change',build);$('crystalAxes').addEventListener('change',()=>{if(axes)axes.visible=$('crystalAxes').checked;draw()});$('crystalSpin').addEventListener('change',spin);$('crystalReset').addEventListener('click',()=>{angle=.65;tilt=.4;dist=5;draw()});if(!$('geoView_crystals').hidden)init();
+document.addEventListener('geo-crystal-view',e=>{if(e.detail==='crystals'){init();resize();spin();}});$('crystalSystem').addEventListener('change',build);for(const id of ['csRot','csMirror','csInv','csLabels','csOrder','csColor','csPlane','csOpacity','csStyle','csFont','csBold','csItalic','csSeparate','csC2','csC3','csC4','csC6'])$(id).addEventListener('input',build);$('crystalAxes').addEventListener('change',()=>{if(axes)axes.visible=$('crystalAxes').checked;draw()});$('crystalSpin').addEventListener('change',spin);$('crystalReset').addEventListener('click',()=>{angle=.65;tilt=.4;dist=5;draw()});if(!$('geoView_crystals').hidden)init();
 
 host.geoExportCurrent = () => { if (!renderer) throw new Error('Open the model first.'); draw(); const select=$('crystalSystem'); window.geoDownloadModelPNG(renderer.domElement, select.options[select.selectedIndex]?.text || 'crystalCanvas'); };
 </script>
@@ -4828,5 +5390,108 @@ document.addEventListener('fullscreenchange',sync);document.addEventListener('we
 <style id="geoHideFloatingLearning">#geoLearningToggle { display: none !important; }</style>
 <style>#geoLearningPanel{position:static;width:auto;max-height:none;overflow:visible;box-shadow:none;box-sizing:border-box;margin:0;} </style>
 <style>.geo-feedback-link{display:inline-block;background:#087e75;color:white!important;padding:12px 18px;border-radius:8px;text-decoration:none;font-weight:600;max-width:100%;box-sizing:border-box}.geo-feedback-link:hover{background:#09675f}</style>
+<style id="geoNorthLayoutFix">
+#viewer #geoModelNorthHUD {position:absolute!important;top:150px!important;right:12px!important;left:auto!important;bottom:auto!important;width:108px!important;height:108px!important;min-width:0!important;min-height:0!important;max-width:108px!important;max-height:108px!important;aspect-ratio:1;z-index:110!important;pointer-events:none!important;}
+#viewer:fullscreen #geoModelNorthHUD,#viewer.geo-expanded #geoModelNorthHUD {top:64px!important;right:16px!important;}
+@media(max-width:600px){#viewer #geoModelNorthHUD{width:84px!important;height:84px!important;max-width:84px!important;max-height:84px!important;}}
+</style>
+<style>
+#viewer #geoModelScaleHUD{position:absolute!important;left:max(0px, calc(50% - 120px))!important;bottom:48px!important;top:auto!important;right:auto!important;width:240px!important;height:56px!important;max-width:240px!important;max-height:56px!important;min-width:0!important;min-height:0!important;z-index:110!important;pointer-events:none!important;}
+
+
+#viewer #geoModelScaleHUD[hidden]{display:none!important;}
+#viewer #geoScaleToggle{position:absolute;left:50%!important;transform:translateX(-50%);bottom:108px;z-index:111;font-size:11px;padding:4px 8px;cursor:pointer;}
+#viewer #geoDimensionHUD{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;pointer-events:none!important;z-index:7!important;}
+#viewer #geoDimensionToggle{position:absolute;left:12px;bottom:140px;z-index:111;font-size:11px;padding:4px 8px;}
+</style><style>#geoIntegratedAxesControls{position:absolute;left:12px;bottom:170px;z-index:111;display:flex;align-items:center;gap:5px;}#geoIntegratedAxesControls button{font-size:11px;padding:4px 8px;}#geoIntegratedAxesControls input{width:65px;}</style><style>#viewer #geoDimControls,#viewer #geoIntegratedAxesControls{position:absolute!important;left:12px!important;z-index:111!important;display:flex;align-items:center;flex-wrap:wrap;gap:4px;max-width:calc(100% - 24px);font-size:11px;}#viewer #geoDimControls{bottom:140px;}#viewer #geoIntegratedAxesControls{bottom:180px;}#viewer #geoDimControls #geoDimensionToggle{position:static!important;}#viewer #geoDimControls button,#viewer #geoIntegratedAxesControls button{font-size:11px;padding:4px 6px;touch-action:none;}#viewer #geoDimControls input,#viewer #geoIntegratedAxesControls input{width:55px;}#viewer #geoDimControls label,#viewer #geoIntegratedAxesControls label{display:flex;align-items:center;gap:3px;}@media(max-width:600px){#viewer #geoIntegratedAxesControls{bottom:200px;}}</style><style id="geoStep1531">
+#viewer #geoDimControls,#viewer #geoIntegratedAxesControls{left:auto!important;right:12px!important;top:auto!important;max-width:calc(100% - 24px);}
+#viewer #geoDimControls{bottom:75px!important;}#viewer #geoIntegratedAxesControls{bottom:115px!important;}
+#viewer #geoDimControls button,#viewer #geoIntegratedAxesControls button{cursor:grab;touch-action:none;}
+#viewer:fullscreen #geoModelNorthHUD,#viewer.geo-expanded #geoModelNorthHUD{top:var(--geo-compass-top,150px)!important;right:16px!important;}
+#viewer #geoModelNorthHUD{top:var(--geo-compass-top,150px)!important;}
+</style><script>(()=>{const v=document.getElementById('viewer');function align(){const r=v.getBoundingClientRect();let y=150;for(const el of v.querySelectorAll('.geo-local-export')){if(el.getClientRects().length)y=Math.max(y,el.getBoundingClientRect().bottom-r.top+12);}v.style.setProperty('--geo-compass-top',y+'px');}new ResizeObserver(align).observe(v);for(const el of v.querySelectorAll('.geo-local-export'))new ResizeObserver(align).observe(el);document.addEventListener('fullscreenchange',align);align();})();</script>
+<script>
+function geoCreditCanvas(source){
+ const c=document.createElement('canvas'), w=Math.max(600,source.width), h=Math.round(source.height*w/source.width), footer=64;
+ c.width=w;c.height=h+footer;const x=c.getContext('2d');x.fillStyle='#ffffff';x.fillRect(0,0,w,c.height);x.drawImage(source,0,0,w,h);x.fillStyle='#172633';x.fillRect(0,h,w,footer);x.fillStyle='#ffffff';x.font='bold 15px Arial';x.fillText('Developed by Mohammed Simko Nayif Pasha | GeoEdu 3D',14,h+23);x.font='13px Arial';const author=document.getElementById('projectAuthor')?.value.trim();x.fillText(author?'Project author: '+author.slice(0,65):'GeoEdu 3D | Educational geological visualization',14,h+45);return c;
+}
+// Standalone PDF writer: embeds JPEG images in standard A4 pages, no external library.
+</script>
+<style id="geoScaleSideBySide">
+#viewer #geoScaleGroup{position:absolute;left:50%;transform:translateX(-50%);bottom:28px;display:flex;align-items:center;justify-content:center;gap:6px;z-index:112;width:max-content;max-width:100%;pointer-events:none;}
+#viewer #geoScaleGroup #geoScaleToggle{position:static!important;left:auto!important;bottom:auto!important;transform:none!important;white-space:nowrap;pointer-events:auto;flex:none;}
+#viewer #geoScaleGroup #geoModelScaleHUD{position:static!important;left:auto!important;bottom:auto!important;transform:none!important;flex:none;}
+@media(max-width:360px){#viewer #geoScaleGroup #geoModelScaleHUD{width:210px!important;height:49px!important;}}
+</style>
+<style>
+.geo-presets-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#geoPresetsFullscreen{width:auto;background:#203c4d;color:white;border:1px solid #83b5c5;border-radius:8px;padding:9px 13px;cursor:pointer}
+#geoView_presets:fullscreen,#geoView_presets.geo-presets-expanded{box-sizing:border-box;width:100vw!important;height:100vh!important;height:100dvh!important;max-width:none!important;margin:0!important;border-radius:0;overflow:auto!important;background:#142533;padding:16px;overscroll-behavior:contain}
+#geoView_presets.geo-presets-expanded{position:fixed!important;inset:0;z-index:100000}
+#geoView_presets:fullscreen .geo-presets-heading,#geoView_presets.geo-presets-expanded .geo-presets-heading{position:sticky;top:0;z-index:10;background:#142533;padding:8px 0}
+</style>
+<script>
+(()=>{const host=document.getElementById('geoView_presets'),button=document.getElementById('geoPresetsFullscreen');let fallback=false,marker=null,overflow='',pending=false;
+const native=()=>document.fullscreenElement||document.webkitFullscreenElement;
+function sync(){const active=fallback||native()===host;button.textContent=active?'↙ Exit full screen':'⛶ Full screen';button.setAttribute('aria-pressed',String(active));}
+function restore(){if(!fallback)return;host.classList.remove('geo-presets-expanded');marker.replaceWith(host);document.body.style.overflow=overflow;fallback=false;marker=null;sync();}
+button.addEventListener('click',async()=>{if(pending)return;pending=true;try{if(fallback){restore();return;}if(native()===host){const exit=document.exitFullscreen||document.webkitExitFullscreen;if(exit)await exit.call(document);return;}if(native())return;const request=host.requestFullscreen||host.webkitRequestFullscreen;if(request){try{await request.call(host);if(native()===host)return;}catch(e){}}marker=document.createComment('preset workspace position');host.before(marker);document.body.append(host);overflow=document.body.style.overflow;document.body.style.overflow='hidden';fallback=true;host.classList.add('geo-presets-expanded');}finally{pending=false;sync();}});
+document.addEventListener('fullscreenchange',sync);document.addEventListener('webkitfullscreenchange',sync);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&fallback){e.preventDefault();restore();}});sync();})();
+</script>
+<style>
+.geo-diagrams-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#geoDiagramsFullscreen{width:auto;background:#203c4d;color:white;border:1px solid #83b5c5;border-radius:8px;padding:9px 13px;cursor:pointer}
+#geoView_diagrams:fullscreen,#geoView_diagrams.geo-diagrams-expanded{box-sizing:border-box;width:100vw!important;height:100vh!important;height:100dvh!important;max-width:none!important;margin:0!important;border-radius:0;overflow:auto!important;background:#142533;padding:16px;overscroll-behavior:contain}
+#geoView_diagrams.geo-diagrams-expanded{position:fixed!important;inset:0;z-index:100000}
+#geoView_diagrams:fullscreen .geo-diagrams-heading,#geoView_diagrams.geo-diagrams-expanded .geo-diagrams-heading{position:sticky;top:0;z-index:10;background:#142533;padding:8px 0}
+</style>
+<script>
+(()=>{const host=document.getElementById('geoView_diagrams'),button=document.getElementById('geoDiagramsFullscreen');let fallback=false,marker=null,overflow='',pending=false;
+const native=()=>document.fullscreenElement||document.webkitFullscreenElement;
+function sync(){const active=fallback||native()===host;button.textContent=active?'↙ Exit full screen':'⛶ Full screen';button.setAttribute('aria-pressed',String(active));}
+function restore(){if(!fallback)return;host.classList.remove('geo-diagrams-expanded');marker.replaceWith(host);document.body.style.overflow=overflow;fallback=false;marker=null;sync();}
+button.addEventListener('click',async()=>{if(pending)return;pending=true;try{if(fallback){restore();return;}if(native()===host){const exit=document.exitFullscreen||document.webkitExitFullscreen;if(exit)await exit.call(document);return;}if(native())return;const request=host.requestFullscreen||host.webkitRequestFullscreen;if(request){try{await request.call(host);if(native()===host)return;}catch(e){}}marker=document.createComment('preset workspace position');host.before(marker);document.body.append(host);overflow=document.body.style.overflow;document.body.style.overflow='hidden';fallback=true;host.classList.add('geo-diagrams-expanded');}finally{pending=false;sync();}});
+document.addEventListener('fullscreenchange',sync);document.addEventListener('webkitfullscreenchange',sync);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&fallback){e.preventDefault();restore();}});sync();})();
+</script>
+<style id="geoAdaptiveDiagrams">
+#geoView_diagrams .diagram-content-grid{grid-template-columns:repeat(3,minmax(0,1fr));align-items:start}
+#geoView_diagrams .diagram-content-grid[data-visible-count="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}
+#geoView_diagrams .diagram-content-grid[data-visible-count="1"],#geoView_diagrams .diagram-content-grid[data-visible-count="0"]{grid-template-columns:minmax(0,1fr)}
+#geoView_diagrams .diagram-legend{grid-column:auto}
+#geoView_diagrams .diagram-card canvas{width:100%!important;height:auto!important;max-width:100%!important;object-fit:contain}
+#geoView_diagrams .diagram-content-grid[data-visible-count="1"] #diagram_column canvas{width:min(100%,680px)!important}
+#geoView_diagrams .diagram-content-grid[data-visible-count="0"]::after{content:"Select a geological diagram to display.";padding:20px;text-align:center}
+@media(max-width:850px){#geoView_diagrams .diagram-content-grid,#geoView_diagrams .diagram-content-grid[data-visible-count="2"]{grid-template-columns:minmax(0,1fr)}}
+</style>
+<script>
+(()=>{const side=document.getElementById('geoSectionName'),local=document.getElementById('geoSectionNameLocal'),heading=document.getElementById('geoSectionHeading'),panel=heading.closest('section'),summary=document.querySelector('[data-panel="geological-cross-section"] > summary'),mode=document.getElementById('geoABMode'),map=document.getElementById('geoABMap'),info=document.getElementById('geoABInfo'),host=document.getElementById('geoSectionLocalControls');
+const localMode=mode.cloneNode(true);localMode.id='geoABModeLocal';localMode.removeAttribute('onchange');const label=document.createElement('label');label.textContent='Section mode';label.htmlFor=localMode.id;host.append(label,localMode);map.style.maxWidth='360px';map.style.display='block';const help=document.createElement('small');help.textContent='Custom A–B: click or drag endpoints on the map.';map.after(help);
+function syncMode(){localMode.value=mode.value;map.hidden=mode.value!=='custom';map.style.display=map.hidden?'none':'block';help.hidden=map.hidden;info.hidden=map.hidden;}
+localMode.addEventListener('change',()=>{mode.value=localMode.value;syncMode();window.createCrossSection(false)});mode.addEventListener('change',syncMode);const direction=document.getElementById('sectionDirection'),localDirection=direction.cloneNode(true);localDirection.id='geoDirectionLocal';localDirection.removeAttribute('onchange');host.append(localDirection);localDirection.addEventListener('change',()=>{direction.value=localDirection.value;window.createCrossSection(false)});direction.addEventListener('change',()=>localDirection.value=direction.value);syncMode();
+function rename(source,target){target.value=source.value;const name=side.value.trim()||'Geological Cross-Section';heading.textContent=side.value.trim();heading.hidden=true;panel.dataset.sectionTitle=name;for(const n of [...summary.childNodes])if(n.nodeType===3)n.remove();summary.append(document.createTextNode(name));window.createCrossSection(false);}
+side.addEventListener('input',()=>rename(side,local));local.addEventListener('input',()=>rename(local,side));})();
+</script><script>
+(function(){const panel=document.getElementById('strat49Controls');if(!panel)return;const redraw=()=>{if(typeof window.drawStratigraphicColumn==='function')window.drawStratigraphicColumn();};panel.addEventListener('input',redraw);panel.addEventListener('change',redraw);document.getElementById('strat49Reset').addEventListener('click',()=>{panel.querySelectorAll('input,select').forEach(e=>{if(e.type==='checkbox')e.checked=e.defaultChecked;else if(e.tagName==='SELECT')e.selectedIndex=0;else e.value=e.defaultValue;});redraw();});})();
+</script>
+<script>document.getElementById('geoTitle54').addEventListener('input',()=>window.createCrossSection(false));document.getElementById('geoTitle54').addEventListener('change',()=>window.createCrossSection(false));</script>
+<script>for(const id of ["geo63Style","geo63Unit","geo63Length","geo63Div","geo63Color","geo63Font","geo63Size","geo63Bold","geo63Italic"]){document.getElementById(id).addEventListener("input",()=>window.createCrossSection(false));}</script>
+<script>(()=>{const $=id=>document.getElementById('sl64'+id), num=id=>Number($(id).value), fmt=n=>Number(n.toPrecision(8)).toLocaleString('en-US'), questions=[['At 1:50,000, 4 cm represents how many km?',2,'4 × 50,000 / 100,000 = 2 km'],['At 1:10,000, 2 cm² represents how many m²?',20000,'2 × (10,000 / 100)² = 20,000 m²'],['Horizontal 1:10,000 and vertical 1:5,000: what is VE?',2,'10,000 / 5,000 = 2']];let notes='';function draw(){const n=num('n'),d=num('d'),a=num('a'),h=num('h'),v=num('v');notes=n>0&&d>=0&&a>=0&&[n,d,a].every(Number.isFinite)?`RF 1:${fmt(n)}\n1 cm = ${fmt(n/100)} m\nGround distance: ${fmt(d*n/100)} m (${fmt(d*n/100000)} km)\nGround area: ${fmt(a*(n/100)**2)} m²`:'Enter valid nonnegative measurements and a positive denominator.';$('result').textContent=notes;const ve=h>0&&v>0&&Number.isFinite(h/v)?h/v:NaN;$('ve').textContent=Number.isFinite(ve)?'Vertical exaggeration: '+fmt(ve)+'×':'Enter positive scale denominators.';const c=$('plot').getContext('2d');c.clearRect(0,0,640,240);c.fillStyle='white';c.fillRect(0,0,640,240);c.fillStyle='#222';c.font='16px Arial';if(Number.isFinite(ve)){const scale=Math.min(1,5/ve);for(let i=0;i<3;i++){c.beginPath();for(let x=0;x<=560;x+=4){let y=185-(25*Math.sin(Math.PI*x/560)+i*12)*ve*scale;x===0?c.moveTo(40+x,y):c.lineTo(40+x,y)}c.strokeStyle=['#87602c','#467e9d','#555'][i];c.lineWidth=3;c.stroke()}c.fillText('Schematic profile • VE '+fmt(ve)+'×'+(scale<1?' (fit to view)':''),30,25)}const b=$('bar').getContext('2d');b.fillStyle='white';b.fillRect(0,0,640,130);const len=num('len'),div=Math.max(1,Math.min(10,Math.round(num('div')||1))),style=$('style').value;if(!(len>0&&Number.isFinite(len)))return;b.strokeStyle='#222';b.fillStyle='#222';b.font='14px Arial';b.textAlign='center';const count=style==='simple'?1:div,w=520/count;for(let i=0;i<count;i++){const x=50+i*w;if(style==='block'||style==='checker'){const rows=style==='checker'?2:1;for(let r=0;r<rows;r++){b.fillStyle=(i+r)%2?'white':'#222';b.fillRect(x,30+r*20/rows,w,20/rows);b.strokeRect(x,30+r*20/rows,w,20/rows)}}else{b.beginPath();b.moveTo(x,30);b.lineTo(x,50);b.lineTo(x+w,50);b.stroke()}b.fillStyle='#222';b.fillText(fmt(i*len/count),x,75)}b.beginPath();b.moveTo(570,30);b.lineTo(570,50);b.stroke();b.fillText(fmt(len)+' m',570,75);b.fillText('GeoEdu 3D | Mohammed Simko Nayif Pasha',320,110)}function download(url,name){const a=document.createElement('a');a.href=url;a.download=name;a.click()}for(const id of ['n','d','a','h','v','len','div','style'])$(id).addEventListener('input',draw);questions.forEach((q,i)=>{const l=document.createElement('label');l.textContent=q[0];const input=document.createElement('input');input.type='number';input.step='any';input.id='sl64q'+i;l.append(input);$('quiz').append(l,document.createElement('br'))});$('check').onclick=()=>{let score=0;const feedback=questions.map((q,i)=>{const ok=$('q'+i).value!==''&&Math.abs(num('q'+i)-q[1])<1e-8;score+=Number(ok);return (ok?'Correct: ':'Review: ')+q[2]});$('score').style.whiteSpace='pre-line';$('score').textContent=score+'/3\n'+feedback.join('\n')};$('png').onclick=()=>download($('bar').toDataURL('image/png'),'GeoEdu-scale.png');$('notes').onclick=()=>{const url=URL.createObjectURL(new Blob([notes+'\n'+$('ve').textContent+'\nGeoEdu 3D | Mohammed Simko Nayif Pasha'],{type:'text/plain'}));download(url,'GeoEdu-scale-notes.txt');setTimeout(()=>URL.revokeObjectURL(url),1000)};draw()})();</script><script id="geo-ui68-script">
+(()=>{function init(){const sidebar=document.getElementById('geoSidebar');if(!sidebar||document.getElementById('geoUI68Search'))return;
+const panels=Array.from(sidebar.querySelectorAll(':scope > details.geo-sidebar-panel'));if(!panels.length)return;
+const tools=document.createElement('div');tools.className='geo-ui68-tools';
+const search=document.createElement('input');search.type='search';search.id='geoUI68Search';search.placeholder='Find a tool…';search.setAttribute('aria-label','Filter sidebar tool names');
+const collapse=document.createElement('button');collapse.type='button';collapse.textContent='Collapse all';
+const clear=document.createElement('button');clear.type='button';clear.textContent='Clear';
+const count=document.createElement('div');count.className='geo-ui68-count';count.setAttribute('aria-live','polite');
+function filter(){const q=search.value.trim().toLowerCase();let n=0;for(const p of panels){const name=(p.querySelector(':scope > summary')?.textContent||'')+' '+(p.dataset.panel||'').replace(/-/g,' ');const match=!q||name.toLowerCase().includes(q);p.classList.toggle('geo-ui68-filtered',!match);if(match)n++;}count.textContent=q?n+' matching tools':'Modeling & project tools';}
+search.addEventListener('input',filter);clear.addEventListener('click',()=>{search.value='';filter();search.focus();});collapse.addEventListener('click',()=>{for(const p of panels)p.open=false;});tools.append(search,clear,collapse);panels[0].before(tools,count);filter();
+}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
+</script>
+<style id="geoScalePosition1570">
+#viewer #geoScaleGroup {position:absolute!important;inset:auto auto 28px 50%!important;transform:translateX(-50%)!important;display:flex;align-items:center;justify-content:center;width:max-content!important;max-width:100%;gap:6px;}
+#viewer #geoScaleGroup #geoModelScaleHUD {width:240px!important;height:56px!important;min-width:240px!important;max-width:240px!important;flex:none!important;}
+#viewer #geoScaleGroup #geoScaleToggle {width:auto!important;flex:none!important;margin:0!important;}
+@media(max-width:420px){#viewer #geoScaleGroup{flex-direction:column;gap:3px;}}
+</style>
 </body>
 </html>
