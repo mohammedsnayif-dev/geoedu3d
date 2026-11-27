@@ -1,5 +1,5 @@
 
-const CACHE = 'geoedu-pwa-v3-mobile-1576';
+const CACHE = 'geoedu-pwa-v3-auto-1577';
 
 const CORE = [
   './',
@@ -9,51 +9,73 @@ const CORE = [
   './icons/icon-512.png'
 ];
 
-self.addEventListener('install', e => {
-  e.waitUntil(
+self.addEventListener('install', event => {
+  event.waitUntil(
     caches.open(CACHE)
-      .then(c => c.addAll(CORE))
+      .then(cache => cache.addAll(
+        CORE.map(url => new Request(url, { cache: 'reload' }))
+      ))
       .then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(
+self.addEventListener('activate', event => {
+  event.waitUntil(
     caches.keys()
       .then(keys => Promise.all(
-        keys.filter(k => k.startsWith('geoedu-pwa-') && k !== CACHE)
-          .map(k => caches.delete(k))
+        keys.filter(key =>
+          key.startsWith('geoedu-pwa-') && key !== CACHE
+        ).map(key => caches.delete(key))
       ))
       .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
 
-  const url = new URL(e.request.url);
+  const url = new URL(event.request.url);
 
   if (url.origin === self.location.origin) {
-    e.respondWith(
-      fetch(e.request).then(r => {
-        if (r.ok) {
-          const copy = r.clone();
-          caches.open(CACHE).then(c => c.put(e.request, copy));
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(CACHE);
+
+        try {
+          const response = await fetch(event.request, {
+            cache: 'no-store'
+          });
+
+          if (response.ok) {
+            await cache.put(event.request, response.clone());
+          }
+
+          return response;
+        } catch {
+          return await cache.match(event.request) ||
+            (event.request.mode === 'navigate'
+              ? await cache.match('./index.html')
+              : null) ||
+            Response.error();
         }
-        return r;
-      }).catch(() => caches.match(e.request))
+      })()
     );
   } else if (url.hostname === 'cdn.jsdelivr.net') {
-    e.respondWith(
-      caches.match(e.request).then(cached =>
-        cached || fetch(e.request).then(r => {
-          if (r.ok || r.type === 'opaque') {
-            const copy = r.clone();
-            caches.open(CACHE).then(c => c.put(e.request, copy));
-          }
-          return r;
-        })
-      )
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(CACHE);
+        const cached = await cache.match(event.request);
+
+        if (cached) return cached;
+
+        const response = await fetch(event.request);
+
+        if (response.ok || response.type === 'opaque') {
+          await cache.put(event.request, response.clone());
+        }
+
+        return response;
+      })()
     );
   }
 });
