@@ -4950,7 +4950,18 @@ $('geo61PNG').onclick=()=>export61('png');$('geo61PDF').onclick=()=>export61('pd
   });
   window.addEventListener('appinstalled',()=>{install.hidden=true;});
   if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')){
-    window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(console.warn));
+    const geoCheckWorker = async () => {
+      try {
+        const registration = await navigator.serviceWorker.register('./sw.js', {updateViaCache: 'none'});
+        await registration.update();
+      } catch (error) { console.warn('GeoEdu update check:', error); }
+    };
+    window.addEventListener('load', geoCheckWorker);
+    window.addEventListener('pageshow', geoCheckWorker);
+    window.addEventListener('online', geoCheckWorker);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') geoCheckWorker();
+    });
   }
 })();
 </script>
